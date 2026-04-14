@@ -1,0 +1,138 @@
+[
+  {
+    "id": "cat_hr_base",
+    "name": "人事・労務",
+    "parentId": null,
+    "targetDepartmentId": "dept_hr"
+  },
+  {
+    "id": "cat_hr_benefit",
+    "name": "資格取得祝金申請",
+    "parentId": "cat_hr_base",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 5
+  },
+  {
+    "id": "cat_hr_commuting",
+    "name": "通勤経費変更申請",
+    "parentId": "cat_hr_base",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 3
+  },
+  {
+    "id": "cat_hr_health",
+    "name": "健康診断面談希望",
+    "parentId": "cat_hr_base",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 2
+  },
+  {
+    "id": "cat_hr_keicho",
+    "name": "慶弔・休業申請",
+    "parentId": "cat_hr_base",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 10,
+    "customFields": [
+      {
+        "id": "event_date",
+        "label": "事由発生日",
+        "type": "date",
+        "required": true
+      },
+      {
+        "id": "subject_name",
+        "label": "対象者氏名",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "days_planned",
+        "label": "休業予定日数",
+        "type": "number",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "cat_it_base",
+    "name": "IT・情報システム",
+    "parentId": null,
+    "targetDepartmentId": "dept_it"
+  },
+  {
+    "id": "cat_it_pc",
+    "name": "PC貸与・交換依頼",
+    "parentId": "cat_it_base",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 7,
+    "customFields": [
+      {
+        "id": "pc_type",
+        "label": "希望機種",
+        "type": "select",
+        "options": ["Windows (標準)", "MacBook Pro (開発用)", "Surface Pro (営業用)"],
+        "required": true
+      },
+      {
+        "id": "reason",
+        "label": "利用目的",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "delivery_date",
+        "label": "希望納品日",
+        "type": "date",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "cat_it_soft",
+    "name": "ソフトウェア導入相談",
+    "parentId": "cat_it_base",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 14
+  },
+  {
+    "id": "cat_it_account",
+    "name": "各種アカウント発行",
+    "parentId": "cat_it_base",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 1
+  },
+  {
+    "id": "cat_ga_base",
+    "name": "総務・ファシリティ",
+    "parentId": null,
+    "targetDepartmentId": "dept_ga"
+  },
+  {
+    "id": "cat_ga_card",
+    "name": "名刺作成依頼",
+    "parentId": "cat_ga_base",
+    "targetDepartmentId": "dept_ga",
+    "slaDays": 3,
+    "customFields": [
+      {
+        "id": "name_romaji",
+        "label": "氏名（ローマ字表記）",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "quantity",
+        "label": "必要枚数",
+        "type": "number",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "cat_ga_mail",
+    "name": "郵便物・宅配発送",
+    "parentId": "cat_ga_base",
+    "targetDepartmentId": "dept_ga",
+    "slaDays": 1
+  }
+]

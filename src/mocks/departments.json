@@ -1,0 +1,6 @@
+[
+  { "id": "dept_ga", "name": "総務部" },
+  { "id": "dept_hr", "name": "人事部" },
+  { "id": "dept_acc", "name": "経理部" },
+  { "id": "dept_it", "name": "情報システム部" }
+]

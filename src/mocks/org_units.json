@@ -1,0 +1,164 @@
+[
+  {
+    "id": "org_root",
+    "name": "代表取締役直轄",
+    "type": "root",
+    "parentId": null
+  },
+  {
+    "id": "org_div_sales",
+    "name": "営業本部",
+    "type": "division",
+    "parentId": "org_root"
+  },
+  {
+    "id": "org_grp_sales_0",
+    "name": "営業本部 第1グループ",
+    "type": "group",
+    "parentId": "org_div_sales"
+  },
+  {
+    "id": "org_team_sales_0_0",
+    "name": "営業本部 第1G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_sales_0"
+  },
+  {
+    "id": "org_team_sales_0_1",
+    "name": "営業本部 第1G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_sales_0"
+  },
+  {
+    "id": "org_grp_sales_1",
+    "name": "営業本部 第2グループ",
+    "type": "group",
+    "parentId": "org_div_sales"
+  },
+  {
+    "id": "org_team_sales_1_0",
+    "name": "営業本部 第2G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_sales_1"
+  },
+  {
+    "id": "org_team_sales_1_1",
+    "name": "営業本部 第2G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_sales_1"
+  },
+  {
+    "id": "org_grp_sales_2",
+    "name": "営業本部 第3グループ",
+    "type": "group",
+    "parentId": "org_div_sales"
+  },
+  {
+    "id": "org_team_sales_2_0",
+    "name": "営業本部 第3G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_sales_2"
+  },
+  {
+    "id": "org_team_sales_2_1",
+    "name": "営業本部 第3G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_sales_2"
+  },
+  {
+    "id": "org_div_dev",
+    "name": "開発本部",
+    "type": "division",
+    "parentId": "org_root"
+  },
+  {
+    "id": "org_grp_dev_0",
+    "name": "開発本部 第1グループ",
+    "type": "group",
+    "parentId": "org_div_dev"
+  },
+  {
+    "id": "org_team_dev_0_0",
+    "name": "開発本部 第1G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_dev_0"
+  },
+  {
+    "id": "org_team_dev_0_1",
+    "name": "開発本部 第1G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_dev_0"
+  },
+  {
+    "id": "org_grp_dev_1",
+    "name": "開発本部 第2グループ",
+    "type": "group",
+    "parentId": "org_div_dev"
+  },
+  {
+    "id": "org_team_dev_1_0",
+    "name": "開発本部 第2G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_dev_1"
+  },
+  {
+    "id": "org_team_dev_1_1",
+    "name": "開発本部 第2G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_dev_1"
+  },
+  {
+    "id": "org_grp_dev_2",
+    "name": "開発本部 第3グループ",
+    "type": "group",
+    "parentId": "org_div_dev"
+  },
+  {
+    "id": "org_team_dev_2_0",
+    "name": "開発本部 第3G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_dev_2"
+  },
+  {
+    "id": "org_team_dev_2_1",
+    "name": "開発本部 第3G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_dev_2"
+  },
+  {
+    "id": "org_div_admin",
+    "name": "管理本部",
+    "type": "division",
+    "parentId": "org_root"
+  },
+  {
+    "id": "org_grp_admin_0",
+    "name": "管理本部 第1グループ",
+    "type": "group",
+    "parentId": "org_div_admin"
+  },
+  {
+    "id": "org_team_admin_0_0",
+    "name": "管理本部 第1G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_admin_0"
+  },
+  {
+    "id": "org_team_admin_0_1",
+    "name": "管理本部 第1G 第2チーム",
+    "type": "team",
+    "parentId": "org_grp_admin_0"
+  },
+  {
+    "id": "org_grp_admin_1",
+    "name": "管理本部 第2グループ",
+    "type": "group",
+    "parentId": "org_div_admin"
+  },
+  {
+    "id": "org_team_admin_1_0",
+    "name": "管理本部 第2G 第1チーム",
+    "type": "team",
+    "parentId": "org_grp_admin_1"
+  }
+]
