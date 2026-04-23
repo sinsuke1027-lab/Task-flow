@@ -1,4 +1,4 @@
-import { DataProvider, Task, User, Department, Status, OrganizationUnit, Category, AuditLog, ApprovalStep, UserChangeEvent } from './types';
+import { DataProvider, Task, User, Department, Status, OrganizationUnit, Category, AuditLog, ApprovalStep, UserChangeEvent, Delegation } from './types';
 import tasksData from '@/mocks/tasks.json';
 import usersData from '@/mocks/users.json';
 import departmentsData from '@/mocks/departments.json';
@@ -15,9 +15,38 @@ export class MockDataProvider implements DataProvider {
   private categories: Category[] = [...categoriesData] as Category[];
   private auditLogs: AuditLog[] = [];
   private userChangeEvents: UserChangeEvent[] = [];
+  private delegations: Delegation[] = [];
   private currentUser: User;
 
   constructor() {
+    // ─── LocalStorage 永続化: 保存済み状態の復元 ──────────────────
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('tb_state');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved) as {
+            version: number; users: User[]; orgUnits: OrganizationUnit[];
+            categories: Category[]; tasks: Task[]; auditLogs: AuditLog[];
+            userChangeEvents: UserChangeEvent[];
+          };
+          if (state.version === 1 && Array.isArray(state.users) && state.users.length > 0) {
+            this.users = state.users;
+            this.orgUnits = state.orgUnits ?? [];
+            this.categories = state.categories ?? this.categories;
+            this.tasks = state.tasks ?? [];
+            this.auditLogs = state.auditLogs ?? [];
+            this.userChangeEvents = state.userChangeEvents ?? [];
+            this.delegations = (state as Record<string, unknown>).delegations as Delegation[] ?? [];
+            this.currentUser = this.users.find(u => u.id === 'user_admin_1') || this.users[0];
+            return;
+          }
+        } catch {
+          localStorage.removeItem('tb_state');
+        }
+      }
+    }
+    // ──────────────────────────────────────────────────────────────
+
     // Initialize users with defaults for new fields
     this.users = (usersData as Record<string, unknown>[]).map(u => {
       const rawRole = (u.role as string) || 'user';
@@ -54,6 +83,9 @@ export class MockDataProvider implements DataProvider {
 
     // Initialize tasks with proper mapping
     this.tasks = (tasksData as Record<string, unknown>[]).map(t => this.enrichTask(t));
+
+    // JSON から初期化した場合はストレージに保存
+    this.saveToStorage();
   }
 
   public setCurrentUser(userId: string): void {
@@ -63,11 +95,33 @@ export class MockDataProvider implements DataProvider {
     }
   }
 
+  private saveToStorage(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('tb_state', JSON.stringify({
+        version: 1,
+        users: this.users,
+        orgUnits: this.orgUnits,
+        categories: this.categories,
+        tasks: this.tasks,
+        auditLogs: this.auditLogs.slice(-500),
+        userChangeEvents: this.userChangeEvents,
+        delegations: this.delegations,
+      }));
+    } catch (e) {
+      console.warn('TaskFlow: ストレージへの保存に失敗しました', e);
+    }
+  }
+
+  /** モックデータをリセットしてJSON初期値に戻す（開発用） */
+  public clearStorage(): void {
+    if (typeof window !== 'undefined') localStorage.removeItem('tb_state');
+  }
+
   private enrichTask(task: Record<string, unknown>): Task {
     const categoryId = task.categoryId as string;
     const statusId = task.statusId as string;
     const category = this.categories.find(c => c.id === categoryId);
-    const status = this.statuses.find(s => s.id === statusId);
     
     const rawRoute = (task.approvalRoute || task.approvalSteps) as Record<string, unknown>[] || [];
     const enrichedRoute: ApprovalStep[] = rawRoute.map((step: Record<string, unknown>) => {
@@ -80,7 +134,10 @@ export class MockDataProvider implements DataProvider {
         avatar: (step.avatar as string) || approver?.avatar,
         status: (step.status as ApprovalStep['status']) || 'pending',
         comment: step.comment as string,
-        processedAt: step.processedAt as string
+        processedAt: step.processedAt as string,
+        stageIndex: step.stageIndex as number | undefined,
+        parallelType: step.parallelType as ApprovalStep['parallelType'],
+        delegatedBy: step.delegatedBy as string | undefined,
       };
     });
     
@@ -110,12 +167,13 @@ export class MockDataProvider implements DataProvider {
       updatedAt: task.updatedAt as string,
       dueDate: task.dueDate as string,
       category: category?.name || '未分類',
-      status: (status?.label === '完了' ? 'completed' : status?.label === '対応中' ? 'in_progress' : 'todo') as Task['status'],
+      status: (statusId === 'status_done' ? 'completed' : statusId === 'status_working' ? 'in_progress' : 'todo') as Task['status'],
       approvalRoute: enrichedRoute,
       ccRoute: enrichedCcRoute,
       currentApproverId: enrichedRoute.find(s => s.status === 'pending')?.userId,
       currentApproverName: enrichedRoute.find(s => s.status === 'pending')?.userName,
-      customData: task.customData as Record<string, string | number>
+      customData: task.customData as Record<string, string | number>,
+      taskType: (task.taskType as Task['taskType']) || 'approval',
     };
   }
 
@@ -135,6 +193,8 @@ export class MockDataProvider implements DataProvider {
 
     const approvalRoute = task.approvalRoute || [];
     const ccRoute = task.ccRoute || [];
+    const pendingRoute = approvalRoute.map(s => ({ ...s, status: 'pending' as const }));
+    const firstPending = pendingRoute.find(s => s.status === 'pending');
     const newTask: Task = {
       ...task,
       id: `task_${Math.random().toString(36).substr(2, 9)}`,
@@ -143,8 +203,10 @@ export class MockDataProvider implements DataProvider {
       createdAt: createdAt.toISOString(),
       updatedAt: createdAt.toISOString(),
       dueDate: dueDate.toISOString(),
-      approvalRoute: approvalRoute.map(s => ({ ...s, status: 'pending' })),
-      ccRoute: ccRoute
+      approvalRoute: pendingRoute,
+      ccRoute: ccRoute,
+      currentApproverId: firstPending?.userId,
+      currentApproverName: firstPending?.userName
     };
 
     this.tasks.push(newTask);
@@ -160,6 +222,7 @@ export class MockDataProvider implements DataProvider {
       timestamp: createdAt.toISOString()
     });
 
+    this.saveToStorage();
     return newTask;
   }
 
@@ -168,49 +231,121 @@ export class MockDataProvider implements DataProvider {
     if (index === -1) throw new Error('Task not found');
     
     this.tasks[index] = { ...this.tasks[index], ...updates, updatedAt: new Date().toISOString() };
+    this.saveToStorage();
     return this.tasks[index];
   }
 
-  async processApproval(taskId: string, userId: string, action: 'approve' | 'reject', comment?: string): Promise<Task> {
+  async processApproval(taskId: string, userId: string, action: 'approve' | 'reject' | 'acknowledge', comment?: string): Promise<Task> {
     const task = await this.getTaskById(taskId);
     if (!task) throw new Error('Task not found');
 
-    const stepIndex = task.approvalRoute.findIndex(s => s.userId === userId && s.status === 'pending');
+    // ── 代決チェック: userId が delegate の場合、delegator のステップを処理 ──
+    let stepIndex = task.approvalRoute.findIndex(s => s.userId === userId && s.status === 'pending');
+    let delegatedBy: string | undefined;
+
+    if (stepIndex === -1) {
+      const delegation = this.delegations.find(d =>
+        d.delegateId === userId && d.isActive &&
+        task.approvalRoute.some(s => s.userId === d.delegatorId && s.status === 'pending'),
+      );
+      if (delegation) {
+        stepIndex = task.approvalRoute.findIndex(s => s.userId === delegation.delegatorId && s.status === 'pending');
+        delegatedBy = userId;
+      }
+    }
+
     if (stepIndex === -1) throw new Error('No pending approval for this user');
 
+    const step = task.approvalRoute[stepIndex];
+    const isCirculation = task.taskType === 'circulation';
+
+    // 回覧は 'acknowledge' として扱い、常に approved 扱い
+    const resolvedStatus: 'approved' | 'rejected' =
+      isCirculation || action === 'approve' || action === 'acknowledge' ? 'approved' : 'rejected';
+
     task.approvalRoute[stepIndex] = {
-      ...task.approvalRoute[stepIndex],
-      status: action === 'approve' ? 'approved' : 'rejected',
+      ...step,
+      status: resolvedStatus,
       comment,
-      processedAt: new Date().toISOString()
+      processedAt: new Date().toISOString(),
+      ...(delegatedBy ? { delegatedBy } : {}),
     };
 
-    if (action === 'reject') {
+    const auditAction = action === 'acknowledge' ? 'acknowledge' : action;
+
+    if (resolvedStatus === 'rejected') {
+      // 差し戻し
       task.statusId = 'status_rejected';
-      task.status = 'todo'; // Simplified
+      task.status = 'todo';
+      task.currentApproverId = undefined;
+      task.currentApproverName = undefined;
     } else {
-      const nextStep = task.approvalRoute.find(s => s.status === 'pending');
-      if (!nextStep) {
-        task.statusId = 'status_completed';
-        task.status = 'completed';
+      // ── 並列承認: OR条件の場合、同ステージの残りステップを自動承認 ──
+      if (step.stageIndex !== undefined && step.parallelType === 'or') {
+        task.approvalRoute = task.approvalRoute.map((s, idx) => {
+          if (idx !== stepIndex && s.stageIndex === step.stageIndex && s.status === 'pending') {
+            return {
+              ...s,
+              status: 'approved' as const,
+              comment: 'OR条件による自動承認',
+              processedAt: new Date().toISOString(),
+            };
+          }
+          return s;
+        });
+      }
+
+      // ── 現在ステージの完了判定 ──
+      const currentStageComplete =
+        step.stageIndex === undefined
+          ? true
+          : task.approvalRoute
+              .filter(s => s.stageIndex === step.stageIndex)
+              .every(s => s.status === 'approved');
+
+      // 次の pending ステップを探す
+      let nextStep: typeof step | undefined;
+      if (currentStageComplete) {
+        // 次ステージ or stageIndex なしの後続ステップ
+        nextStep = task.approvalRoute.find(s => {
+          if (s.status !== 'pending') return false;
+          if (step.stageIndex === undefined) return true;
+          return s.stageIndex === undefined || s.stageIndex > step.stageIndex;
+        });
       } else {
+        // 同ステージの残り pending（AND並列）
+        nextStep = task.approvalRoute.find(
+          s => s.stageIndex === step.stageIndex && s.status === 'pending',
+        );
+      }
+
+      if (!nextStep) {
+        task.statusId = 'status_done';
+        task.status = 'completed';
+        task.currentApproverId = undefined;
+        task.currentApproverName = undefined;
+      } else {
+        task.statusId = 'status_working';
         task.status = 'in_progress';
+        task.currentApproverId = nextStep.userId;
+        task.currentApproverName = nextStep.userName;
       }
     }
 
     const updatedTask = await this.updateTask(taskId, task);
 
-    // Add Audit Log
+    const actionLabel = auditAction === 'approve' ? '承認されました。' : auditAction === 'reject' ? '差し戻されました。' : '回覧確認されました。';
     this.auditLogs.push({
       id: `log_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-      taskId: taskId,
-      userId: userId,
+      taskId,
+      userId,
       userName: this.users.find(u => u.id === userId)?.name || 'Unknown',
-      action: action,
-      comment: comment || (action === 'approve' ? '承認されました。' : '差し戻されました。'),
-      timestamp: new Date().toISOString()
+      action: auditAction,
+      comment: comment || actionLabel,
+      timestamp: new Date().toISOString(),
     });
 
+    this.saveToStorage();
     return updatedTask;
   }
 
@@ -223,6 +358,7 @@ export class MockDataProvider implements DataProvider {
       comment,
       timestamp: new Date().toISOString()
     });
+    this.saveToStorage();
   }
 
   async getUsers(): Promise<User[]> {
@@ -301,6 +437,7 @@ export class MockDataProvider implements DataProvider {
       status: 'pending'
     };
     this.userChangeEvents.push(newEvent);
+    this.saveToStorage();
     return newEvent;
   }
 
@@ -328,6 +465,7 @@ export class MockDataProvider implements DataProvider {
 
     event.status = 'applied';
     event.appliedAt = new Date().toISOString();
+    this.saveToStorage();
   }
 
   async reassignTasks(oldUserId: string, newUserId: string): Promise<void> {
@@ -371,6 +509,7 @@ export class MockDataProvider implements DataProvider {
       }
       return task;
     });
+    this.saveToStorage();
   }
 
   async importBulkData(type: 'units' | 'users', csvContent: string): Promise<{ count: number; errors: string[] }> {
@@ -410,7 +549,136 @@ export class MockDataProvider implements DataProvider {
       count = dataRows.length;
     }
 
+    this.saveToStorage();
     return { count, errors };
+  }
+
+  async createUser(data: Omit<User, 'id'>): Promise<User> {
+    const newUser: User = {
+      ...data,
+      id: `user_${Math.random().toString(36).substr(2, 9)}`,
+    };
+    this.users.push(newUser);
+    this.saveToStorage();
+    return newUser;
+  }
+
+  async updateUser(id: string, data: Partial<User>): Promise<User> {
+    const idx = this.users.findIndex(u => u.id === id);
+    if (idx === -1) throw new Error('User not found');
+    this.users[idx] = { ...this.users[idx], ...data };
+    this.saveToStorage();
+    return this.users[idx];
+  }
+
+  async createOrganizationUnit(data: Omit<OrganizationUnit, 'id'>): Promise<OrganizationUnit> {
+    const newUnit: OrganizationUnit = {
+      ...data,
+      id: `unit_${Math.random().toString(36).substr(2, 9)}`,
+    };
+    this.orgUnits.push(newUnit);
+    this.saveToStorage();
+    return newUnit;
+  }
+
+  async updateOrganizationUnit(id: string, data: Partial<OrganizationUnit>): Promise<OrganizationUnit> {
+    const idx = this.orgUnits.findIndex(u => u.id === id);
+    if (idx === -1) throw new Error('OrganizationUnit not found');
+    this.orgUnits[idx] = { ...this.orgUnits[idx], ...data };
+    this.saveToStorage();
+    return this.orgUnits[idx];
+  }
+
+  async archiveOrganizationUnit(id: string): Promise<void> {
+    const idx = this.orgUnits.findIndex(u => u.id === id);
+    if (idx === -1) throw new Error('OrganizationUnit not found');
+    this.orgUnits[idx].status = 'archived';
+    this.saveToStorage();
+  }
+
+  async createCategory(data: Omit<Category, 'id'>): Promise<Category> {
+    const newCat: Category = {
+      ...data,
+      id: `cat_${Math.random().toString(36).substr(2, 9)}`,
+    };
+    this.categories.push(newCat);
+    this.saveToStorage();
+    return newCat;
+  }
+
+  async updateCategory(id: string, data: Partial<Category>): Promise<Category> {
+    const idx = this.categories.findIndex(c => c.id === id);
+    if (idx === -1) throw new Error('Category not found');
+    this.categories[idx] = { ...this.categories[idx], ...data };
+    this.saveToStorage();
+    return this.categories[idx];
+  }
+
+  async deleteCategory(id: string): Promise<void> {
+    this.categories = this.categories.filter(c => c.id !== id);
+    this.saveToStorage();
+  }
+
+  async updateApprovalRoute(taskId: string, stepIndex: number, newApproverId: string): Promise<Task> {
+    const task = await this.getTaskById(taskId);
+    if (!task) throw new Error('Task not found');
+
+    const newApprover = this.users.find(u => u.id === newApproverId);
+    if (!newApprover) throw new Error('User not found');
+
+    const oldApprover = task.approvalRoute[stepIndex];
+    if (!oldApprover) throw new Error('Step not found');
+
+    task.approvalRoute[stepIndex] = {
+      ...task.approvalRoute[stepIndex],
+      userId: newApproverId,
+      userName: newApprover.name,
+      position: newApprover.position,
+      avatar: newApprover.avatar,
+    };
+
+    // currentApprover を再計算
+    const firstPending = task.approvalRoute.find(s => s.status === 'pending');
+    task.currentApproverId = firstPending?.userId;
+    task.currentApproverName = firstPending?.userName;
+
+    const updatedTask = await this.updateTask(taskId, task);
+
+    this.auditLogs.push({
+      id: `log_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      taskId,
+      userId: 'system',
+      userName: 'System',
+      action: 'reassign',
+      comment: `承認者がステップ${stepIndex + 1}で ${oldApprover.userName} から ${newApprover.name} に変更されました。`,
+      timestamp: new Date().toISOString()
+    });
+
+    this.saveToStorage();
+    return updatedTask;
+  }
+
+  // ── 代決（代理承認） CRUD ────────────────────────────────────────────
+  async getDelegations(): Promise<Delegation[]> {
+    return this.delegations;
+  }
+
+  async createDelegation(data: Omit<Delegation, 'id'>): Promise<Delegation> {
+    const delegation: Delegation = {
+      ...data,
+      id: `del_${Math.random().toString(36).substr(2, 9)}`,
+    };
+    this.delegations.push(delegation);
+    this.saveToStorage();
+    return delegation;
+  }
+
+  async revokeDelegation(id: string): Promise<void> {
+    const idx = this.delegations.findIndex(d => d.id === id);
+    if (idx !== -1) {
+      this.delegations[idx].isActive = false;
+      this.saveToStorage();
+    }
   }
 }
 

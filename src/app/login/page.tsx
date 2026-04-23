@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { User, Shield, Briefcase, Users, LayoutDashboard, Crown } from 'lucide-react';
 
@@ -19,10 +20,11 @@ export default function LoginPage() {
       {/* Visual Side */}
       <div className="hidden lg:flex relative bg-slate-900 items-center justify-center p-12 overflow-hidden">
         <div className="absolute inset-0 opacity-40">
-          <img 
-            src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=2070" 
-            alt="Office" 
-            className="w-full h-full object-cover"
+          <Image
+            src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=2070"
+            alt="Office"
+            fill
+            className="object-cover"
           />
         </div>
         <div className="relative z-10 w-full max-w-lg">

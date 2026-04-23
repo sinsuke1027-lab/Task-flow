@@ -1,19 +1,27 @@
 import { DataProvider } from './types';
 import { mockProvider } from './mock-provider';
 
-// For now, always return mockProvider. 
-// In the future, this will check process.env.DATA_SOURCE or similar.
-export function getDataProvider(): DataProvider {
-  const dataSource = process.env.DATA_SOURCE || 'mock';
-  
-  if (dataSource === 'mock') {
-    return mockProvider;
-  }
-  
-  // Future implementation for M365 (SharePoint/Graph API)
-  // if (dataSource === 'm365') {
-  //   return m365Provider;
-  // }
+// アクティブな DataProvider をモジュールスコープで保持する
+// setDataProvider() で実DB（Supabase など）への切り替えが可能
+let _provider: DataProvider = mockProvider;
 
-  return mockProvider;
+/**
+ * 現在アクティブな DataProvider を返す。
+ * アプリケーション全体でこの関数を通してプロバイダーを取得すること。
+ */
+export function getDataProvider(): DataProvider {
+  return _provider;
+}
+
+/**
+ * DataProvider を差し替える。
+ * 実DB への移行時や、テスト環境でのモック注入時に使用する。
+ *
+ * 例:
+ *   import { setDataProvider } from '@/lib/repository/factory';
+ *   import { SupabaseProvider } from '@/lib/repository/supabase-provider';
+ *   setDataProvider(new SupabaseProvider());
+ */
+export function setDataProvider(provider: DataProvider): void {
+  _provider = provider;
 }

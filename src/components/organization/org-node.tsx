@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { ChevronRight, ChevronDown, Building2, Shield, User as UserIcon } from 'lucide-react';
 import { OrganizationUnit, User } from '@/lib/repository/types';
 import { cn } from '@/lib/utils';
@@ -99,6 +100,7 @@ export function OrgNode({
               usersInUnit={usersInUnit}
               taskCounts={taskCounts}
               mode={mode}
+              isExpandedInitial={isExpandedInitial}
               onUserClick={onUserClick}
             />
           ))}
@@ -124,7 +126,7 @@ export function OrgNode({
                 <div className="relative shrink-0">
                   <div className="w-8 h-8 rounded-lg bg-slate-100 p-0.5 border group-hover:border-slate-400 transition-all overflow-hidden flex items-center justify-center">
                     {user.avatar ? (
-                      <img src={user.avatar} alt={user.name} className="w-full h-full rounded" />
+                      <Image src={user.avatar} width={32} height={32} alt={user.name} className="w-full h-full rounded" />
                     ) : (
                       <UserIcon className="w-4 h-4 text-slate-400" />
                     )}

@@ -1,138 +1,474 @@
 [
   {
-    "id": "cat_hr_base",
+    "id": "cat_hr",
     "name": "人事・労務",
     "parentId": null,
-    "targetDepartmentId": "dept_hr"
+    "targetDepartmentId": "dept_hr",
+    "customFields": [],
+    "workflowTemplate": []
   },
   {
-    "id": "cat_hr_benefit",
-    "name": "資格取得祝金申請",
-    "parentId": "cat_hr_base",
-    "targetDepartmentId": "dept_hr",
-    "slaDays": 5
+    "id": "cat_it",
+    "name": "IT・情報システム",
+    "parentId": null,
+    "targetDepartmentId": "dept_it",
+    "customFields": [],
+    "workflowTemplate": []
   },
   {
-    "id": "cat_hr_commuting",
-    "name": "通勤経費変更申請",
-    "parentId": "cat_hr_base",
-    "targetDepartmentId": "dept_hr",
-    "slaDays": 3
+    "id": "cat_ga",
+    "name": "総務・施設",
+    "parentId": null,
+    "targetDepartmentId": "dept_ga",
+    "customFields": [],
+    "workflowTemplate": []
   },
   {
-    "id": "cat_hr_health",
-    "name": "健康診断面談希望",
-    "parentId": "cat_hr_base",
+    "id": "cat_hr_shikaku",
+    "name": "資格受験料＆取得申請",
+    "parentId": "cat_hr",
     "targetDepartmentId": "dept_hr",
-    "slaDays": 2
+    "slaDays": 5,
+    "customFields": [
+      { "id": "shikaku_name", "label": "①資格名", "type": "text", "required": true, "placeholder": "例: AWS Solutions Architect" },
+      { "id": "shikaku_saishutoku", "label": "②期限切れ等による再取得ですか？", "type": "select", "options": ["再取得ではありません", "再取得です"], "required": false },
+      { "id": "shikaku_gopi", "label": "③合否", "type": "select", "options": ["合格", "不合格"], "required": false },
+      { "id": "shikaku_shokai", "label": "④初回申請ですか？", "type": "select", "options": ["初回申請です", "初回申請ではありません"], "required": false },
+      { "id": "shikaku_kubun", "label": "資格区分", "type": "text", "required": false, "placeholder": "例: IT系、語学系" },
+      { "id": "shikaku_shutokudate", "label": "資格取得日", "type": "date", "required": false },
+      { "id": "shikaku_kihendate", "label": "資格期限日", "type": "date", "required": false },
+      { "id": "shikaku_jukenryo", "label": "受験料（税抜）", "type": "number", "required": false, "placeholder": "例: 30000" },
+      { "id": "shikaku_jukendate", "label": "受験日", "type": "date", "required": false },
+      { "id": "shikaku_ryoshu", "label": "受験料領収書", "type": "file", "required": false },
+      { "id": "shikaku_goukakusho", "label": "合格証書", "type": "file", "required": false },
+      { "id": "shikaku_seikyukakunin", "label": "受験料が会社負担の場合は承認後に楽楽精算から立替経費精算を申請してください", "type": "checkbox", "required": false },
+      { "id": "shikaku_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_shikaku_1", "label": "人事総務担当承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_shikaku_2", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 1 },
+      { "id": "wf_shikaku_3", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 2 },
+      { "id": "wf_shikaku_4", "label": "人事総務部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_shikaku_5", "label": "経理部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 4 }
+    ],
+    "amountRules": [
+      { "fieldLabel": "受験料（税抜）", "minAmount": 50000, "requiredPosition": "Division Manager" }
+    ]
+  },
+  {
+    "id": "cat_hr_shikaku_crud",
+    "name": "資格の追加・削除",
+    "parentId": "cat_hr",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 3,
+    "customFields": [
+      { "id": "shkdel_type", "label": "申請内容", "type": "select", "options": ["資格追加", "資格削除"], "required": true },
+      { "id": "shkdel_kokka", "label": "国家/民間", "type": "select", "options": ["国家資格", "民間資格"], "required": false },
+      { "id": "shkdel_kubun1", "label": "区分1", "type": "text", "required": false, "placeholder": "例: IT系" },
+      { "id": "shkdel_kubun2", "label": "区分2", "type": "text", "required": false, "placeholder": "例: クラウド" },
+      { "id": "shkdel_name", "label": "資格名", "type": "text", "required": false, "placeholder": "例: AWS SAA" },
+      { "id": "shkdel_jukenumu", "label": "受験料有無", "type": "select", "options": ["有", "無"], "required": false },
+      { "id": "shkdel_jukenryo", "label": "受験料（円）", "type": "number", "required": false },
+      { "id": "shkdel_reason_add", "label": "追加理由", "type": "textarea", "required": false },
+      { "id": "shkdel_reason_del", "label": "削除理由", "type": "textarea", "required": false },
+      { "id": "shkdel_deldate", "label": "削除日", "type": "date", "required": false },
+      { "id": "shkdel_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_shkdel_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_shkdel_2", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_shkdel_3", "label": "上長３承認", "approverType": "third_manager", "stageIndex": 2 },
+      { "id": "wf_shkdel_4", "label": "管理責任者承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_shkdel_5", "label": "人事総務部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 4 },
+      { "id": "wf_shkdel_6", "label": "人事総務担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 5 }
+    ]
+  },
+  {
+    "id": "cat_hr_commute",
+    "name": "通勤手当（定期代）申請",
+    "parentId": "cat_hr",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 5,
+    "customFields": [
+      { "id": "commute_jiyu", "label": "申請事由", "type": "select", "options": ["利用開始", "利用終了", "運賃変更（住所変更）", "運賃変更（常駐先変更）", "運賃変更（通勤経路変更）", "運賃変更（運賃改定）"], "required": true },
+      { "id": "commute_reason", "label": "申請理由", "type": "text", "required": true, "placeholder": "例: 引越しによる通勤経路変更" },
+      { "id": "commute_startdate", "label": "通勤開始（変更）日", "type": "date", "required": false },
+      { "id": "commute_enddate", "label": "通勤終了日", "type": "date", "required": false },
+      { "id": "commute_jikoku_from", "label": "自宅最寄り駅", "type": "text", "required": false, "placeholder": "例: 渋谷駅" },
+      { "id": "commute_jikoku_to", "label": "勤務先最寄り駅", "type": "text", "required": false, "placeholder": "例: 新宿駅" },
+      { "id": "commute_kippu", "label": "切符代往復運賃（円）", "type": "number", "required": false },
+      { "id": "commute_teiki", "label": "定期代（1か月分）（円）", "type": "number", "required": false },
+      { "id": "commute_url", "label": "利用ルートの検索結果URL", "type": "text", "required": false, "placeholder": "経路検索サイトのURLを貼り付け" },
+      { "id": "commute_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_commute_1", "label": "人事総務確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_commute_2", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 1 },
+      { "id": "wf_commute_3", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 2 },
+      { "id": "wf_commute_4", "label": "事業部長/本部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_commute_5", "label": "管理責任者承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 4 },
+      { "id": "wf_commute_6", "label": "人事総務最終確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 5 }
+    ]
+  },
+  {
+    "id": "cat_hr_kintai",
+    "name": "楽々勤怠_勤務パターン変更申請",
+    "parentId": "cat_hr",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 3,
+    "customFields": [
+      { "id": "kintai_date", "label": "変更年月日", "type": "date", "required": true },
+      { "id": "kintai_reason", "label": "変更理由", "type": "select", "options": ["新規入場するため", "プロジェクトが変更になったため", "その他"], "required": true },
+      { "id": "kintai_reason_other", "label": "変更理由（その他）", "type": "textarea", "required": false },
+      { "id": "kintai_old_company", "label": "現（旧）勤務会社名", "type": "text", "required": true, "placeholder": "例: 株式会社○○" },
+      { "id": "kintai_new_company", "label": "新勤務会社名", "type": "text", "required": true, "placeholder": "例: 株式会社△△" },
+      { "id": "kintai_start_time", "label": "始業時刻", "type": "text", "required": true, "placeholder": "例: 09:00" },
+      { "id": "kintai_end_time", "label": "終業時刻", "type": "text", "required": true, "placeholder": "例: 18:00" },
+      { "id": "kintai_break_start", "label": "休憩開始時刻", "type": "text", "required": false, "placeholder": "例: 12:00" },
+      { "id": "kintai_break_end", "label": "休憩終了時刻", "type": "text", "required": false, "placeholder": "例: 13:00" },
+      { "id": "kintai_flex", "label": "フレックスタイム対象有無", "type": "select", "options": ["有", "無"], "required": true },
+      { "id": "kintai_half", "label": "半休", "type": "select", "options": ["有", "無"], "required": true },
+      { "id": "kintai_multi", "label": "本申請の勤務パターンを他に適用する方はいますか", "type": "select", "options": ["無", "有"], "required": true },
+      { "id": "kintai_others", "label": "申請者以外の対象者（氏名を改行区切りで入力）", "type": "textarea", "required": false },
+      { "id": "kintai_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_kintai_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_kintai_2", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_kintai_3", "label": "上長３承認", "approverType": "third_manager", "stageIndex": 2 },
+      { "id": "wf_kintai_4", "label": "管理責任者承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_kintai_5", "label": "人事総務確認・処理", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 4 }
+    ]
+  },
+  {
+    "id": "cat_hr_salary",
+    "name": "給与振込口座変更",
+    "parentId": "cat_hr",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 5,
+    "customFields": [
+      { "id": "salary_bank", "label": "金融機関名", "type": "text", "required": true, "placeholder": "例: ○○銀行" },
+      { "id": "salary_branch", "label": "支店名", "type": "text", "required": true, "placeholder": "例: 渋谷支店" },
+      { "id": "salary_type", "label": "口座種別", "type": "select", "options": ["普通", "当座"], "required": true },
+      { "id": "salary_number", "label": "口座番号", "type": "text", "required": true, "placeholder": "7桁の数字" },
+      { "id": "salary_holder", "label": "口座名義（カナ）", "type": "text", "required": true, "placeholder": "例: ヤマダ タロウ" },
+      { "id": "salary_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_salary_1", "label": "人事総務担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 }
+    ]
   },
   {
     "id": "cat_hr_keicho",
-    "name": "慶弔・休業申請",
-    "parentId": "cat_hr_base",
+    "name": "社員慶弔に関する報告書",
+    "parentId": "cat_hr",
     "targetDepartmentId": "dept_hr",
     "slaDays": 10,
     "customFields": [
-      {
-        "id": "event_date",
-        "label": "事由発生日",
-        "type": "date",
-        "required": true
-      },
-      {
-        "id": "subject_name",
-        "label": "対象者氏名",
-        "type": "text",
-        "required": true
-      },
-      {
-        "id": "days_planned",
-        "label": "休業予定日数",
-        "type": "number",
-        "required": true
-      }
+      { "id": "keicho_type", "label": "申請内容", "type": "select", "options": ["祝事", "弔事"], "required": false },
+      { "id": "keicho_shuji_file", "label": "報告書（祝事）", "type": "file", "required": false },
+      { "id": "keicho_shuji_proof", "label": "事実を証明する書類（祝事）", "type": "file", "required": false },
+      { "id": "keicho_chouji_file", "label": "報告書（弔事）", "type": "file", "required": false },
+      { "id": "keicho_chouji_proof", "label": "事実を証明する書類（弔事）", "type": "file", "required": false },
+      { "id": "keicho_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_keicho_1", "label": "上長（TL）承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_keicho_2", "label": "上長（GM）承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_keicho_3", "label": "事業部長/本部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 2 },
+      { "id": "wf_keicho_4", "label": "管理責任者承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_keicho_5", "label": "人事総務担当確認（慶弔金処理）", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 4 },
+      { "id": "wf_keicho_6", "label": "人事総務担当確認（勤怠処理）", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 5 }
     ]
   },
   {
-    "id": "cat_it_base",
-    "name": "IT・情報システム",
-    "parentId": null,
-    "targetDepartmentId": "dept_it"
-  },
-  {
-    "id": "cat_it_pc",
-    "name": "PC貸与・交換依頼",
-    "parentId": "cat_it_base",
-    "targetDepartmentId": "dept_it",
-    "slaDays": 7,
+    "id": "cat_hr_36",
+    "name": "36協定特別条項発動申請書",
+    "parentId": "cat_hr",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 3,
     "customFields": [
-      {
-        "id": "pc_type",
-        "label": "希望機種",
-        "type": "select",
-        "options": ["Windows (標準)", "MacBook Pro (開発用)", "Surface Pro (営業用)"],
-        "required": true
-      },
-      {
-        "id": "reason",
-        "label": "利用目的",
-        "type": "text",
-        "required": true
-      },
-      {
-        "id": "delivery_date",
-        "label": "希望納品日",
-        "type": "date",
-        "required": true
-      }
+      { "id": "sa36_jigyousho", "label": "事業所", "type": "text", "required": true, "placeholder": "例: 東京本社" },
+      { "id": "sa36_kubun", "label": "申請区分", "type": "select", "options": ["月45時間超", "年間360時間超"], "required": true },
+      { "id": "sa36_month", "label": "対象月", "type": "number", "required": false },
+      { "id": "sa36_year", "label": "対象年", "type": "number", "required": false },
+      { "id": "sa36_biko_applicant", "label": "備考欄（申請者）", "type": "textarea", "required": false },
+      { "id": "sa36_work_content", "label": "1) 作業内容", "type": "textarea", "required": false },
+      { "id": "sa36_reason", "label": "2) 時間外労働を行う理由", "type": "textarea", "required": false },
+      { "id": "sa36_total_hours", "label": "（想定）総労働時間（h）", "type": "number", "required": false },
+      { "id": "sa36_36hours", "label": "（想定）36協定対象時間（h）", "type": "number", "required": false },
+      { "id": "sa36_annual_hours", "label": "（想定）年間残業時間（h）", "type": "number", "required": false },
+      { "id": "sa36_check_100h", "label": "4) 月100時間未満・2〜6か月平均80時間以内の確認", "type": "checkbox", "required": false },
+      { "id": "sa36_member_status", "label": "5) 対象社員の状況（業務遂行面、健康面等）", "type": "textarea", "required": false },
+      { "id": "sa36_health_measures", "label": "6) 健康及び福祉を確保するための措置", "type": "select", "options": ["こころとからだの相談窓口のご案内", "産業医面談の実施のご案内"], "required": false },
+      { "id": "sa36_future", "label": "7) 今後の見通し/具体的対策", "type": "textarea", "required": false },
+      { "id": "sa36_other", "label": "8) その他", "type": "textarea", "required": false },
+      { "id": "sa36_file", "label": "添付ファイル", "type": "file", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_sa36_1", "label": "上長１承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_sa36_2", "label": "上長２承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 1 },
+      { "id": "wf_sa36_3", "label": "上長３承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 2 },
+      { "id": "wf_sa36_4", "label": "労働者代表承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_sa36_5", "label": "人事総務担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 4 }
     ]
   },
   {
-    "id": "cat_it_soft",
-    "name": "ソフトウェア導入相談",
-    "parentId": "cat_it_base",
+    "id": "cat_hr_retire",
+    "name": "退職時チェック",
+    "parentId": "cat_hr",
+    "targetDepartmentId": "dept_hr",
+    "slaDays": 10,
+    "customFields": [
+      { "id": "retire_date", "label": "退職日", "type": "date", "required": true },
+      { "id": "retire_last_day", "label": "最終出社予定日", "type": "date", "required": true },
+      { "id": "retire_zip", "label": "退職後郵便番号", "type": "text", "required": true, "placeholder": "例: 150-0001" },
+      { "id": "retire_address", "label": "退職後住所", "type": "textarea", "required": true, "placeholder": "都道府県から記入" },
+      { "id": "retire_tel", "label": "退職後の連絡先（TEL）", "type": "text", "required": true },
+      { "id": "retire_email", "label": "退職後の連絡先（E-mail）", "type": "text", "required": true },
+      { "id": "retire_idcard", "label": "社員証", "type": "select", "options": ["破棄しました", "返却しました", "返却予定", "貸与されていない"], "required": true },
+      { "id": "retire_meishi", "label": "名刺", "type": "select", "options": ["破棄しました", "返却しました", "返却予定", "貸与されていない"], "required": true },
+      { "id": "retire_kansho", "label": "入館証", "type": "select", "options": ["東京本社へ返却済", "返却予定", "貸与されていない", "その他"], "required": true },
+      { "id": "retire_pc", "label": "パソコン返却", "type": "select", "options": ["全て返却済み", "未返却あり", "貸与されていない"], "required": true },
+      { "id": "retire_phone", "label": "携帯電話返却", "type": "select", "options": ["全て返却", "未返却あり", "貸与されていない"], "required": true },
+      { "id": "retire_wifi", "label": "モバイルWi-Fi返却", "type": "select", "options": ["全て返却", "一部未返却あり", "貸与されていない"], "required": true },
+      { "id": "retire_kenko_card", "label": "健康保険被保険者証/資格確認書の有無", "type": "checkbox", "required": true },
+      { "id": "retire_kimitsu", "label": "機密保持に関する確認書の合意", "type": "checkbox", "required": true },
+      { "id": "retire_taishokudodeki", "label": "退職届(願)の提出", "type": "checkbox", "required": true },
+      { "id": "retire_kintai", "label": "勤怠登録", "type": "checkbox", "required": true },
+      { "id": "retire_kehi", "label": "経費精算申請", "type": "checkbox", "required": true },
+      { "id": "retire_hikisugi", "label": "業務引継ぎ", "type": "checkbox", "required": true },
+      { "id": "retire_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_retire_1", "label": "人事総務担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_retire_2", "label": "情報システム担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 1 }
+    ]
+  },
+  {
+    "id": "cat_it_usb_personal",
+    "name": "個人所有USB利用申請",
+    "parentId": "cat_it",
     "targetDepartmentId": "dept_it",
-    "slaDays": 14
+    "slaDays": 3,
+    "customFields": [
+      { "id": "usb_p_type", "label": "申請内容", "type": "select", "options": ["新規利用申請", "期限延長申請", "停止申請"], "required": true },
+      { "id": "usb_p_reason", "label": "申請理由", "type": "textarea", "required": false, "placeholder": "利用目的・業務上の必要性を記入" },
+      { "id": "usb_p_vendor", "label": "ベンダー名", "type": "text", "required": false },
+      { "id": "usb_p_device", "label": "デバイス名", "type": "text", "required": false },
+      { "id": "usb_p_start", "label": "利用開始希望日", "type": "date", "required": false },
+      { "id": "usb_p_end", "label": "利用終了予定日", "type": "date", "required": false },
+      { "id": "usb_p_extend", "label": "期限延長日", "type": "date", "required": false },
+      { "id": "usb_p_stop", "label": "停止確認", "type": "checkbox", "required": false },
+      { "id": "usb_p_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_usb_p_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_usb_p_2", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_usb_p_3", "label": "情シス担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 2 }
+    ]
   },
   {
-    "id": "cat_it_account",
-    "name": "各種アカウント発行",
-    "parentId": "cat_it_base",
+    "id": "cat_it_usb_loan",
+    "name": "外部記憶媒体（USB等）貸出申請",
+    "parentId": "cat_it",
     "targetDepartmentId": "dept_it",
-    "slaDays": 1
+    "slaDays": 2,
+    "customFields": [
+      { "id": "usbl_type", "label": "申請内容", "type": "select", "options": ["USB", "外付けHDD", "CD/DVD（外付けドライブ含む）"], "required": true },
+      { "id": "usbl_reason_usb", "label": "申請理由（USB）", "type": "textarea", "required": false },
+      { "id": "usbl_outside_usb", "label": "オフィス外利用有無（USB）", "type": "select", "options": ["利用する", "利用しない"], "required": false },
+      { "id": "usbl_start_usb", "label": "利用開始希望日（USB）", "type": "date", "required": false },
+      { "id": "usbl_end_usb", "label": "返却予定日（USB）", "type": "date", "required": false },
+      { "id": "usbl_reason_hdd", "label": "申請理由（外付けHDD）", "type": "textarea", "required": false },
+      { "id": "usbl_start_hdd", "label": "利用開始希望日（外付けHDD）", "type": "date", "required": false },
+      { "id": "usbl_end_hdd", "label": "返却予定日（外付けHDD）", "type": "date", "required": false },
+      { "id": "usbl_reason_dvd", "label": "申請理由（CD/DVD）", "type": "textarea", "required": false },
+      { "id": "usbl_media", "label": "メディア種別", "type": "select", "options": ["CD", "DVD"], "required": false },
+      { "id": "usbl_start_dvd", "label": "利用開始希望日（CD/DVD）", "type": "date", "required": false },
+      { "id": "usbl_end_dvd", "label": "利用終了予定日（CD/DVD）", "type": "date", "required": false },
+      { "id": "usbl_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_usbl_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_usbl_2", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_usbl_3", "label": "情報システム確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 2 }
+    ]
   },
   {
-    "id": "cat_ga_base",
-    "name": "総務・ファシリティ",
-    "parentId": null,
-    "targetDepartmentId": "dept_ga"
+    "id": "cat_it_byod",
+    "name": "当社資産外端末利用申請",
+    "parentId": "cat_it",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 3,
+    "customFields": [
+      { "id": "byod_devices", "label": "デバイス情報（メーカー・機種名・OS・バージョン）", "type": "textarea", "required": false, "placeholder": "例:\nApple / iPhone 15 / iOS 17.0\nSamsung / Galaxy S23 / Android 13" },
+      { "id": "byod_email", "label": "セキュアブラウザのコードを受け取れるアドレス", "type": "text", "required": true, "placeholder": "example@company.co.jp" },
+      { "id": "byod_agree", "label": "誓約書を読んで同意してください", "type": "checkbox", "required": true },
+      { "id": "byod_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_byod_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_byod_2", "label": "上長２承認", "approverType": "role", "approverRole": "IT_Admin", "stageIndex": 1 },
+      { "id": "wf_byod_3", "label": "情報システム確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 2 }
+    ]
   },
   {
-    "id": "cat_ga_card",
-    "name": "名刺作成依頼",
-    "parentId": "cat_ga_base",
+    "id": "cat_it_mailing",
+    "name": "メーリングリスト申請",
+    "parentId": "cat_it",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 2,
+    "customFields": [
+      { "id": "ml_type", "label": "依頼内容", "type": "select", "options": ["新規作成", "更新", "削除"], "required": true },
+      { "id": "ml_purpose", "label": "利用用途", "type": "text", "required": false, "placeholder": "例: プロジェクト連絡用" },
+      { "id": "ml_new_addr", "label": "新規メーリングリストアドレス", "type": "text", "required": false, "placeholder": "例: project-abc@company.co.jp" },
+      { "id": "ml_admin1", "label": "メーリングリスト管理者①", "type": "text", "required": false, "placeholder": "氏名を入力" },
+      { "id": "ml_admin2", "label": "メーリングリスト管理者②", "type": "text", "required": false },
+      { "id": "ml_members", "label": "登録メンバー（氏名を改行区切りで入力）", "type": "textarea", "required": false },
+      { "id": "ml_update_addr", "label": "更新対象のメーリングリストアドレス", "type": "text", "required": false },
+      { "id": "ml_member_changes", "label": "メンバー更新内容（追加・削除を明記）", "type": "textarea", "required": false },
+      { "id": "ml_del_addr", "label": "削除対象のメーリングリストアドレス", "type": "text", "required": false },
+      { "id": "ml_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_ml_1", "label": "ML管理者承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_ml_2", "label": "情報システム担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 1 }
+    ]
+  },
+  {
+    "id": "cat_it_shared_addr",
+    "name": "共有アドレス作成・更新・削除申請",
+    "parentId": "cat_it",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 2,
+    "customFields": [
+      { "id": "shared_type", "label": "依頼内容", "type": "select", "options": ["新規作成", "更新", "削除"], "required": true },
+      { "id": "shared_purpose", "label": "利用用途", "type": "text", "required": false, "placeholder": "例: 営業部共有窓口" },
+      { "id": "shared_new_addr", "label": "新規共有アドレス", "type": "text", "required": false, "placeholder": "例: sales@company.co.jp" },
+      { "id": "shared_admin1", "label": "共有アドレス管理者①", "type": "text", "required": false },
+      { "id": "shared_admin2", "label": "共有アドレス管理者②", "type": "text", "required": false },
+      { "id": "shared_members", "label": "登録メンバー（氏名を改行区切りで入力）", "type": "textarea", "required": false },
+      { "id": "shared_update_addr", "label": "更新対象の共有アドレス", "type": "text", "required": false },
+      { "id": "shared_member_changes", "label": "メンバー更新内容（追加・削除を明記）", "type": "textarea", "required": false },
+      { "id": "shared_del_addr", "label": "削除対象の共有アドレス", "type": "text", "required": false },
+      { "id": "shared_del_purpose", "label": "削除対象の利用用途", "type": "text", "required": false },
+      { "id": "shared_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_shared_1", "label": "共有アドレス管理者承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_shared_2", "label": "情報システム担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 1 }
+    ]
+  },
+  {
+    "id": "cat_it_udemy",
+    "name": "Udemy・Ping-T受講申し込み",
+    "parentId": "cat_it",
+    "targetDepartmentId": "dept_it",
+    "slaDays": 5,
+    "customFields": [
+      { "id": "udemy_courses", "label": "受講者リスト（氏名・コース名を改行区切りで入力）", "type": "textarea", "required": false, "placeholder": "例:\n山田 太郎 / AWS入門コース\n田中 花子 / Ping-T CCNA" },
+      { "id": "udemy_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_udemy_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_udemy_2", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_udemy_3", "label": "人事総務担当承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 2 },
+      { "id": "wf_udemy_4", "label": "人事総務GM承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 }
+    ]
+  },
+  {
+    "id": "cat_ga_meishi",
+    "name": "名刺申請",
+    "parentId": "cat_ga",
+    "targetDepartmentId": "dept_ga",
+    "slaDays": 5,
+    "customFields": [
+      { "id": "meishi_yakushoku", "label": "役職", "type": "text", "required": true, "placeholder": "例: 営業部 主任" },
+      { "id": "meishi_kaisha", "label": "会社情報（掲載する部門・連絡先等）", "type": "text", "required": false },
+      { "id": "meishi_yakushoku_en_before", "label": "役職（英語）前回申請内容", "type": "text", "required": false },
+      { "id": "meishi_yakushoku_en", "label": "役職（英語）", "type": "text", "required": false, "placeholder": "例: Sales Manager" },
+      { "id": "meishi_name_en_before", "label": "氏名（英語）前回申請内容", "type": "text", "required": false },
+      { "id": "meishi_name_en", "label": "氏名（英語）", "type": "text", "required": false, "placeholder": "例: Taro Yamada" },
+      { "id": "meishi_count", "label": "名刺の枚数", "type": "select", "options": ["30枚（社内印刷）", "100枚（外注）"], "required": true },
+      { "id": "meishi_receive", "label": "受け取り方法", "type": "select", "options": ["東京本社", "横浜本社", "自宅郵送"], "required": true },
+      { "id": "meishi_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_meishi_1", "label": "人事総務担当承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 }
+    ]
+  },
+  {
+    "id": "cat_ga_cert",
+    "name": "各種証明書申請",
+    "parentId": "cat_ga",
     "targetDepartmentId": "dept_ga",
     "slaDays": 3,
     "customFields": [
-      {
-        "id": "name_romaji",
-        "label": "氏名（ローマ字表記）",
-        "type": "text",
-        "required": true
-      },
-      {
-        "id": "quantity",
-        "label": "必要枚数",
-        "type": "number",
-        "required": true
-      }
+      { "id": "cert_type", "label": "証明書名", "type": "select", "options": ["就労証明書", "在籍証明書", "在職証明書", "復職(復帰)証明書", "その他"], "required": true },
+      { "id": "cert_file", "label": "各種証明書（様式がある場合）", "type": "file", "required": false },
+      { "id": "cert_deadline", "label": "希望期限", "type": "date", "required": true },
+      { "id": "cert_reason", "label": "申請理由", "type": "textarea", "required": true, "placeholder": "提出先・用途を記入してください" },
+      { "id": "cert_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_cert_1", "label": "人事総務担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 }
     ]
   },
   {
-    "id": "cat_ga_mail",
-    "name": "郵便物・宅配発送",
-    "parentId": "cat_ga_base",
+    "id": "cat_ga_bukatsu",
+    "name": "BUKATSU費用申請",
+    "parentId": "cat_ga",
     "targetDepartmentId": "dept_ga",
-    "slaDays": 1
+    "slaDays": 5,
+    "customFields": [
+      { "id": "bukatsu_dept", "label": "申請部署", "type": "select", "options": ["主所属", "兼務所属"], "required": false },
+      { "id": "bukatsu_name", "label": "BUKATSU名", "type": "text", "required": true, "placeholder": "例: 野球部" },
+      { "id": "bukatsu_period", "label": "対象期", "type": "select", "options": ["63期", "64期", "65期", "66期", "67期", "68期", "69期", "70期"], "required": false },
+      { "id": "bukatsu_quarter", "label": "対象四半期", "type": "select", "options": ["1Q", "2Q", "3Q", "4Q"], "required": false },
+      { "id": "bukatsu_event", "label": "イベント名", "type": "select", "options": ["ファミリー", "顧客"], "required": true },
+      { "id": "bukatsu_url", "label": "社内報URL", "type": "text", "required": true, "placeholder": "社内報の記事URLを貼り付け" },
+      { "id": "bukatsu_file", "label": "計算シート添付", "type": "file", "required": true },
+      { "id": "bukatsu_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_bukatsu_1", "label": "総務担当承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 0 },
+      { "id": "wf_bukatsu_2", "label": "人事総務部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 1 },
+      { "id": "wf_bukatsu_3", "label": "財務経理部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 2 },
+      { "id": "wf_bukatsu_4", "label": "コーポレート本部長承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 },
+      { "id": "wf_bukatsu_5", "label": "人事担当承認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 4 }
+    ]
+  },
+  {
+    "id": "cat_ga_device",
+    "name": "貸与機器の新規利用_使用者変更_返却",
+    "parentId": "cat_ga",
+    "targetDepartmentId": "dept_ga",
+    "slaDays": 5,
+    "customFields": [
+      { "id": "device_dept", "label": "申請部署", "type": "select", "options": ["主所属", "兼務所属"], "required": false },
+      { "id": "device_kiki", "label": "機器選択", "type": "checkbox", "required": false },
+      { "id": "device_pc_kubun", "label": "区分（PC）", "type": "select", "options": ["貸与", "返却"], "required": false },
+      { "id": "device_pc_user", "label": "貸与希望者（PC）", "type": "text", "required": false },
+      { "id": "device_pc_outside", "label": "社外への持ち出し", "type": "select", "options": ["有", "無"], "required": false },
+      { "id": "device_pc_start", "label": "希望開始日（PC）", "type": "date", "required": false },
+      { "id": "device_pc_end", "label": "終了予定日（PC）", "type": "date", "required": false },
+      { "id": "device_pc_id", "label": "返却PC管理番号", "type": "text", "required": false },
+      { "id": "device_sp_kubun", "label": "区分（スマホ）", "type": "select", "options": ["貸与", "返却"], "required": false },
+      { "id": "device_sp_user", "label": "貸与希望者（スマホ）", "type": "text", "required": false },
+      { "id": "device_sp_start", "label": "希望開始日（スマホ）", "type": "date", "required": false },
+      { "id": "device_sp_end", "label": "終了予定日（スマホ）", "type": "date", "required": false },
+      { "id": "device_wifi_kubun", "label": "区分（モバイルWi-Fi）", "type": "select", "options": ["貸与", "返却"], "required": false },
+      { "id": "device_wifi_user", "label": "貸与希望者（モバイルWi-Fi）", "type": "text", "required": false },
+      { "id": "device_wifi_start", "label": "希望開始日（モバイルWi-Fi）", "type": "date", "required": false },
+      { "id": "device_wifi_end", "label": "終了予定日（モバイルWi-Fi）", "type": "date", "required": false },
+      { "id": "device_biko", "label": "備考", "type": "textarea", "required": false }
+    ],
+    "workflowTemplate": [
+      { "id": "wf_device_1", "label": "上長１承認", "approverType": "direct_manager", "stageIndex": 0 },
+      { "id": "wf_device_2", "label": "上長２承認", "approverType": "second_manager", "stageIndex": 1 },
+      { "id": "wf_device_3", "label": "情報システム担当確認", "approverType": "approval_group", "approverGroupIds": ["user_admin_1"], "parallelType": "or", "stageIndex": 2 },
+      { "id": "wf_device_4", "label": "CFO/CSO承認", "approverType": "role", "approverRole": "HR_Admin", "stageIndex": 3 }
+    ]
   }
 ]

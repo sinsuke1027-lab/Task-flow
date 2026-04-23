@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '@/lib/repository/types';
+import { User, DataProvider } from '@/lib/repository/types';
 import { getDataProvider } from '@/lib/repository/factory';
 import { useRouter } from 'next/navigation';
 
@@ -24,10 +24,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const storedUserId = localStorage.getItem('task_bridge_user_id');
       if (storedUserId) {
         const provider = getDataProvider();
-        // Since it's a singleton in mock mode, we set the current user here
-        if ('setCurrentUser' in provider) {
-          (provider as any).setCurrentUser(storedUserId);
-        }
+        const p = provider as DataProvider & { setCurrentUser?: (id: string) => void };
+        p.setCurrentUser?.(storedUserId);
         const currentUser = await provider.getCurrentUser();
         setUser(currentUser);
       }
@@ -38,9 +36,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (userId: string) => {
     const provider = getDataProvider();
-    if ('setCurrentUser' in provider) {
-      (provider as any).setCurrentUser(userId);
-    }
+    const p = provider as DataProvider & { setCurrentUser?: (id: string) => void };
+    p.setCurrentUser?.(userId);
     const currentUser = await provider.getCurrentUser();
     if (currentUser) {
       setUser(currentUser);

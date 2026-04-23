@@ -1,9 +1,8 @@
 'use client';
 
-import { 
-  CheckCircle2, 
-  Clock, 
-  ArrowUpRight, 
+import {
+  Clock,
+  ArrowUpRight,
   Plus,
   BarChart3,
   ChevronRight,
@@ -11,14 +10,15 @@ import {
   Filter,
   TreeDeciduous,
   Check,
-  RotateCcw,
   AlertTriangle,
   Zap,
 } from 'lucide-react';
 
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import Image from 'next/image';
 import { getDataProvider } from '@/lib/repository/factory';
-import { useEffect, useState, useMemo, useCallback } from 'react';
-import { Task, User, OrganizationUnit, Department } from '@/lib/repository/types';
+import { Task, User, OrganizationUnit, Department, Delegation } from '@/lib/repository/types';
+import { isMyTurn } from '@/lib/workflow-utils';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { OrgNode } from '@/components/organization/org-node';
@@ -30,11 +30,16 @@ export default function Dashboard() {
   const [orgUnits, setOrgUnits] = useState<OrganizationUnit[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [delegations, setDelegations] = useState<Delegation[]>([]);
   
   // Filter state
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedDeptId, setSelectedDeptId] = useState('all');
+
+  // Bulk approve state
+  const [selectedTaskIds, setSelectedTaskIds] = useState<Set<string>>(new Set());
+  const [isBulkApproving, setIsBulkApproving] = useState(false);
 
   // Role Flags
   const isSystemAdmin = user?.role === 'admin';
@@ -43,16 +48,18 @@ export default function Dashboard() {
 
   const fetchData = useCallback(async () => {
     const provider = getDataProvider();
-    const [t, u, o, d] = await Promise.all([
+    const [t, u, o, d, del] = await Promise.all([
       provider.getTasks(),
       provider.getUsers(),
       provider.getOrganizationUnits(),
-      provider.getDepartments()
+      provider.getDepartments(),
+      provider.getDelegations(),
     ]);
     setTasks(t);
     setAllUsers(u);
     setOrgUnits(o);
     setDepartments(d);
+    setDelegations(del);
   }, []);
 
   useEffect(() => {
@@ -60,9 +67,10 @@ export default function Dashboard() {
   }, [fetchData]);
 
   const handleApprove = async (taskId: string) => {
+    if (!user) return;
     const provider = getDataProvider();
     try {
-      await provider.processApproval(taskId, user!.id, 'approve', 'ダッシュボードからのクイック承認');
+      await provider.processApproval(taskId, user.id, 'approve', 'ダッシュボードからのクイック承認');
       await fetchData();
     } catch (error) {
       console.error('Approval failed:', error);
@@ -70,12 +78,49 @@ export default function Dashboard() {
   };
 
   const handleReject = async (taskId: string) => {
+    if (!user) return;
     const provider = getDataProvider();
     try {
-      await provider.processApproval(taskId, user!.id, 'reject', 'ダッシュボードからのクイック差戻し');
+      await provider.processApproval(taskId, user.id, 'reject', 'ダッシュボードからのクイック差戻し');
       await fetchData();
     } catch (error) {
       console.error('Rejection failed:', error);
+    }
+  };
+
+  const handleBulkApprove = async () => {
+    if (!user || selectedTaskIds.size === 0) return;
+    setIsBulkApproving(true);
+    const provider = getDataProvider();
+    try {
+      await Promise.all(
+        Array.from(selectedTaskIds).map(id =>
+          provider.processApproval(id, user.id, 'approve', 'ダッシュボードからの一括承認')
+        )
+      );
+      setSelectedTaskIds(new Set());
+      await fetchData();
+    } catch (error) {
+      console.error('Bulk approval failed:', error);
+    } finally {
+      setIsBulkApproving(false);
+    }
+  };
+
+  const toggleSelectTask = (taskId: string) => {
+    setSelectedTaskIds(prev => {
+      const next = new Set(prev);
+      if (next.has(taskId)) next.delete(taskId);
+      else next.add(taskId);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedTaskIds.size === myTurnTasks.length) {
+      setSelectedTaskIds(new Set());
+    } else {
+      setSelectedTaskIds(new Set(myTurnTasks.map(t => t.id)));
     }
   };
 
@@ -115,20 +160,20 @@ export default function Dashboard() {
     return stats;
   }, [filteredTasks]);
 
-  const myTurnTasks = tasks.filter(t => t.currentApproverId === user?.id && t.status !== 'completed');
+  const myTurnTasks = tasks.filter(t => user && isMyTurn(t, user.id, delegations));
   const myPendingRequests = tasks.filter(t => t.requesterId === user?.id && t.status !== 'completed');
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 pb-20">
+    <div className="space-y-5 animate-in fade-in duration-700 pb-6">
       {/* Header Section */}
-      <header className="flex flex-col gap-2">
+      <header className="flex flex-col gap-1">
         <div className="flex items-center gap-2 text-blue-600">
           <ArrowUpRight className="w-4 h-4" />
           <span className="text-[10px] font-black uppercase tracking-widest">
             {isSystemAdmin ? 'System Oversight' : isManagement ? 'Management Dashboard' : 'Personal Workspace'}
           </span>
         </div>
-        <h1 className="text-4xl font-black tracking-tight text-[#191714]">
+        <h1 className="text-2xl font-black tracking-tight text-[#191714]">
           {isSystemAdmin ? '組織滞留モニタリング' : isMember ? '提案事項' : 'マネジメント・インサイト'}
         </h1>
         <p className="text-slate-500 font-medium">
@@ -138,9 +183,9 @@ export default function Dashboard() {
 
       {/* Monitoring Visualization Section (Admin & Management) */}
       {(isSystemAdmin || isManagement) && (
-        <div className="space-y-8">
+        <div className="space-y-4">
           {/* Advanced Filters */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 notion-shadow flex flex-wrap items-center gap-8">
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 notion-shadow flex flex-wrap items-center gap-6">
             <div className="flex items-center gap-3">
               <Calendar className="w-4 h-4 text-slate-400" />
               <div className="flex items-center gap-2">
@@ -159,7 +204,7 @@ export default function Dashboard() {
           </div>
 
           {/* Lead Time Visualization */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <StatsCard icon={<Zap className="w-4 h-4" />} title="Normal (0-2d)" value={leadTimeStats.safe} color="blue" percent={(leadTimeStats.safe / (filteredTasks.filter(t => t.status !== 'completed').length || 1)) * 100} />
             <StatsCard icon={<Clock className="w-4 h-4" />} title="Warning (3-7d)" value={leadTimeStats.warning} color="amber" percent={(leadTimeStats.warning / (filteredTasks.filter(t => t.status !== 'completed').length || 1)) * 100} />
             <StatsCard icon={<AlertTriangle className="w-4 h-4" />} title="Stagnated (>7d)" value={leadTimeStats.alert} color="rose" percent={(leadTimeStats.alert / (filteredTasks.filter(t => t.status !== 'completed').length || 1)) * 100} />
@@ -185,13 +230,25 @@ export default function Dashboard() {
       )}
 
       {/* Actionable Tasks Section (Everyone) */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight text-[#191714] flex items-center gap-2">
+      <section className="space-y-3">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <h2 className="text-base font-bold tracking-tight text-[#191714] flex items-center gap-2">
             <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
             対応すべき申請
           </h2>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{myTurnTasks.length}件</span>
+          <div className="flex items-center gap-3">
+            {selectedTaskIds.size > 0 && (
+              <button
+                onClick={handleBulkApprove}
+                disabled={isBulkApproving}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all disabled:opacity-50 disabled:pointer-events-none"
+              >
+                <Check className="w-3 h-3" />
+                選択中 {selectedTaskIds.size} 件を一括承認
+              </button>
+            )}
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{myTurnTasks.length}件</span>
+          </div>
         </div>
         
         {myTurnTasks.length > 0 ? (
@@ -199,6 +256,14 @@ export default function Dashboard() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-slate-50/50 border-b">
+                  <th className="pl-4 pr-2 py-4 w-10">
+                    <input
+                      type="checkbox"
+                      checked={myTurnTasks.length > 0 && selectedTaskIds.size === myTurnTasks.length}
+                      onChange={toggleSelectAll}
+                      className="w-4 h-4 rounded cursor-pointer accent-slate-900"
+                    />
+                  </th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">申請内容</th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">申請者</th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">回答期限</th>
@@ -207,7 +272,15 @@ export default function Dashboard() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {myTurnTasks.map(t => (
-                  <tr key={t.id} className="group hover:bg-slate-50/30 transition-all">
+                  <tr key={t.id} className={`group hover:bg-slate-50/30 transition-all ${selectedTaskIds.has(t.id) ? 'bg-slate-50/50' : ''}`}>
+                    <td className="pl-4 pr-2 py-4">
+                      <input
+                        type="checkbox"
+                        checked={selectedTaskIds.has(t.id)}
+                        onChange={() => toggleSelectTask(t.id)}
+                        className="w-4 h-4 rounded cursor-pointer accent-slate-900"
+                      />
+                    </td>
                     <td className="px-6 py-4">
                       <Link href={`/inbox?taskId=${t.id}`} className="block">
                         <div className="text-sm font-bold text-slate-800">{t.title}</div>
@@ -216,7 +289,12 @@ export default function Dashboard() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <img src={allUsers.find(u => u.id === t.requesterId)?.avatar} className="w-6 h-6 rounded-lg opacity-80" />
+                        {(() => {
+                          const avatar = allUsers.find(u => u.id === t.requesterId)?.avatar;
+                          return avatar
+                            ? <Image src={avatar} width={24} height={24} className="w-6 h-6 rounded-lg opacity-80" alt="" />
+                            : <div className="w-6 h-6 rounded-lg bg-slate-200 flex items-center justify-center text-[8px] font-bold text-slate-500">U</div>;
+                        })()}
                         <span className="text-xs font-bold text-slate-600">{allUsers.find(u => u.id === t.requesterId)?.name}</span>
                       </div>
                     </td>
@@ -245,8 +323,8 @@ export default function Dashboard() {
       </section>
 
       {/* My Requests Section (Everyone) */}
-      <section className="space-y-6">
-        <h2 className="text-xl font-bold tracking-tight text-[#191714]">自身の申請状況と履歴</h2>
+      <section className="space-y-3">
+        <h2 className="text-base font-bold tracking-tight text-[#191714]">自身の申請状況と履歴</h2>
         <div className="bg-white rounded-3xl border border-slate-200 notion-shadow overflow-hidden">
           {myPendingRequests.length > 0 ? (
             <table className="w-full text-left">
@@ -289,14 +367,14 @@ export default function Dashboard() {
       </section>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link href="/request" className="flex items-center gap-4 p-8 bg-slate-900 text-white rounded-3xl hover:bg-black group shadow-xl">
-           <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center"><Plus className="w-6 h-6" /></div>
-           <div><div className="text-lg font-bold">新規依頼を作成</div><p className="text-xs text-slate-400">Apply for anything</p></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <Link href="/request" className="flex items-center gap-3 p-5 bg-slate-900 text-white rounded-2xl hover:bg-black group shadow-xl">
+           <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center"><Plus className="w-5 h-5" /></div>
+           <div><div className="text-sm font-bold">新規依頼を作成</div><p className="text-[10px] text-slate-400">Apply for anything</p></div>
         </Link>
-        <Link href="/tracker" className="flex items-center gap-4 p-8 bg-white border border-slate-200 rounded-3xl hover:border-slate-900 group">
-           <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white"><BarChart3 className="w-6 h-6" /></div>
-           <div><div className="text-lg font-bold text-slate-900">全ての履歴を確認</div><p className="text-xs text-slate-400">Audit your process</p></div>
+        <Link href="/tracker" className="flex items-center gap-3 p-5 bg-white border border-slate-200 rounded-2xl hover:border-slate-900 group">
+           <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white"><BarChart3 className="w-5 h-5" /></div>
+           <div><div className="text-sm font-bold text-slate-900">全ての履歴を確認</div><p className="text-[10px] text-slate-400">Audit your process</p></div>
         </Link>
       </div>
     </div>
@@ -304,7 +382,7 @@ export default function Dashboard() {
 }
 
 // Helper component for visualization stats
-function StatsCard({ icon, title, value, color, percent }: { icon: any, title: string, value: number, color: string, percent: number }) {
+function StatsCard({ icon, title, value, color, percent }: { icon: React.ReactNode, title: string, value: number, color: string, percent: number }) {
   const colorMap: Record<string, string> = {
     blue: 'bg-blue-600 text-blue-600 bg-blue-50',
     amber: 'bg-amber-600 text-amber-600 bg-amber-50',
