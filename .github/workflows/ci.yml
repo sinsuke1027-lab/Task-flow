@@ -2,14 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - 'src/**'
       - '**/*.ts'
       - '**/*.tsx'
       - 'package.json'
   pull_request:
-    branches: [main]
+    branches: [master]
     paths:
       - 'src/**'
       - '**/*.ts'
