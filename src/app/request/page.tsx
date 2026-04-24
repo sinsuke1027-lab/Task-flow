@@ -26,6 +26,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const DRAFTS_KEY = 'task_bridge_drafts';
 const MAX_DRAFTS = 5;
 
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_EXTENSIONS = [
+  '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+  '.png', '.jpg', '.jpeg', '.gif', '.txt', '.zip',
+];
+
 interface DraftEntry {
   id: string;
   title: string;
@@ -70,6 +76,7 @@ function RequestFormContent() {
   const [priority, setPriority] = useState<'low' | 'normal' | 'high'>('normal');
   const [taskType, setTaskType] = useState<'approval' | 'circulation'>('approval');
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [fileErrors, setFileErrors] = useState<string[]>([]);
 
   // フォームバリデーション
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -306,6 +313,25 @@ function RequestFormContent() {
       stage++;
       return { ...step, stageIndex: stage, parallelType: undefined };
     });
+  };
+
+  const addFiles = (incoming: File[]) => {
+    const errors: string[] = [];
+    const valid: File[] = [];
+    for (const file of incoming) {
+      const ext = ('.' + file.name.split('.').pop()).toLowerCase();
+      if (!ALLOWED_EXTENSIONS.includes(ext)) {
+        errors.push(`${file.name}：許可されていないファイル形式です（${ext}）`);
+        continue;
+      }
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        errors.push(`${file.name}：ファイルサイズが10MBを超えています（${(file.size / 1024 / 1024).toFixed(1)}MB）`);
+        continue;
+      }
+      valid.push(file);
+    }
+    setFileErrors(errors);
+    if (valid.length > 0) setAttachedFiles(prev => [...prev, ...valid]);
   };
 
   /** 単一フィールドのバリデーション。エラーメッセージを返す（問題なければ空文字） */
@@ -743,8 +769,7 @@ function RequestFormContent() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   e.preventDefault();
-                  const files = Array.from(e.dataTransfer.files);
-                  setAttachedFiles(prev => [...prev, ...files]);
+                  addFiles(Array.from(e.dataTransfer.files));
                 }}
                 className="flex items-center gap-2 p-4 mt-4 bg-slate-50 border border-dashed rounded-xl text-slate-400 cursor-pointer hover:bg-slate-100 hover:text-slate-600 transition-all"
               >
@@ -757,8 +782,7 @@ function RequestFormContent() {
                 multiple
                 className="hidden"
                 onChange={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  setAttachedFiles(prev => [...prev, ...files]);
+                  addFiles(Array.from(e.target.files || []));
                   e.target.value = '';
                 }}
               />
@@ -776,11 +800,22 @@ function RequestFormContent() {
                           setAttachedFiles(prev => prev.filter((_, i) => i !== idx));
                         }}
                         className="text-slate-300 hover:text-rose-500 transition-colors"
+                        aria-label={`${file.name}を削除`}
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ))}
+                </div>
+              )}
+              {fileErrors.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {fileErrors.map((err, idx) => (
+                    <p key={idx} className="text-xs text-rose-500 font-bold px-1">{err}</p>
+                  ))}
+                  <p className="text-[10px] text-slate-400 px-1">
+                    許可形式: {ALLOWED_EXTENSIONS.join(', ')} ／ 上限: 10MB
+                  </p>
                 </div>
               )}
             </div>
