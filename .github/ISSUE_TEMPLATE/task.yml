@@ -1,0 +1,37 @@
+name: タスク
+description: 新機能・改善タスクを起票する
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: タスクの詳細を入力してください。
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What（何をするか）
+      description: 実装・変更する内容を具体的に記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why（なぜするか）
+      description: このタスクの背景・目的・ビジネス価値を記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria（完了条件）
+      description: "チェックリスト形式で記述してください。例: - [ ] ○○ができること"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tech
+    attributes:
+      label: Technical Notes（技術メモ）
+      description: 実装方針・注意点・参考リンクなど（任意）

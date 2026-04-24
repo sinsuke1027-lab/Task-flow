@@ -1,0 +1,36 @@
+name: Issue Auto Branch
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create branch from issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+
+          # タイトルをkebab-caseに変換（英数字以外はハイフンに、連続ハイフンは1つに）
+          BRANCH_SLUG=$(echo "$ISSUE_TITLE" | \
+            tr '[:upper:]' '[:lower:]' | \
+            sed 's/[^a-z0-9]/-/g' | \
+            sed 's/--*/-/g' | \
+            sed 's/^-\|-$//g' | \
+            cut -c1-50)
+
+          BRANCH_NAME="issue/${ISSUE_NUMBER}-${BRANCH_SLUG}"
+
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+
+          gh issue comment "$ISSUE_NUMBER" --body "ブランチを作成しました: \`$BRANCH_NAME\`"

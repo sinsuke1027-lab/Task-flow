@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - 'package.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - 'package.json'
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: npm run typecheck
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: npm run lint
