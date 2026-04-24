@@ -1,5 +1,6 @@
 export interface User {
   id: string;
+  tenant_id?: string;
   name: string;
   email: string;
   role: 'admin' | 'user';
@@ -15,6 +16,7 @@ export interface User {
 
 export interface OrganizationUnit {
   id: string;
+  tenant_id?: string;
   name: string;
   type: 'division' | 'group' | 'team' | 'root';
   parentId: string | null;
@@ -23,6 +25,7 @@ export interface OrganizationUnit {
 
 export interface UserChangeEvent {
   id: string;
+  tenant_id?: string;
   targetType: 'user' | 'unit';
   targetId: string;
   eventType: 'join' | 'transfer' | 'promotion' | 'leave' | 'retire' | 'unit_create' | 'unit_update' | 'unit_archive';
@@ -82,6 +85,7 @@ export interface AmountRule {
 
 export interface Category {
   id: string;
+  tenant_id?: string;
   name: string;
   parentId: string | null;
   targetDepartmentId: string;
@@ -110,6 +114,7 @@ export interface ApprovalStep {
 /** 代決（代理承認）設定 */
 export interface Delegation {
   id: string;
+  tenant_id?: string;
   delegatorId: string;  // 権限を委任する人
   delegateId: string;   // 代理で承認する人
   startDate: string;
@@ -120,6 +125,7 @@ export interface Delegation {
 
 export interface AuditLog {
   id: string;
+  tenant_id?: string;
   taskId: string;
   userId: string;
   userName?: string;
@@ -130,6 +136,7 @@ export interface AuditLog {
 
 export interface Task {
   id: string;
+  tenant_id?: string;
   title: string;
   description: string;
   requesterId: string;
@@ -153,12 +160,14 @@ export interface Task {
 
 export interface Status {
   id: string;
+  tenant_id?: string;
   label: string;
   color: string;
 }
 
 export interface Department {
   id: string;
+  tenant_id?: string;
   name: string;
 }
 
