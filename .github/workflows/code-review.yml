@@ -3,7 +3,7 @@ name: AI Code Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [main]
+    branches: [master]
 
 jobs:
   review:
@@ -26,7 +26,7 @@ jobs:
       - name: AI Review with Claude
         if: steps.diff.outputs.diff_size > 0
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
