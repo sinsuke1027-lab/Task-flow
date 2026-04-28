@@ -62,9 +62,5 @@ jobs:
             --jq '.[] | select(.user.login == "github-actions[bot]") | .id' | \
             xargs -I{} gh api --method DELETE "repos/$REPO/issues/comments/{}" 2>/dev/null || true
 
-          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "## AI Code Review (Claude)
-
-$REVIEW_BODY
-
----
-*Powered by claude-sonnet-4-6*"
+          COMMENT_BODY=$(printf '## AI Code Review (Claude)\n\n%s\n\n---\n*Powered by claude-sonnet-4-6*' "$REVIEW_BODY")
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$COMMENT_BODY"
