@@ -1,5 +1,6 @@
 'use client';
 
+import { z } from 'zod';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import Image from 'next/image';
 import {
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react';
 
 import { getDataProvider } from '@/lib/repository/factory';
-import { Category, User, ApprovalStep, AmountRule } from '@/lib/repository/types';
+import { Category, User, ApprovalStep, AmountRule, CustomField, FieldValidation } from '@/lib/repository/types';
 import { resolveWorkflowTemplate } from '@/lib/workflow-utils';
 import { useAuth } from '@/context/auth-context';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -56,6 +57,18 @@ function loadDrafts(): DraftEntry[] {
 
 function saveDraftsToStorage(list: DraftEntry[]): void {
   localStorage.setItem(DRAFTS_KEY, JSON.stringify(list));
+}
+
+// ── Validation schemas ────────────────────────────────────────────────────────
+const titleSchema = z.string().min(1, 'タイトルは必須です').max(100);
+const descriptionSchema = z.string().max(2000);
+
+function buildTextFieldSchema(v: FieldValidation): z.ZodString {
+  let schema = z.string();
+  if (v.minLength !== undefined) schema = schema.min(v.minLength, `${v.minLength}文字以上で入力してください`);
+  if (v.maxLength !== undefined) schema = schema.max(v.maxLength, `${v.maxLength}文字以内で入力してください`);
+  // Dynamic pattern validation intentionally omitted to prevent ReDoS
+  return schema;
 }
 
 function RequestFormContent() {
@@ -335,40 +348,42 @@ function RequestFormContent() {
   };
 
   /** 単一フィールドのバリデーション。エラーメッセージを返す（問題なければ空文字） */
-  const validateField = (fieldId: string, value: string | number, field?: import('@/lib/repository/types').CustomField): string => {
+  const validateField = (fieldId: string, value: string | number, field?: CustomField): string => {
     const strVal = String(value ?? '').trim();
+
     if (fieldId === '__title') {
-      if (!strVal) return 'タイトルは必須です';
-      if (strVal.length > 100) return `タイトルは100文字以内で入力してください（現在 ${strVal.length} 文字）`;
+      const result = titleSchema.safeParse(strVal);
+      if (!result.success) {
+        if (strVal.length > 100) return `タイトルは100文字以内で入力してください（現在 ${strVal.length} 文字）`;
+        return result.error.issues[0].message;
+      }
       return '';
     }
+
     if (fieldId === '__description') {
-      if (strVal.length > 2000) return `詳細説明は2000文字以内で入力してください（現在 ${strVal.length} 文字）`;
+      const result = descriptionSchema.safeParse(strVal);
+      if (!result.success) return `詳細説明は2000文字以内で入力してください（現在 ${strVal.length} 文字）`;
       return '';
     }
+
     if (!field) return '';
     if (field.required && !strVal) return `${field.label}は必須です`;
-    if (strVal && field.validation) {
-      const v = field.validation;
-      if (field.type === 'text' || field.type === 'select') {
-        if (v.minLength !== undefined && strVal.length < v.minLength)
-          return `${v.minLength}文字以上で入力してください`;
-        if (v.maxLength !== undefined && strVal.length > v.maxLength)
-          return `${v.maxLength}文字以内で入力してください`;
-        if (v.pattern) {
-          try {
-            if (!new RegExp(v.pattern).test(strVal))
-              return v.patternMessage ?? '入力形式が正しくありません';
-          } catch { /* invalid regex — ignore */ }
-        }
-      }
-      if (field.type === 'number') {
-        const num = Number(value);
-        if (isNaN(num)) return '数値を入力してください';
-        if (v.min !== undefined && num < v.min) return `${v.min} 以上の値を入力してください`;
-        if (v.max !== undefined && num > v.max) return `${v.max} 以下の値を入力してください`;
-      }
+    if (!strVal) return '';
+
+    if (field.type === 'number') {
+      const num = Number(value);
+      if (isNaN(num)) return '数値を入力してください';
+      const v = field.validation ?? {};
+      if (v.min !== undefined && num < v.min) return `${v.min} 以上の値を入力してください`;
+      if (v.max !== undefined && num > v.max) return `${v.max} 以下の値を入力してください`;
+      return '';
     }
+
+    if (field.validation) {
+      const result = buildTextFieldSchema(field.validation).safeParse(strVal);
+      if (!result.success) return result.error.issues[0]?.message ?? '';
+    }
+
     return '';
   };
 
