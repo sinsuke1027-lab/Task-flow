@@ -27,7 +27,11 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error) {
+    // Supabase unavailable — fail open to avoid blocking all routes
+    return NextResponse.next();
+  }
 
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname.startsWith('/login');
@@ -49,6 +53,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon\\.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
