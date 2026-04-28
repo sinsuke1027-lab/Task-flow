@@ -102,7 +102,7 @@
 | P0-2 | `SupabaseDataProvider` 実装（`DataProvider` インターフェース継承） | `src/lib/repository/supabase-provider.ts`（新規） | ✅ |
 | P0-3 | DBマイグレーションファイル作成 | `supabase/migrations/001_initial_schema.sql`（新規） | ✅ |
 | P0-4 | 認証リプレース：`auth-context.tsx` を Supabase Auth + HTTP-Only Cookie に変更 | `src/context/auth-context.tsx`, `src/app/login/page.tsx` | ✅ |
-| P0-5 | Next.js Middleware でサーバー側認証チェック追加 | `middleware.ts`（新規） | ⬜ |
+| P0-5 | Next.js Middleware でサーバー側認証チェック追加 | `middleware.ts`（新規） | ✅ |
 | P0-6 | Row Level Security (RLS) ポリシー設定（API レベル認可） | Supabase コンソール | ⬜ |
 | P0-7 | 入力バリデーション強化：`zod` 導入・`validateField()` 置き換え・ReDoS 対策 | `src/app/request/page.tsx` | ⬜ |
 | P0-8 | ファイルアップロード検証（最大10MB・許可拡張子リスト） | `src/app/request/page.tsx` | ✅ |
