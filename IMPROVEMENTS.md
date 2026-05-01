@@ -113,7 +113,7 @@
 
 | # | 内容 | 対象ファイル | ステータス |
 |---|------|------------|----------|
-| P1-1 | Vitest + React Testing Library + jest-dom 導入 | `package.json`, `vitest.config.ts`（新規） | ⬜ |
+| P1-1 | Vitest + React Testing Library + jest-dom 導入 | `package.json`, `vitest.config.ts`（新規） | ✅ |
 | P1-2 | `workflow-utils.ts` ユニットテスト（`isMyTurn`, `resolveWorkflowTemplate` 境界値） | `src/lib/workflow-utils.test.ts`（新規） | ⬜ |
 | P1-3 | `mock-provider.ts` 統合テスト（`processApproval`, `createTask`） | `src/lib/repository/mock-provider.test.ts`（新規） | ⬜ |
 | P1-4 | Playwright E2E テスト（ログイン → 申請 → 承認 → 完了 の黄金パス） | `e2e/approval-flow.spec.ts`（新規） | ⬜ |
