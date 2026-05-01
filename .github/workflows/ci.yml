@@ -5,16 +5,20 @@ on:
     branches: [master]
     paths:
       - 'src/**'
+      - 'e2e/**'
       - '**/*.ts'
       - '**/*.tsx'
       - 'package.json'
+      - '.github/workflows/**'
   pull_request:
     branches: [master]
     paths:
       - 'src/**'
+      - 'e2e/**'
       - '**/*.ts'
       - '**/*.tsx'
       - 'package.json'
+      - '.github/workflows/**'
 
 jobs:
   typecheck:
