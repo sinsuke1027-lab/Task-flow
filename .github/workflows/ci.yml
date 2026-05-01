@@ -5,16 +5,20 @@ on:
     branches: [master]
     paths:
       - 'src/**'
+      - 'e2e/**'
       - '**/*.ts'
       - '**/*.tsx'
       - 'package.json'
+      - '.github/workflows/**'
   pull_request:
     branches: [master]
     paths:
       - 'src/**'
+      - 'e2e/**'
       - '**/*.ts'
       - '**/*.tsx'
       - 'package.json'
+      - '.github/workflows/**'
 
 jobs:
   typecheck:
@@ -30,3 +34,26 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - run: npm run lint
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm test
+      # Playwright E2E (npm run test:e2e) は headless ブラウザと
+      # 開発サーバーが必要なため CI では除外。ローカルで実行すること。
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm audit --audit-level=high
