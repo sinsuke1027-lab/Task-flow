@@ -180,6 +180,7 @@ export default function RequestInbox() {
       await fetchTasks();
       const newLogs = await provider.getAuditLogs(selectedTask.id);
       setLogs(newLogs);
+      toast.success('承認しました');
     } catch (error) {
       toast.error('承認処理に失敗しました');
       console.error('Approval failed:', error);
@@ -198,6 +199,7 @@ export default function RequestInbox() {
       await fetchTasks();
       const newLogs = await provider.getAuditLogs(selectedTask.id);
       setLogs(newLogs);
+      toast.success('確認しました');
     } catch (error) {
       toast.error('確認処理に失敗しました');
       console.error('Acknowledge failed:', error);
@@ -223,6 +225,7 @@ export default function RequestInbox() {
       setLogs(newLogs);
       setShowRejectModal(false);
       setRejectComment('');
+      toast.success('差し戻しました');
     } catch (error) {
       toast.error('差し戻し処理に失敗しました');
       console.error('Rejection failed:', error);
@@ -248,6 +251,7 @@ export default function RequestInbox() {
       setLogs(newLogs);
       setShowChangeApproverModal(false);
       setChangingStepIndex(null);
+      toast.success('承認者を変更しました');
     } catch (error) {
       toast.error('承認者の変更に失敗しました');
       console.error('Change approver failed:', error);
