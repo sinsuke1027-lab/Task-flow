@@ -379,7 +379,7 @@ export default function AdminSettings() {
               "shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border",
               activeTab === tab.id
                 ? "bg-slate-900 text-white border-slate-900"
-                : "text-slate-400 border-slate-200 hover:border-slate-400"
+                : "text-slate-500 border-slate-200 hover:border-slate-400"
             )}
           >
             <tab.icon className="w-3.5 h-3.5" />
@@ -405,7 +405,7 @@ export default function AdminSettings() {
                 "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-all",
                 activeTab === tab.id
                   ? "bg-slate-900 text-white shadow-xl translate-x-1"
-                  : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                  : "text-slate-500 hover:text-slate-600 hover:bg-slate-100"
               )}
             >
               <tab.icon className="w-4 h-4" />
@@ -429,9 +429,9 @@ export default function AdminSettings() {
                   { label: '平均処理日数', value: `${adminStats.avgDays}日`, sub: 'Avg. Lead Time', color: 'text-amber-600' },
                 ].map(stat => (
                   <div key={stat.label} className="bg-white border border-slate-200 rounded-2xl notion-shadow p-3 space-y-1">
-                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{stat.label}</div>
                     <div className={`text-2xl font-black ${stat.color}`}>{stat.value}</div>
-                    <div className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{stat.sub}</div>
+                    <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{stat.sub}</div>
                   </div>
                 ))}
               </div>
@@ -440,7 +440,7 @@ export default function AdminSettings() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-[#191714]">システム基本情報</h2>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">General System Settings</p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">General System Settings</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -457,7 +457,7 @@ export default function AdminSettings() {
                         mockProvider.clearStorage();
                         window.location.reload();
                       }}
-                      className="flex items-center gap-2 px-4 py-2 border border-rose-200 text-rose-500 rounded-xl text-xs font-bold hover:bg-rose-50 transition-all"
+                      className="flex items-center gap-2 px-4 py-2 border border-rose-200 text-rose-600 rounded-xl text-xs font-bold hover:bg-rose-50 transition-all"
                     >
                       <RefreshCw className="w-4 h-4" />
                       データをリセット
@@ -478,7 +478,7 @@ export default function AdminSettings() {
                 )}
                 <div className="grid grid-cols-2 gap-8 pt-4">
                   <div className="space-y-2">
-                    <label htmlFor="admin-tenant-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">テナント名</label>
+                    <label htmlFor="admin-tenant-name" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">テナント名</label>
                     <input
                       id="admin-tenant-name"
                       type="text"
@@ -488,7 +488,7 @@ export default function AdminSettings() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">データソース</label>
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">データソース</label>
                     <div className="w-full h-10 px-4 bg-slate-100 border rounded-xl flex items-center justify-between">
                       <span className="text-sm font-bold text-slate-500">SharePoint Lists (Mocked)</span>
                       <Shield className="w-4 h-4 text-emerald-500" />
@@ -507,7 +507,7 @@ export default function AdminSettings() {
                       </div>
                       <div>
                         <h3 className="text-sm font-black text-rose-800">SLA 超過アラート</h3>
-                        <p className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">
+                        <p className="text-[10px] font-bold text-rose-700 uppercase tracking-widest">
                           {tasks.filter(t => t.status !== 'completed' && new Date(t.dueDate) < new Date()).length}件のタスクが期限を超過しています
                         </p>
                       </div>
@@ -524,7 +524,7 @@ export default function AdminSettings() {
                           <div key={t.id} className="flex items-center gap-4 px-5 py-3 hover:bg-rose-50/30 transition-colors">
                             <div className="flex-1 min-w-0">
                               <div className="text-sm font-bold text-[#191714] truncate">{t.title}</div>
-                              <div className="text-[10px] font-bold text-slate-400 mt-0.5">{t.category} ／ 担当: {t.currentApproverName ?? '未設定'}</div>
+                              <div className="text-[10px] font-bold text-slate-500 mt-0.5">{t.category} ／ 担当: {t.currentApproverName ?? '未設定'}</div>
                             </div>
                             <span className="shrink-0 text-[10px] font-black text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-full">
                               +{overdueDays}日超過
@@ -555,7 +555,7 @@ export default function AdminSettings() {
                 <div className="p-6 border-b flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-[#191714]">組織・メンバー管理</h2>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total {users.length} Members Sampled</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Total {users.length} Members Sampled</p>
                   </div>
                   <div className="flex gap-2">
                     <button 
@@ -586,10 +586,10 @@ export default function AdminSettings() {
                   <table className="w-full text-left">
                     <thead>
                       <tr className="bg-slate-50/50 border-b">
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">氏名 / メールアドレス</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">役職</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">所属ユニット</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ステータス</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">氏名 / メールアドレス</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">役職</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">所属ユニット</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">ステータス</th>
                         <th className="w-10"></th>
                       </tr>
                     </thead>
@@ -598,19 +598,19 @@ export default function AdminSettings() {
                         <tr key={u.id} className="hover:bg-slate-50/50 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400">
+                              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500">
                                 {u.name.charAt(0)}
                               </div>
                               <div>
                                 <div className="text-sm font-bold text-[#191714]">{u.name}</div>
-                                <div className="text-[10px] font-medium text-slate-400">{u.email}</div>
+                                <div className="text-[10px] font-medium text-slate-500">{u.email}</div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4">
                             <span className="text-[10px] font-black uppercase tracking-tight bg-slate-100 px-2 py-0.5 rounded-full text-slate-600">{u.position}</span>
                           </td>
-                          <td className="px-6 py-4 text-xs font-bold text-slate-400">
+                          <td className="px-6 py-4 text-xs font-bold text-slate-500">
                             {u.orgUnitId.split('_').pop()}
                           </td>
                           <td className="px-6 py-4">
@@ -621,13 +621,13 @@ export default function AdminSettings() {
                               </span>
                             )}
                             {u.status === 'inactive' && (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 text-[10px] font-bold border border-slate-200">
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 text-[10px] font-bold border border-slate-200">
                                 <div className="w-1 h-1 rounded-full bg-slate-300" />
                                 無効
                               </span>
                             )}
                             {u.status === 'on_leave' && (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 text-[10px] font-bold border border-amber-100">
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold border border-amber-100">
                                 <div className="w-1 h-1 rounded-full bg-amber-500" />
                                 休職中
                               </span>
@@ -638,7 +638,7 @@ export default function AdminSettings() {
                               onClick={() => setUserMenuTargetId(prev => prev === u.id ? null : u.id)}
                               className="p-1.5 hover:bg-slate-200 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                             >
-                              <MoreHorizontal className="w-4 h-4 text-slate-400" />
+                              <MoreHorizontal className="w-4 h-4 text-slate-500" />
                             </button>
                             {userMenuTargetId === u.id && (
                               <>
@@ -648,20 +648,20 @@ export default function AdminSettings() {
                                     onClick={() => { setEditingUser(u); setEditUserName(u.name); setEditUserEmail(u.email); setEditUserPosition(u.position); setEditUserOrgUnit(u.orgUnitId); setShowEditUserModal(true); setUserMenuTargetId(null); }}
                                     className="w-full text-left px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2"
                                   >
-                                    <Settings className="w-3.5 h-3.5 text-slate-400" />
+                                    <Settings className="w-3.5 h-3.5 text-slate-500" />
                                     プロフィール編集
                                   </button>
                                   <button
                                     onClick={() => { setSelectedUser(u.id); setIsChangeModalOpen(true); setUserMenuTargetId(null); }}
                                     className="w-full text-left px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2"
                                   >
-                                    <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+                                    <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
                                     人事・組織変更
                                   </button>
                                   {u.status === 'active' && (
                                     <button
                                       onClick={() => { setDeactivatingUser(u); setUserMenuTargetId(null); }}
-                                      className="w-full text-left px-3 py-2 text-xs font-bold text-rose-500 hover:bg-rose-50 transition-colors flex items-center gap-2 border-t border-slate-100"
+                                      className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors flex items-center gap-2 border-t border-slate-100"
                                     >
                                       <Trash2 className="w-3.5 h-3.5" />
                                       無効化
@@ -683,7 +683,7 @@ export default function AdminSettings() {
                 <div className="p-6 border-b flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-[#191714]">組織ユニット管理</h2>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Departments & Teams</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Departments & Teams</p>
                   </div>
                   <button
                     onClick={() => { setShowAddUnitModal(true); setUnitFormName(''); setUnitFormType('team'); setUnitFormParentId(''); }}
@@ -697,10 +697,10 @@ export default function AdminSettings() {
                   <table className="w-full text-left">
                     <thead>
                       <tr className="bg-slate-50/50 border-b">
-                        <th className="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ユニット名</th>
-                        <th className="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">種別</th>
-                        <th className="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">親ユニット</th>
-                        <th className="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ステータス</th>
+                        <th className="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">ユニット名</th>
+                        <th className="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">種別</th>
+                        <th className="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">親ユニット</th>
+                        <th className="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">ステータス</th>
                         <th className="w-24"></th>
                       </tr>
                     </thead>
@@ -713,18 +713,18 @@ export default function AdminSettings() {
                             <td className="px-6 py-3">
                               <span className="text-[10px] font-black uppercase tracking-tight bg-slate-100 px-2 py-0.5 rounded-full text-slate-600">{unit.type}</span>
                             </td>
-                            <td className="px-6 py-3 text-xs font-bold text-slate-400">{parent?.name || '—'}</td>
+                            <td className="px-6 py-3 text-xs font-bold text-slate-500">{parent?.name || '—'}</td>
                             <td className="px-6 py-3">
                               {unit.status === 'active'
                                 ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">有効</span>
-                                : <span className="text-[10px] font-bold text-slate-400 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-full">アーカイブ</span>
+                                : <span className="text-[10px] font-bold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-full">アーカイブ</span>
                               }
                             </td>
                             <td className="pr-4 text-right">
                               <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
                                 <button
                                   onClick={() => { setEditingUnit(unit); setUnitFormName(unit.name); setUnitFormType(unit.type); setUnitFormParentId(unit.parentId || ''); }}
-                                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 transition-all"
+                                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-all"
                                 >
                                   <Settings className="w-3.5 h-3.5" />
                                 </button>
@@ -754,7 +754,7 @@ export default function AdminSettings() {
                 <div className="p-6 border-b flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-[#191714]">申請カテゴリーマスタ</h2>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Configure SLA and Approval Templates</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Configure SLA and Approval Templates</p>
                   </div>
                   <button
                     onClick={() => { setShowAddCatModal(true); setCatFormName(''); setCatFormParentId(''); setCatFormSla(5); setCatFormAmountRules([]); setCatFormFields([]); setCatFormWorkflow([]); setCatFormTab('basic'); }}
@@ -770,7 +770,7 @@ export default function AdminSettings() {
                     return (
                       <div key={cat.id} className="p-4 bg-slate-50 border rounded-2xl flex items-center justify-between hover:border-slate-900 transition-all cursor-pointer group">
                         <div>
-                          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{parent?.name || '基本カテゴリ'}</div>
+                          <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{parent?.name || '基本カテゴリ'}</div>
                           <div className="text-sm font-bold text-[#191714]">{cat.name}</div>
                           <div className="mt-2 flex items-center gap-2">
                             <Clock className="w-3 h-3 text-emerald-500" />
@@ -780,7 +780,7 @@ export default function AdminSettings() {
                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
                           <button
                             onClick={(e) => { e.stopPropagation(); setEditingCategory(cat); setCatFormName(cat.name); setCatFormParentId(cat.parentId || ''); setCatFormSla(cat.slaDays ?? 5); setCatFormAmountRules(cat.amountRules ?? []); setCatFormFields(cat.customFields ?? []); setCatFormWorkflow(cat.workflowTemplate ?? []); setCatFormTab('basic'); }}
-                            className="p-2 hover:bg-white rounded-lg text-slate-400 border border-transparent hover:border-slate-200 transition-all"
+                            className="p-2 hover:bg-white rounded-lg text-slate-500 border border-transparent hover:border-slate-200 transition-all"
                           ><Settings className="w-3.5 h-3.5" /></button>
                           <button
                             onClick={(e) => { e.stopPropagation(); setDeletingCategory(cat); }}
@@ -801,7 +801,7 @@ export default function AdminSettings() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-base font-black text-[#191714]">代決設定</h2>
-                    <p className="text-xs text-slate-400 font-medium mt-0.5">不在時などに代理で承認できるユーザーを設定します。</p>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">不在時などに代理で承認できるユーザーを設定します。</p>
                   </div>
                   <button
                     onClick={() => setShowAddDelegationModal(true)}
@@ -813,7 +813,7 @@ export default function AdminSettings() {
                 </div>
                 <div className="space-y-2">
                   {delegations.length === 0 && (
-                    <p className="text-sm text-slate-400 text-center py-8">代決設定はありません</p>
+                    <p className="text-sm text-slate-500 text-center py-8">代決設定はありません</p>
                   )}
                   {delegations.map(d => {
                     const delegator = users.find(u => u.id === d.delegatorId);
@@ -823,13 +823,13 @@ export default function AdminSettings() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-sm font-bold text-slate-800">{delegator?.name ?? d.delegatorId}</span>
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">→ 代理:</span>
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">→ 代理:</span>
                             <span className="text-sm font-bold text-violet-700">{delegate?.name ?? d.delegateId}</span>
-                            {!d.isActive && <span className="px-2 py-0.5 bg-slate-100 text-slate-400 text-[9px] font-black rounded-full uppercase">無効</span>}
+                            {!d.isActive && <span className="px-2 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-black rounded-full uppercase">無効</span>}
                           </div>
                           <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] text-slate-400 font-medium">{d.startDate} 〜 {d.endDate ?? '終了日なし'}</span>
-                            {d.reason && <span className="text-[10px] text-slate-400 font-medium truncate max-w-xs">{d.reason}</span>}
+                            <span className="text-[10px] text-slate-500 font-medium">{d.startDate} 〜 {d.endDate ?? '終了日なし'}</span>
+                            {d.reason && <span className="text-[10px] text-slate-500 font-medium truncate max-w-xs">{d.reason}</span>}
                           </div>
                         </div>
                         {d.isActive && (
@@ -860,12 +860,12 @@ export default function AdminSettings() {
                     <div className="p-6 border-b flex items-center justify-between">
                       <h3 id="delegation-modal-title" className="text-lg font-bold text-[#191714]">代決設定を追加</h3>
                       <button type="button" onClick={() => setShowAddDelegationModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
-                        <X className="w-5 h-5 text-slate-400" />
+                        <X className="w-5 h-5 text-slate-500" />
                       </button>
                     </div>
                     <div className="p-6 space-y-4">
                       <div className="space-y-1">
-                        <label htmlFor="del-delegator" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">権限を委任する人（不在者）<span className="text-rose-500">*</span></label>
+                        <label htmlFor="del-delegator" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">権限を委任する人（不在者）<span className="text-rose-600">*</span></label>
                         <select
                           id="del-delegator"
                           className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all"
@@ -879,7 +879,7 @@ export default function AdminSettings() {
                         </select>
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="del-delegate" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">代理承認者<span className="text-rose-500">*</span></label>
+                        <label htmlFor="del-delegate" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">代理承認者<span className="text-rose-600">*</span></label>
                         <select
                           id="del-delegate"
                           className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all"
@@ -894,16 +894,16 @@ export default function AdminSettings() {
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label htmlFor="del-start-date" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">開始日<span className="text-rose-500">*</span></label>
+                          <label htmlFor="del-start-date" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">開始日<span className="text-rose-600">*</span></label>
                           <input id="del-start-date" type="date" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delStartDate} onChange={e => setDelStartDate(e.target.value)} />
                         </div>
                         <div className="space-y-1">
-                          <label htmlFor="del-end-date" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">終了日（任意）</label>
+                          <label htmlFor="del-end-date" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">終了日（任意）</label>
                           <input id="del-end-date" type="date" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delEndDate} onChange={e => setDelEndDate(e.target.value)} />
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="del-reason" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">理由・備考</label>
+                        <label htmlFor="del-reason" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">理由・備考</label>
                         <input id="del-reason" type="text" placeholder="例：出張、育休など" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delReason} onChange={e => setDelReason(e.target.value)} />
                       </div>
                       <div className="flex gap-3 pt-2">
@@ -922,7 +922,7 @@ export default function AdminSettings() {
                <section className="bg-white rounded-3xl border border-slate-200 notion-shadow p-8 flex flex-col items-center justify-center text-center py-20">
                  <Shield className="w-12 h-12 text-slate-200 mb-4" />
                  <h2 className="text-xl font-bold text-[#191714]">セキュリティ・権限設定</h2>
-                 <p className="text-sm text-slate-400 max-w-sm">システム権限ロールやIP制限の設定は、現在準備中です。プロトタイプ版ではデフォルトのRoleBasedPolicyが適用されています。</p>
+                 <p className="text-sm text-slate-500 max-w-sm">システム権限ロールやIP制限の設定は、現在準備中です。プロトタイプ版ではデフォルトのRoleBasedPolicyが適用されています。</p>
                </section>
             </div>
           )}
@@ -934,12 +934,12 @@ export default function AdminSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-xl font-bold text-[#191714]">全社監査ログ</h2>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">System-wide Activity History</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">System-wide Activity History</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-3 items-center">
                     <div className="relative flex-1 min-w-48">
-                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         aria-label="監査ログを検索"
@@ -950,7 +950,7 @@ export default function AdminSettings() {
                       />
                     </div>
                     <div className="flex items-center gap-2">
-                      <CalendarDays className="w-4 h-4 text-slate-400" />
+                      <CalendarDays className="w-4 h-4 text-slate-500" />
                       <input
                         type="date"
                         aria-label="開始日"
@@ -969,7 +969,7 @@ export default function AdminSettings() {
                       {(logStartDate || logEndDate) && (
                         <button
                           onClick={() => { setLogStartDate(''); setLogEndDate(''); }}
-                          className="text-[10px] font-bold text-slate-400 hover:text-slate-700 transition-colors uppercase tracking-widest"
+                          className="text-[10px] font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest"
                         >
                           クリア
                         </button>
@@ -981,10 +981,10 @@ export default function AdminSettings() {
                   <table className="w-full text-left">
                     <thead>
                       <tr className="bg-slate-50/50 border-b">
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">日時</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">実行者</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">アクション</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">詳細</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">日時</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">実行者</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">アクション</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">詳細</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -997,7 +997,7 @@ export default function AdminSettings() {
                           </td>
                           <td className="px-6 py-4">
                             <span className="text-sm font-bold text-[#191714]">{log.userName}</span>
-                            {log.comment && <p className="text-[10px] text-slate-400 mt-1 line-clamp-1">{log.comment}</p>}
+                            {log.comment && <p className="text-[10px] text-slate-500 mt-1 line-clamp-1">{log.comment}</p>}
                           </td>
                           <td className="px-6 py-4">
                             <span className={cn(
@@ -1021,7 +1021,7 @@ export default function AdminSettings() {
                       ))}
                       {filteredLogs.length === 0 && (
                         <tr>
-                          <td colSpan={4} className="px-6 py-12 text-center text-slate-400 text-sm font-medium">
+                          <td colSpan={4} className="px-6 py-12 text-center text-slate-500 text-sm font-medium">
                             該当するログデータがありません
                           </td>
                         </tr>
@@ -1048,7 +1048,7 @@ export default function AdminSettings() {
             <div className="p-6 border-b flex items-center justify-between bg-slate-50/50">
               <div>
                 <h3 id="change-modal-title" className="text-xl font-bold text-[#191714]">人事・組織変更の登録</h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Schedule Personnel Event</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Schedule Personnel Event</p>
               </div>
               <button type="button" onClick={() => setIsChangeModalOpen(false)} className="p-2 hover:bg-slate-200 rounded-xl transition-colors" aria-label="閉じる">
                 <ChevronRight className="w-5 h-5 rotate-90" />
@@ -1057,7 +1057,7 @@ export default function AdminSettings() {
             
             <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
               <div className="space-y-2">
-                <label htmlFor="change-target-user" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">対象ユーザー</label>
+                <label htmlFor="change-target-user" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">対象ユーザー</label>
                 <select
                   id="change-target-user"
                   value={selectedUser}
@@ -1073,7 +1073,7 @@ export default function AdminSettings() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label htmlFor="change-type-select" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">変更種別</label>
+                  <label htmlFor="change-type-select" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">変更種別</label>
                   <select
                     id="change-type-select"
                     value={changeType}
@@ -1087,10 +1087,10 @@ export default function AdminSettings() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="change-scheduled-date" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">適用予定日</label>
+                  <label htmlFor="change-scheduled-date" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">適用予定日</label>
                   <div className="relative">
                     <input id="change-scheduled-date" type="date" className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all pl-10" />
-                    <CalendarDays className="w-4 h-4 absolute left-4 top-4 text-slate-400" />
+                    <CalendarDays className="w-4 h-4 absolute left-4 top-4 text-slate-500" />
                   </div>
                 </div>
               </div>
@@ -1098,7 +1098,7 @@ export default function AdminSettings() {
               {(changeType === 'transfer' || changeType === 'promotion') && (
                 <div className="space-y-4 pt-4 border-t border-dashed">
                   <div className="space-y-2">
-                    <label htmlFor="change-new-org" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">新所属組織</label>
+                    <label htmlFor="change-new-org" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">新所属組織</label>
                     <select
                       id="change-new-org"
                       value={newOrgUnit}
@@ -1112,7 +1112,7 @@ export default function AdminSettings() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="change-new-manager" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">新直属上長</label>
+                    <label htmlFor="change-new-manager" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">新直属上長</label>
                     <select
                       id="change-new-manager"
                       value={newManager}
@@ -1162,7 +1162,7 @@ export default function AdminSettings() {
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
             <div className="p-6 border-b flex items-center justify-between">
               <h3 className="text-lg font-bold text-[#191714]">インポート結果</h3>
-              <button onClick={() => setImportResult(null)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+              <button onClick={() => setImportResult(null)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-5 h-5 text-slate-500" /></button>
             </div>
             <div className="p-6 space-y-3">
               <p className="text-sm font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl">{importResult.count} 件を更新しました</p>
@@ -1190,7 +1190,7 @@ export default function AdminSettings() {
           >
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="add-user-modal-title" className="text-lg font-bold text-[#191714]">メンバー新規追加</h3>
-              <button type="button" onClick={() => setShowAddUserModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
+              <button type="button" onClick={() => setShowAddUserModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-500" /></button>
             </div>
             <div className="p-6 space-y-4">
               {[
@@ -1198,20 +1198,20 @@ export default function AdminSettings() {
                 { id: 'new-user-email', label: 'メールアドレス', value: newUserEmail, setter: setNewUserEmail, placeholder: 'example@company.co.jp' },
               ].map(({ id, label, value, setter, placeholder }) => (
                 <div key={label} className="space-y-1">
-                  <label htmlFor={id} className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">{label}</label>
+                  <label htmlFor={id} className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">{label}</label>
                   <input id={id} type="text" value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
                     className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                 </div>
               ))}
               <div className="space-y-1">
-                <label htmlFor="new-user-position" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">役職</label>
+                <label htmlFor="new-user-position" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">役職</label>
                 <select id="new-user-position" value={newUserPosition} onChange={e => setNewUserPosition(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   {['President', 'Division Manager', 'General Manager', 'Team Leader', 'Member'].map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
               <div className="space-y-1">
-                <label htmlFor="new-user-org-unit" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">組織ユニット</label>
+                <label htmlFor="new-user-org-unit" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">組織ユニット</label>
                 <select id="new-user-org-unit" value={newUserOrgUnit} onChange={e => setNewUserOrgUnit(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   <option value="">選択してください</option>
@@ -1240,7 +1240,7 @@ export default function AdminSettings() {
           >
             <div className="p-6 border-b flex items-center justify-between shrink-0">
               <h3 id="cat-modal-title" className="text-lg font-bold text-[#191714]">{editingCategory ? 'カテゴリーを編集' : 'カテゴリーを追加'}</h3>
-              <button type="button" onClick={() => { setShowAddCatModal(false); setEditingCategory(null); setCatFormTab('basic'); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
+              <button type="button" onClick={() => { setShowAddCatModal(false); setEditingCategory(null); setCatFormTab('basic'); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-500" /></button>
             </div>
 
             {/* タブ */}
@@ -1249,7 +1249,7 @@ export default function AdminSettings() {
                 <button
                   key={tab}
                   onClick={() => setCatFormTab(tab)}
-                  className={cn('flex-1 py-3 text-xs font-bold transition-colors', catFormTab === tab ? 'border-b-2 border-slate-900 text-slate-900' : 'text-slate-400 hover:text-slate-600')}
+                  className={cn('flex-1 py-3 text-xs font-bold transition-colors', catFormTab === tab ? 'border-b-2 border-slate-900 text-slate-900' : 'text-slate-500 hover:text-slate-600')}
                 >
                   {label}
                   {tab === 'fields' && catFormFields.length > 0 && <span className="ml-1 text-blue-500">({catFormFields.length})</span>}
@@ -1263,12 +1263,12 @@ export default function AdminSettings() {
               {catFormTab === 'basic' && (
                 <div className="space-y-4">
                   <div className="space-y-1">
-                    <label htmlFor="cat-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">カテゴリー名</label>
+                    <label htmlFor="cat-name" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">カテゴリー名</label>
                     <input id="cat-name" type="text" value={catFormName} onChange={e => setCatFormName(e.target.value)} placeholder="例: 資格取得祝金申請"
                       className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="cat-parent" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">大分類（親カテゴリー）</label>
+                    <label htmlFor="cat-parent" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">大分類（親カテゴリー）</label>
                     <select id="cat-parent" value={catFormParentId} onChange={e => setCatFormParentId(e.target.value)}
                       className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                       <option value="">なし（大分類として追加）</option>
@@ -1276,13 +1276,13 @@ export default function AdminSettings() {
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="cat-sla" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">目標SLA（営業日）</label>
+                    <label htmlFor="cat-sla" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">目標SLA（営業日）</label>
                     <input id="cat-sla" type="number" min={1} max={90} value={catFormSla} onChange={e => setCatFormSla(Number(e.target.value))}
                       className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                   </div>
                   <div className="space-y-2 pt-2 border-t border-dashed border-slate-100">
                     <div className="flex items-center justify-between">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">金額閾値ルール（任意）</label>
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">金額閾値ルール（任意）</label>
                       <button type="button" onClick={() => setCatFormAmountRules(prev => [...prev, { fieldLabel: '', minAmount: 0, requiredPosition: 'Division Manager' }])}
                         className="text-[10px] font-black text-blue-600 hover:text-blue-800 transition-colors">+ ルールを追加</button>
                     </div>
@@ -1292,13 +1292,13 @@ export default function AdminSettings() {
                           onChange={e => setCatFormAmountRules(prev => prev.map((r, i) => i === idx ? { ...r, fieldLabel: e.target.value } : r))}
                           className="h-9 px-3 bg-slate-50 border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all" />
                         <div className="flex gap-1.5 items-center">
-                          <span className="text-xs text-slate-400 font-bold shrink-0">¥</span>
+                          <span className="text-xs text-slate-500 font-bold shrink-0">¥</span>
                           <input type="number" placeholder="閾値（例: 100000）" value={rule.minAmount || ''}
                             onChange={e => setCatFormAmountRules(prev => prev.map((r, i) => i === idx ? { ...r, minAmount: Number(e.target.value) } : r))}
                             className="flex-1 h-9 px-3 bg-slate-50 border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all" />
                         </div>
                         <button type="button" onClick={() => setCatFormAmountRules(prev => prev.filter((_, i) => i !== idx))}
-                          className="h-9 w-9 flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all">
+                          className="h-9 w-9 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                         <div className="col-span-2">
@@ -1312,7 +1312,7 @@ export default function AdminSettings() {
                         </div>
                       </div>
                     ))}
-                    {catFormAmountRules.length === 0 && <p className="text-[10px] text-slate-300 font-medium px-1">ルールなし（すべての金額で同一フローを適用）</p>}
+                    {catFormAmountRules.length === 0 && <p className="text-[10px] text-slate-500 font-medium px-1">ルールなし（すべての金額で同一フローを適用）</p>}
                   </div>
                 </div>
               )}
@@ -1327,7 +1327,7 @@ export default function AdminSettings() {
                       className="text-[10px] font-black text-blue-600 hover:text-blue-800 transition-colors whitespace-nowrap">+ 項目を追加</button>
                   </div>
                   {catFormFields.length === 0 && (
-                    <div className="py-8 text-center text-slate-300 text-xs">項目がありません。「+ 項目を追加」から追加してください。</div>
+                    <div className="py-8 text-center text-slate-500 text-xs">項目がありません。「+ 項目を追加」から追加してください。</div>
                   )}
                   {catFormFields.map((field, idx) => (
                     <div key={field.id} className="p-3 bg-slate-50 border rounded-2xl space-y-2">
@@ -1352,7 +1352,7 @@ export default function AdminSettings() {
                           必須
                         </label>
                         <button type="button" onClick={() => setCatFormFields(prev => prev.filter((_, i) => i !== idx))}
-                          className="h-8 w-8 flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all shrink-0">
+                          className="h-8 w-8 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shrink-0">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
@@ -1361,7 +1361,7 @@ export default function AdminSettings() {
                         className="w-full h-7 px-3 bg-white border rounded-xl text-[11px] text-slate-500 focus:outline-none focus:border-slate-400 transition-all" />
                       {field.type === 'select' && (
                         <div className="space-y-1">
-                          <p className="text-[10px] text-slate-400 font-bold">選択肢（改行区切り）</p>
+                          <p className="text-[10px] text-slate-500 font-bold">選択肢（改行区切り）</p>
                           <textarea rows={3} aria-label="選択肢（改行区切り）" value={(field.options ?? []).join('\n')}
                             onChange={e => setCatFormFields(prev => prev.map((f, i) => i === idx ? { ...f, options: e.target.value.split('\n').filter(Boolean) } : f))}
                             className="w-full px-3 py-2 bg-white border rounded-xl text-xs focus:outline-none focus:border-slate-400 transition-all resize-none" />
@@ -1382,17 +1382,17 @@ export default function AdminSettings() {
                       className="text-[10px] font-black text-blue-600 hover:text-blue-800 transition-colors whitespace-nowrap">+ ステップを追加</button>
                   </div>
                   {catFormWorkflow.length === 0 && (
-                    <div className="py-8 text-center text-slate-300 text-xs">ステップがありません。「+ ステップを追加」から追加してください。<br/>テンプレートなしの場合は申請者が手動で承認者を選択します。</div>
+                    <div className="py-8 text-center text-slate-500 text-xs">ステップがありません。「+ ステップを追加」から追加してください。<br/>テンプレートなしの場合は申請者が手動で承認者を選択します。</div>
                   )}
                   {catFormWorkflow.map((step, idx) => (
                     <div key={step.id} className="p-3 bg-slate-50 border rounded-2xl space-y-2">
                       <div className="flex gap-2 items-center">
-                        <span className="text-[10px] font-black text-slate-400 w-5 shrink-0">{idx + 1}</span>
+                        <span className="text-[10px] font-black text-slate-500 w-5 shrink-0">{idx + 1}</span>
                         <input type="text" aria-label="ステップ名" placeholder="ステップ名（例: 上長承認）" value={step.label}
                           onChange={e => setCatFormWorkflow(prev => prev.map((s, i) => i === idx ? { ...s, label: e.target.value } : s))}
                           className="flex-1 h-8 px-3 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all" />
                         <button type="button" onClick={() => setCatFormWorkflow(prev => prev.filter((_, i) => i !== idx))}
-                          className="h-8 w-8 flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all shrink-0">
+                          className="h-8 w-8 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shrink-0">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
@@ -1436,7 +1436,7 @@ export default function AdminSettings() {
                       </div>
                       {step.approverType === 'approval_group' && (
                         <div className="space-y-1">
-                          <p className="text-[10px] text-slate-400 font-bold">グループメンバー</p>
+                          <p className="text-[10px] text-slate-500 font-bold">グループメンバー</p>
                           <div className="flex flex-wrap gap-1">
                             {users.filter(u => u.status === 'active').map(u => {
                               const selected = (step.approverGroupIds ?? []).includes(u.id);
@@ -1484,7 +1484,7 @@ export default function AdminSettings() {
           >
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="edit-user-modal-title" className="text-lg font-bold text-[#191714]">プロフィール編集</h3>
-              <button type="button" onClick={() => { setShowEditUserModal(false); setEditingUser(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
+              <button type="button" onClick={() => { setShowEditUserModal(false); setEditingUser(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-500" /></button>
             </div>
             <div className="p-6 space-y-4">
               {[
@@ -1492,20 +1492,20 @@ export default function AdminSettings() {
                 { id: 'edit-user-email', label: 'メールアドレス', value: editUserEmail, setter: setEditUserEmail, placeholder: 'example@company.co.jp' },
               ].map(({ id, label, value, setter, placeholder }) => (
                 <div key={label} className="space-y-1">
-                  <label htmlFor={id} className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">{label}</label>
+                  <label htmlFor={id} className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">{label}</label>
                   <input id={id} type="text" value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
                     className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                 </div>
               ))}
               <div className="space-y-1">
-                <label htmlFor="edit-user-position" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">役職</label>
+                <label htmlFor="edit-user-position" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">役職</label>
                 <select id="edit-user-position" value={editUserPosition} onChange={e => setEditUserPosition(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   {['President', 'Division Manager', 'General Manager', 'Team Leader', 'Member'].map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
               <div className="space-y-1">
-                <label htmlFor="edit-user-org-unit" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">組織ユニット</label>
+                <label htmlFor="edit-user-org-unit" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">組織ユニット</label>
                 <select id="edit-user-org-unit" value={editUserOrgUnit} onChange={e => setEditUserOrgUnit(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   {orgUnits.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
@@ -1526,7 +1526,7 @@ export default function AdminSettings() {
           <div className="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
             <div className="p-6 space-y-4">
               <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto">
-                <Trash2 className="w-6 h-6 text-rose-500" />
+                <Trash2 className="w-6 h-6 text-rose-600" />
               </div>
               <div className="text-center space-y-1">
                 <h3 className="text-base font-bold text-[#191714]">ユーザーを無効化しますか？</h3>
@@ -1554,16 +1554,16 @@ export default function AdminSettings() {
           >
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="unit-modal-title" className="text-lg font-bold text-[#191714]">{editingUnit ? 'ユニットを編集' : 'ユニットを追加'}</h3>
-              <button type="button" onClick={() => { setShowAddUnitModal(false); setEditingUnit(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
+              <button type="button" onClick={() => { setShowAddUnitModal(false); setEditingUnit(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-500" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div className="space-y-1">
-                <label htmlFor="unit-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">ユニット名</label>
+                <label htmlFor="unit-name" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">ユニット名</label>
                 <input id="unit-name" type="text" value={unitFormName} onChange={e => setUnitFormName(e.target.value)} placeholder="例: 営業第一グループ"
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
               </div>
               <div className="space-y-1">
-                <label htmlFor="unit-type" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">種別</label>
+                <label htmlFor="unit-type" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">種別</label>
                 <select id="unit-type" value={unitFormType} onChange={e => setUnitFormType(e.target.value as OrganizationUnit['type'])}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   <option value="division">Division（事業部）</option>
@@ -1572,7 +1572,7 @@ export default function AdminSettings() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label htmlFor="unit-parent" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">親ユニット</label>
+                <label htmlFor="unit-parent" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">親ユニット</label>
                 <select id="unit-parent" value={unitFormParentId} onChange={e => setUnitFormParentId(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   <option value="">なし（ルートとして追加）</option>
@@ -1596,7 +1596,7 @@ export default function AdminSettings() {
           <div className="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
             <div className="p-6 space-y-4">
               <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto">
-                <Trash2 className="w-6 h-6 text-rose-500" />
+                <Trash2 className="w-6 h-6 text-rose-600" />
               </div>
               <div className="text-center space-y-1">
                 <h3 className="text-base font-bold text-[#191714]">カテゴリーを削除しますか？</h3>

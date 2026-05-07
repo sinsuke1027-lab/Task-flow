@@ -301,7 +301,7 @@ export default function RequestInbox() {
                 className="p-1.5 hover:bg-slate-200 rounded-lg transition-colors"
                 aria-label="CSVエクスポート"
               >
-                <Download className="w-4 h-4 text-slate-400" />
+                <Download className="w-4 h-4 text-slate-500" />
               </button>
               {/* Filter ドロップダウン（期間フィルター） */}
               <div className="relative">
@@ -309,13 +309,13 @@ export default function RequestInbox() {
                   onClick={() => { setShowFilterDropdown(v => !v); setShowSortDropdown(false); }}
                   className={cn("p-1.5 hover:bg-slate-200 rounded-lg transition-colors", (periodFilter !== 'all' || priorityFilter !== 'all' || categoryFilter !== 'all') && "bg-blue-50 text-blue-600")}
                 >
-                  <Filter className="w-4 h-4 text-slate-400" />
+                  <Filter className="w-4 h-4 text-slate-500" />
                 </button>
                 {showFilterDropdown && (
                   <>
                     <div className="fixed inset-0 z-[45]" onClick={() => setShowFilterDropdown(false)} />
                     <div className="absolute right-0 top-full mt-1 w-48 bg-white border rounded-xl shadow-xl z-50 overflow-hidden animate-in zoom-in-95 duration-150">
-                      <div className="px-3 py-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b">期間</div>
+                      <div className="px-3 py-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b">期間</div>
                       {([
                         { value: 'all', label: '全期間' },
                         { value: 'today', label: '今日' },
@@ -330,7 +330,7 @@ export default function RequestInbox() {
                           {opt.label}
                         </button>
                       ))}
-                      <div className="px-3 py-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-y mt-1">優先度</div>
+                      <div className="px-3 py-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-y mt-1">優先度</div>
                       {([
                         { value: 'all', label: 'すべて' },
                         { value: 'high', label: '急ぎ' },
@@ -347,7 +347,7 @@ export default function RequestInbox() {
                       ))}
                       {categories.length > 0 && (
                         <>
-                          <div className="px-3 py-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-y mt-1">カテゴリー</div>
+                          <div className="px-3 py-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-y mt-1">カテゴリー</div>
                           <button
                             onClick={() => { setCategoryFilter('all'); }}
                             className={cn("w-full text-left px-3 py-2 text-xs font-bold transition-colors hover:bg-slate-50", categoryFilter === 'all' ? "text-blue-600 bg-blue-50" : "text-slate-600")}
@@ -368,7 +368,7 @@ export default function RequestInbox() {
                       <div className="px-3 py-2 border-t">
                         <button
                           onClick={() => { setPeriodFilter('all'); setPriorityFilter('all'); setCategoryFilter('all'); setShowFilterDropdown(false); }}
-                          className="w-full text-center text-[10px] font-black text-slate-400 hover:text-slate-700 transition-colors uppercase tracking-widest"
+                          className="w-full text-center text-[10px] font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest"
                         >
                           リセット
                         </button>
@@ -383,13 +383,13 @@ export default function RequestInbox() {
                   onClick={() => { setShowSortDropdown(v => !v); setShowFilterDropdown(false); }}
                   className="p-1.5 hover:bg-slate-200 rounded-lg transition-colors"
                 >
-                  <MoreHorizontal className="w-4 h-4 text-slate-400" />
+                  <MoreHorizontal className="w-4 h-4 text-slate-500" />
                 </button>
                 {showSortDropdown && (
                   <>
                     <div className="fixed inset-0 z-[45]" onClick={() => setShowSortDropdown(false)} />
                     <div className="absolute right-0 top-full mt-1 w-36 bg-white border rounded-xl shadow-xl z-50 overflow-hidden animate-in zoom-in-95 duration-150">
-                      <div className="px-3 py-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b">ソート順</div>
+                      <div className="px-3 py-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b">ソート順</div>
                       {([
                         { value: 'newest', label: '新しい順' },
                         { value: 'oldest', label: '古い順' },
@@ -410,7 +410,7 @@ export default function RequestInbox() {
             </div>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-300" />
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
             <input
               type="text"
               aria-label="依頼を検索"
@@ -431,7 +431,7 @@ export default function RequestInbox() {
                   onClick={() => setFilter(currentStatus)}
                   className={cn(
                     "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all whitespace-nowrap",
-                    isActive ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-400 border-slate-200 hover:border-slate-400"
+                    isActive ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-500 border-slate-200 hover:border-slate-400"
                   )}
                 >
                   {label}
@@ -456,14 +456,14 @@ export default function RequestInbox() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">{task.category}</span>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest truncate">{task.category}</span>
                     {task.taskType === 'circulation' && (
-                      <span className="shrink-0 px-1.5 py-0.5 rounded-full text-[8px] font-black bg-teal-50 text-teal-600 border border-teal-100">回覧</span>
+                      <span className="shrink-0 px-1.5 py-0.5 rounded-full text-[8px] font-black bg-teal-50 text-teal-700 border border-teal-100">回覧</span>
                     )}
                   </div>
                   <span className={cn(
                     "shrink-0 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tight",
-                    isOverdue ? "bg-rose-100 text-rose-600" :
+                    isOverdue ? "bg-rose-100 text-rose-700" :
                     task.status === 'completed' ? "bg-emerald-50 text-emerald-600" :
                     task.status === 'in_progress' ? "bg-blue-50 text-blue-600" :
                     "bg-slate-100 text-slate-500"
@@ -475,7 +475,7 @@ export default function RequestInbox() {
                 
                 {/* Current Holder Display */}
                 <div className="flex items-center gap-1.5 mt-2 mb-2">
-                  <span className="text-[9px] font-bold text-slate-400">現在：</span>
+                  <span className="text-[9px] font-bold text-slate-500">現在：</span>
                   <span className={cn(
                     "px-1.5 py-0.5 rounded text-[9px] font-bold",
                     task.currentApproverId === user?.id ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"
@@ -487,20 +487,20 @@ export default function RequestInbox() {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5">
                     <div className="w-4 h-4 rounded-full bg-slate-200 flex items-center justify-center text-[8px] font-bold">U</div>
-                    <span className="text-[10px] font-bold text-slate-400">{task.requesterId.split('_').pop()}</span>
+                    <span className="text-[10px] font-bold text-slate-500">{task.requesterId.split('_').pop()}</span>
                   </div>
                   <div className="flex items-center gap-1.5 ml-auto">
                     {isOverdue && (() => {
                       const days = Math.floor((now.getTime() - new Date(task.dueDate).getTime()) / 86400000);
                       return (
-                        <span className="text-[8px] font-black bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full border border-rose-200">
+                        <span className="text-[8px] font-black bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full border border-rose-200">
                           +{days}日超過
                         </span>
                       );
                     })()}
                     <div className={cn(
                       "text-[10px] font-bold",
-                      isOverdue ? "text-rose-500" : "text-slate-300"
+                      isOverdue ? "text-rose-700" : "text-slate-500"
                     )}>
                       <ClientOnlyDate date={task.dueDate} />
                     </div>
@@ -526,14 +526,14 @@ export default function RequestInbox() {
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="reject-modal-title" className="text-lg font-bold text-[#191714]">差し戻し理由を入力</h3>
               <button type="button" onClick={() => setShowRejectModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
             <div className="p-6 space-y-5">
               <p className="text-sm text-slate-500 font-medium">申請者に差し戻す理由を入力してください。コメントは必須です。</p>
               {/* 定型テンプレート */}
               <div className="space-y-2">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">定型テンプレート</p>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">定型テンプレート</p>
                 <div className="flex flex-wrap gap-2">
                   {[
                     '内容を修正して再申請してください',
@@ -593,7 +593,7 @@ export default function RequestInbox() {
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="change-approver-modal-title" className="text-lg font-bold text-[#191714]">承認者を変更</h3>
               <button type="button" onClick={() => setShowChangeApproverModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
             <div className="p-6 space-y-4">
@@ -601,7 +601,7 @@ export default function RequestInbox() {
                 ステップ {changingStepIndex + 1} の承認者を変更します。現在: <span className="font-bold text-slate-800">{selectedTask?.approvalRoute[changingStepIndex]?.userName}</span>
               </p>
               <div className="relative">
-                <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-300" />
+                <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
                 <input
                   type="text"
                   aria-label="承認者を検索"
@@ -625,11 +625,11 @@ export default function RequestInbox() {
                     >
                       {u.avatar
                         ? <Image src={u.avatar} width={32} height={32} alt={u.name} className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-100 group-hover:border-slate-300" />
-                        : <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-400">{u.name[0]}</div>
+                        : <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">{u.name[0]}</div>
                       }
                       <div>
                         <div className="text-sm font-bold text-slate-800">{u.name}</div>
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{u.position}</div>
+                        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{u.position}</div>
                       </div>
                     </button>
                   ))
@@ -671,7 +671,7 @@ export default function RequestInbox() {
                 )}>
                   <AlarmClock className={cn(
                     "w-4 h-4 mt-0.5 shrink-0",
-                    urgency === 'critical' ? "text-rose-500" : urgency === 'high' ? "text-orange-500" : "text-amber-500"
+                    urgency === 'critical' ? "text-rose-600" : urgency === 'high' ? "text-orange-600" : "text-amber-600"
                   )} />
                   <div className="flex-1 min-w-0">
                     <p className={cn(
@@ -683,7 +683,7 @@ export default function RequestInbox() {
                     </p>
                     <p className={cn(
                       "text-[10px] font-medium mt-0.5",
-                      urgency === 'critical' ? "text-rose-500" : urgency === 'high' ? "text-orange-500" : "text-amber-500"
+                      urgency === 'critical' ? "text-rose-700" : urgency === 'high' ? "text-orange-700" : "text-amber-700"
                     )}>
                       期限: <ClientOnlyDate date={selectedTask.dueDate} /> ／ 現在の担当者が未処理のため遅延しています
                     </p>
@@ -702,7 +702,7 @@ export default function RequestInbox() {
                       回覧
                     </span>
                   )}
-                  <span className="text-[10px] font-bold text-slate-300">ID: {selectedTask.id}</span>
+                  <span className="text-[10px] font-bold text-slate-500">ID: {selectedTask.id}</span>
                 </div>
                 <button
                   onClick={handleExportPdf}
@@ -719,16 +719,16 @@ export default function RequestInbox() {
               </h1>
               <div className="flex items-center gap-6 py-2 border-y border-slate-100">
                 <div className="space-y-1">
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">申請者</div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">申請者</div>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold">U</div>
                     <span className="text-xs font-bold text-[#191714]">User {selectedTask.requesterId.split('_').pop()}</span>
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">期限 (SLA)</div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">期限 (SLA)</div>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-slate-300" />
+                    <Calendar className="w-4 h-4 text-slate-500" />
                     <span className="text-xs font-bold text-[#191714]"><ClientOnlyDate date={selectedTask.dueDate} /></span>
                   </div>
                 </div>
@@ -736,12 +736,12 @@ export default function RequestInbox() {
             </header>
 
             <section className="space-y-4">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                 <FileText className="w-4 h-4" />
                 依頼内容の詳細
               </h3>
               <div className="text-sm font-medium text-slate-600 leading-relaxed bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                {selectedTask.description || <span className="text-slate-400 italic">追加の説明はありません。</span>}
+                {selectedTask.description || <span className="text-slate-500 italic">追加の説明はありません。</span>}
               </div>
               
               {/* Dynamic Form Custom Data Rendering */}
@@ -751,7 +751,7 @@ export default function RequestInbox() {
                   <div className="grid grid-cols-2 gap-y-4">
                     {Object.entries(selectedTask.customData).map(([key, value]) => (
                       <div key={key} className="space-y-1">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase">{key}</div>
+                        <div className="text-[10px] font-bold text-slate-500 uppercase">{key}</div>
                         <div className="text-sm font-bold text-[#191714]">{value as string}</div>
                       </div>
                     ))}
@@ -763,7 +763,7 @@ export default function RequestInbox() {
             {/* Approval Route Visual */}
             <section className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4" />
                   現在の承認ステータス
                 </h3>
@@ -824,7 +824,7 @@ export default function RequestInbox() {
                         ? <Image src={step.avatar} width={40} height={40} alt={step.userName} className="w-10 h-10 rounded-xl bg-slate-100 mb-3 mt-2" />
                         : <div className="w-10 h-10 rounded-xl bg-slate-100 mb-3 mt-2" />
                       }
-                      <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{step.position}</div>
+                      <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">{step.position}</div>
                       <div className="text-xs font-bold text-[#191714]">{step.userName}</div>
                       {isDelegated && delegateUser && (
                         <div className="text-[9px] font-bold text-violet-500 mt-0.5">代理: {delegateUser.name}</div>
@@ -834,14 +834,14 @@ export default function RequestInbox() {
                           "text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border",
                           step.status === 'approved' ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
                           step.status === 'rejected' ? "bg-rose-50 text-rose-500 border-rose-100" :
-                          "bg-slate-50 text-slate-400 border-slate-100"
+                          "bg-slate-50 text-slate-500 border-slate-100"
                         )}>
                           {stepLabel}
                         </span>
                         {step.status === 'pending' && (
                           <button
                             onClick={() => handleOpenChangeApprover(idx)}
-                            className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border border-slate-200 text-slate-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                            className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border border-slate-200 text-slate-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
                             aria-label={`${step.userName}の承認者を変更`}
                           >
                             変更
@@ -857,7 +857,7 @@ export default function RequestInbox() {
               {selectedTask.ccRoute && selectedTask.ccRoute.length > 0 && (
                 <div className="pt-2 animate-in fade-in duration-500">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">CC（共有先）</div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">CC（共有先）</div>
                     <div className="h-px flex-1 bg-slate-100" />
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -869,7 +869,7 @@ export default function RequestInbox() {
                         }
                         <div className="flex flex-col">
                           <span className="text-[10px] font-bold text-[#191714] leading-tight">{cc.userName}</span>
-                          <span className="text-[8px] font-medium text-slate-400 leading-tight uppercase tracking-tighter">{cc.position}</span>
+                          <span className="text-[8px] font-medium text-slate-500 leading-tight uppercase tracking-tighter">{cc.position}</span>
                         </div>
                       </div>
                     ))}
@@ -880,7 +880,7 @@ export default function RequestInbox() {
 
             {/* Audit Logs (Timeline) */}
             <section className="space-y-6">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                 <History className="w-4 h-4" />
                 アクティビティ履歴
               </h3>
@@ -917,7 +917,7 @@ export default function RequestInbox() {
                               {theme.label}
                             </span>
                           </div>
-                          <div className="text-[10px] font-bold text-slate-300">
+                          <div className="text-[10px] font-bold text-slate-500">
                             <ClientOnlyDate date={log.timestamp} showTime />
                           </div>
                         </div>
@@ -928,14 +928,14 @@ export default function RequestInbox() {
                     </div>
                   );
                 }) : (
-                  <div className="text-[10px] font-bold text-slate-300 uppercase tracking-widest italic py-4">履歴データはまだありません</div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest italic py-4">履歴データはまだありません</div>
                 )}
               </div>
             </section>
 
             {/* In-App Messaging (Comments) */}
             <section className="space-y-6 pt-4 border-t">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
                 連絡・コメントを追加
               </h3>
@@ -1016,7 +1016,7 @@ export default function RequestInbox() {
                     </button>
                   </>
                 ) : (
-                  <div className="flex-1 py-4 text-center text-sm font-bold text-slate-300 border border-dashed rounded-2xl">
+                  <div className="flex-1 py-4 text-center text-sm font-bold text-slate-500 border border-dashed rounded-2xl">
                     現在あなたの対応番ではありません
                   </div>
                 )}
@@ -1024,7 +1024,7 @@ export default function RequestInbox() {
             </footer>
           </div>
         ) : (
-          <div className="h-full flex flex-col items-center justify-center text-slate-300">
+          <div className="h-full flex flex-col items-center justify-center text-slate-500">
             <Archive className="w-16 h-16 opacity-10 mb-4" />
             <p className="text-sm font-bold uppercase tracking-widest opacity-30">依頼を選択してください</p>
           </div>

@@ -518,8 +518,8 @@ function RequestFormContent() {
             }`}
             aria-pressed={taskType === opt.value}
           >
-            <div className={`text-xs font-black ${taskType === opt.value ? 'text-slate-900' : 'text-slate-400'}`}>{opt.label}</div>
-            <div className="text-[10px] text-slate-400 font-medium mt-0.5">{opt.desc}</div>
+            <div className={`text-xs font-black ${taskType === opt.value ? 'text-slate-900' : 'text-slate-500'}`}>{opt.label}</div>
+            <div className="text-[10px] text-slate-500 font-medium mt-0.5">{opt.desc}</div>
           </button>
         ))}
       </div>
@@ -528,13 +528,13 @@ function RequestFormContent() {
         <div className="lg:col-span-2 space-y-6">
           {/* Section 1: Categories */}
           <section className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
               <span className="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-slate-900 border">1</span>
               カテゴリー選択
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="req-large-category" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">大分類</label>
+                <label htmlFor="req-large-category" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">大分類</label>
                 <div className="relative group">
                   <select
                     id="req-large-category"
@@ -548,11 +548,11 @@ function RequestFormContent() {
                     <option value="">選択してください</option>
                     {largeCategoryOptions.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
-                  <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-slate-400 pointer-events-none group-hover:text-slate-600 transition-colors" />
+                  <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-slate-500 pointer-events-none group-hover:text-slate-600 transition-colors" />
                 </div>
               </div>
               <div className="space-y-2">
-                <label htmlFor="req-medium-category" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">中分類</label>
+                <label htmlFor="req-medium-category" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">中分類</label>
                 <div className="relative group">
                   <select
                     id="req-medium-category"
@@ -569,7 +569,7 @@ function RequestFormContent() {
                     <option value="">選択してください</option>
                     {mediumCategoryOptions.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
-                  <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-slate-400 pointer-events-none group-hover:text-slate-600 transition-colors" />
+                  <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-slate-500 pointer-events-none group-hover:text-slate-600 transition-colors" />
                 </div>
               </div>
             </div>
@@ -591,19 +591,19 @@ function RequestFormContent() {
 
           {/* Section 2: Details */}
           <section className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
               <span className="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-slate-900 border">2</span>
               申請内容の詳細
             </div>
             <div className="space-y-4">
               {/* A-1: 優先度 */}
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">優先度</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">優先度</label>
                 <div className="flex gap-2">
                   {([
                     { value: 'low',    label: '低',   className: 'border-sky-200 text-sky-500 bg-sky-50' },
                     { value: 'normal', label: '通常', className: 'border-slate-200 text-slate-500 bg-slate-50' },
-                    { value: 'high',   label: '急ぎ', className: 'border-rose-200 text-rose-500 bg-rose-50' },
+                    { value: 'high',   label: '急ぎ', className: 'border-rose-200 text-rose-700 bg-rose-50' },
                   ] as const).map(opt => (
                     <button
                       key={opt.value}
@@ -612,7 +612,7 @@ function RequestFormContent() {
                       className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition-all ${
                         priority === opt.value
                           ? opt.className + ' ring-2 ring-offset-1 ring-current'
-                          : 'border-slate-100 text-slate-300 bg-white hover:border-slate-200'
+                          : 'border-slate-100 text-slate-500 bg-white hover:border-slate-200'
                       }`}
                     >
                       {opt.label}
@@ -622,7 +622,7 @@ function RequestFormContent() {
               </div>
 
               <div className="space-y-2" id="field-__title">
-                <label htmlFor="req-title" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">タイトル <span className="text-rose-500">*</span></label>
+                <label htmlFor="req-title" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">タイトル <span className="text-rose-600">*</span></label>
                 <input
                   id="req-title"
                   type="text"
@@ -633,10 +633,10 @@ function RequestFormContent() {
                   aria-invalid={!!fieldErrors['__title']}
                   aria-describedby={fieldErrors['__title'] ? 'err-__title' : undefined}
                 />
-                {fieldErrors['__title'] && <p id="err-__title" className="text-xs text-rose-500 font-bold px-1">{fieldErrors['__title']}</p>}
+                {fieldErrors['__title'] && <p id="err-__title" className="text-xs text-rose-600 font-bold px-1">{fieldErrors['__title']}</p>}
               </div>
               <div className="space-y-2" id="field-__description">
-                <label htmlFor="req-description" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">詳細説明 / 追記</label>
+                <label htmlFor="req-description" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">詳細説明 / 追記</label>
                 <textarea
                   id="req-description"
                   rows={6}
@@ -647,7 +647,7 @@ function RequestFormContent() {
                   aria-invalid={!!fieldErrors['__description']}
                   aria-describedby={fieldErrors['__description'] ? 'err-__description' : undefined}
                 />
-                {fieldErrors['__description'] && <p id="err-__description" className="text-xs text-rose-500 font-bold px-1">{fieldErrors['__description']}</p>}
+                {fieldErrors['__description'] && <p id="err-__description" className="text-xs text-rose-600 font-bold px-1">{fieldErrors['__description']}</p>}
               </div>
 
               {/* Dynamic Fields Section */}
@@ -671,10 +671,10 @@ function RequestFormContent() {
                         <div key={field.id} className="space-y-2" id={`field-${field.id}`}>
                           <label
                             htmlFor={!['checkbox', 'file'].includes(field.type) ? `custom-field-${field.id}` : undefined}
-                            className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1"
+                            className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1"
                           >
                             {field.label}
-                            {field.required && <span className="text-rose-500 ml-1">*</span>}
+                            {field.required && <span className="text-rose-600 ml-1">*</span>}
                           </label>
 
                           {field.type === 'select' ? (
@@ -690,7 +690,7 @@ function RequestFormContent() {
                                 <option value="">選択してください</option>
                                 {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                               </select>
-                              <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-slate-400 pointer-events-none" />
+                              <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-slate-500 pointer-events-none" />
                             </div>
                           ) : field.type === 'textarea' ? (
                             <textarea
@@ -743,7 +743,7 @@ function RequestFormContent() {
                               aria-describedby={hasErr ? errId : undefined}
                             />
                           )}
-                          {hasErr && <p id={errId} className="text-xs text-rose-500 font-bold px-1">{fieldErrors[field.id]}</p>}
+                          {hasErr && <p id={errId} className="text-xs text-rose-600 font-bold px-1">{fieldErrors[field.id]}</p>}
                         </div>
                       );
                     })}
@@ -803,7 +803,7 @@ function RequestFormContent() {
                   e.preventDefault();
                   addFiles(Array.from(e.dataTransfer.files));
                 }}
-                className="flex items-center gap-2 p-4 mt-4 bg-slate-50 border border-dashed rounded-xl text-slate-400 cursor-pointer hover:bg-slate-100 hover:text-slate-600 transition-all"
+                className="flex items-center gap-2 p-4 mt-4 bg-slate-50 border border-dashed rounded-xl text-slate-500 cursor-pointer hover:bg-slate-100 hover:text-slate-600 transition-all"
               >
                 <Plus className="w-4 h-4 ml-auto" />
                 <span className="text-xs font-bold mr-auto">ファイルを添付またはドラッグ＆ドロップ</span>
@@ -822,16 +822,16 @@ function RequestFormContent() {
                 <div className="mt-2 space-y-1">
                   {attachedFiles.map((file, idx) => (
                     <div key={idx} className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600">
-                      <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <FileText className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                       <span className="flex-1 truncate">{file.name}</span>
-                      <span className="text-slate-300 shrink-0">{(file.size / 1024).toFixed(0)} KB</span>
+                      <span className="text-slate-500 shrink-0">{(file.size / 1024).toFixed(0)} KB</span>
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setAttachedFiles(prev => prev.filter((_, i) => i !== idx));
                         }}
-                        className="text-slate-300 hover:text-rose-500 transition-colors"
+                        className="text-slate-500 hover:text-rose-600 transition-colors"
                         aria-label={`${file.name}を削除`}
                       >
                         <X className="w-3.5 h-3.5" />
@@ -843,9 +843,9 @@ function RequestFormContent() {
               {fileErrors.length > 0 && (
                 <div className="mt-2 space-y-1">
                   {fileErrors.map((err, idx) => (
-                    <p key={idx} className="text-xs text-rose-500 font-bold px-1">{err}</p>
+                    <p key={idx} className="text-xs text-rose-600 font-bold px-1">{err}</p>
                   ))}
-                  <p className="text-[10px] text-slate-400 px-1">
+                  <p className="text-[10px] text-slate-500 px-1">
                     許可形式: {ALLOWED_EXTENSIONS.join(', ')} ／ 上限: 10MB
                   </p>
                 </div>
@@ -858,7 +858,7 @@ function RequestFormContent() {
         <aside className="space-y-6">
           <div className="sticky top-24 space-y-8">
             <div className="flex items-center justify-between px-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
                 <span className="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-slate-900 border">3</span>
                 承認フロー
               </div>
@@ -878,7 +878,7 @@ function RequestFormContent() {
             {/* Cc Users compact section */}
             <div className="space-y-4 px-2">
               <div className="flex items-center justify-between">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">CC（共有先）</div>
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">CC（共有先）</div>
                 <button 
                   type="button"
                   onClick={() => {
@@ -901,14 +901,14 @@ function RequestFormContent() {
                     <button 
                       type="button"
                       onClick={() => removeCcUser(idx)}
-                      className="text-slate-300 hover:text-rose-500 transition-colors"
+                      className="text-slate-500 hover:text-rose-600 transition-colors"
                     >
                       <X className="w-2.5 h-2.5" />
                     </button>
                   </div>
                 ))}
                 {ccRoute.length === 0 && (
-                  <div className="text-[10px] text-slate-300 italic font-medium">指定なし</div>
+                  <div className="text-[10px] text-slate-500 italic font-medium">指定なし</div>
                 )}
               </div>
             </div>
@@ -930,7 +930,7 @@ function RequestFormContent() {
                             ? 'bg-violet-50 border-violet-200 text-violet-600'
                             : step.parallelType === 'or'
                             ? 'bg-amber-50 border-amber-200 text-amber-600'
-                            : 'bg-slate-50 border-slate-200 text-slate-300 hover:border-slate-400 hover:text-slate-500'
+                            : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-500'
                         }`}
                         title="クリックして並列設定を変更: なし → AND（全員承認）→ OR（1名でOK）"
                       >
@@ -943,7 +943,7 @@ function RequestFormContent() {
                         : <div className="w-8 h-8 rounded-lg bg-slate-100" />
                       }
                       <div className="flex-1 min-w-0">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{step.position}</div>
+                        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{step.position}</div>
                         <div className="text-xs font-bold text-[#191714] truncate">{step.userName}</div>
                       </div>
                       <button
@@ -995,12 +995,12 @@ function RequestFormContent() {
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="draft-list-modal-title" className="text-lg font-bold text-[#191714]">保存済み下書き</h3>
               <button type="button" onClick={() => setShowDraftList(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
             <div className="max-h-96 overflow-y-auto p-3 space-y-2">
               {drafts.length === 0 && (
-                <p className="text-center text-sm text-slate-400 py-8">下書きはありません</p>
+                <p className="text-center text-sm text-slate-500 py-8">下書きはありません</p>
               )}
               {drafts.map((draft) => {
                 const savedAt = new Date(draft.savedAt);
@@ -1009,10 +1009,10 @@ function RequestFormContent() {
                   : savedAt.toLocaleDateString('ja-JP') + ' ' + savedAt.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
                 return (
                   <div key={draft.id} className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl group hover:border-slate-400 transition-all">
-                    <FileText className="w-5 h-5 text-slate-400 shrink-0" />
+                    <FileText className="w-5 h-5 text-slate-500 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-[#191714] truncate">{draft.title}</div>
-                      <div className="text-[10px] text-slate-400 font-medium">{dateLabel}</div>
+                      <div className="text-[10px] text-slate-500 font-medium">{dateLabel}</div>
                     </div>
                     <button
                       type="button"
@@ -1024,7 +1024,7 @@ function RequestFormContent() {
                     <button
                       type="button"
                       onClick={() => handleDeleteDraft(draft.id)}
-                      className="p-1 text-slate-300 hover:text-rose-500 transition-colors shrink-0"
+                      className="p-1 text-slate-500 hover:text-rose-600 transition-colors shrink-0"
                       aria-label="削除"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -1054,11 +1054,11 @@ function RequestFormContent() {
                   {searchMode === 'approver' ? '承認者の検索・追加' : 'CC（共有先）の検索・追加'}
                 </h3>
                 <button type="button" onClick={() => setShowSearch(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
-                  <X className="w-5 h-5 text-slate-400" />
+                  <X className="w-5 h-5 text-slate-500" />
                 </button>
               </div>
               <div className="relative">
-                <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-300" />
+                <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
                 <input
                   type="text"
                   autoFocus
@@ -1083,10 +1083,10 @@ function RequestFormContent() {
                       : <div className="w-10 h-10 rounded-xl bg-slate-100" />
                     }
                     <div className="flex-1">
-                      <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">{u.position}</div>
+                      <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">{u.position}</div>
                       <div className="text-sm font-bold text-[#191714]">{u.name}</div>
                     </div>
-                    <Plus className="w-5 h-5 text-slate-300 opacity-0 group-hover:opacity-100 transition-all" />
+                    <Plus className="w-5 h-5 text-slate-500 opacity-0 group-hover:opacity-100 transition-all" />
                   </button>
                 ))}
               </div>
@@ -1100,7 +1100,7 @@ function RequestFormContent() {
 
 export default function RequestForm() {
   return (
-    <Suspense fallback={<div className="p-8 text-slate-400 text-sm font-medium">フォームを読み込み中...</div>}>
+    <Suspense fallback={<div className="p-8 text-slate-500 text-sm font-medium">フォームを読み込み中...</div>}>
       <RequestFormContent />
     </Suspense>
   );
