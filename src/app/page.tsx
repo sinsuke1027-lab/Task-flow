@@ -23,6 +23,7 @@ import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { OrgNode } from '@/components/organization/org-node';
 import { ClientOnlyDate } from '@/components/common/client-only-date';
+import { toast } from 'sonner';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -72,7 +73,9 @@ export default function Dashboard() {
     try {
       await provider.processApproval(taskId, user.id, 'approve', 'ダッシュボードからのクイック承認');
       await fetchData();
+      toast.success('承認しました');
     } catch (error) {
+      toast.error('承認処理に失敗しました');
       console.error('Approval failed:', error);
     }
   };
@@ -83,7 +86,9 @@ export default function Dashboard() {
     try {
       await provider.processApproval(taskId, user.id, 'reject', 'ダッシュボードからのクイック差戻し');
       await fetchData();
+      toast.success('差し戻しました');
     } catch (error) {
+      toast.error('差し戻し処理に失敗しました');
       console.error('Rejection failed:', error);
     }
   };
@@ -100,7 +105,9 @@ export default function Dashboard() {
       );
       setSelectedTaskIds(new Set());
       await fetchData();
+      toast.success('一括承認しました');
     } catch (error) {
+      toast.error('一括承認処理に失敗しました');
       console.error('Bulk approval failed:', error);
     } finally {
       setIsBulkApproving(false);
