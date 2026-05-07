@@ -23,6 +23,7 @@ import { Category, User, ApprovalStep, AmountRule, CustomField, FieldValidation 
 import { resolveWorkflowTemplate } from '@/lib/workflow-utils';
 import { useAuth } from '@/context/auth-context';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 const DRAFTS_KEY = 'task_bridge_drafts';
 const MAX_DRAFTS = 5;
@@ -116,6 +117,11 @@ function RequestFormContent() {
   const [searchResults, setSearchResults] = useState<User[]>([]);
 
   const [allUsers, setAllUsers] = useState<User[]>([]);
+
+  const draftListModalRef = useRef<HTMLDivElement>(null);
+  const searchModalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(draftListModalRef, showDraftList, () => setShowDraftList(false));
+  useFocusTrap(searchModalRef, showSearch, () => setShowSearch(false));
 
   useEffect(() => {
     const fetchInitial = async () => {
@@ -967,11 +973,17 @@ function RequestFormContent() {
       {/* C-1: 下書き一覧モーダル */}
       {showDraftList && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowDraftList(false)} />
-          <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowDraftList(false)} aria-hidden="true" />
+          <div
+            ref={draftListModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="draft-list-modal-title"
+            className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">保存済み下書き</h3>
-              <button onClick={() => setShowDraftList(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+              <h3 id="draft-list-modal-title" className="text-lg font-bold text-[#191714]">保存済み下書き</h3>
+              <button type="button" onClick={() => setShowDraftList(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                 <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>
@@ -1017,14 +1029,20 @@ function RequestFormContent() {
       {/* Search Modal */}
       {showSearch && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowSearch(false)} />
-          <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowSearch(false)} aria-hidden="true" />
+          <div
+            ref={searchModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="search-modal-title"
+            className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-[#191714]">
+                <h3 id="search-modal-title" className="text-lg font-bold text-[#191714]">
                   {searchMode === 'approver' ? '承認者の検索・追加' : 'CC（共有先）の検索・追加'}
                 </h3>
-                <button onClick={() => setShowSearch(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+                <button type="button" onClick={() => setShowSearch(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
               </div>

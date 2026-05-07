@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import {
   Search,
@@ -32,6 +32,7 @@ import { useAuth } from '@/context/auth-context';
 import { ClientOnlyDate } from '@/components/common/client-only-date';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 export default function RequestInbox() {
   const { user } = useAuth();
@@ -57,6 +58,11 @@ export default function RequestInbox() {
   const [approverSearchQuery, setApproverSearchQuery] = useState('');
   const [delegations, setDelegations] = useState<Delegation[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const rejectModalRef = useRef<HTMLDivElement>(null);
+  const changeApproverModalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(rejectModalRef, showRejectModal, () => setShowRejectModal(false));
+  useFocusTrap(changeApproverModalRef, showChangeApproverModal, () => setShowChangeApproverModal(false));
 
   const now = new Date('2026-04-02T09:05:57Z'); // For consistent testing matching current metadata
 
@@ -508,11 +514,17 @@ export default function RequestInbox() {
       {/* 差し戻しモーダル */}
       {showRejectModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowRejectModal(false)} />
-          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowRejectModal(false)} aria-hidden="true" />
+          <div
+            ref={rejectModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reject-modal-title"
+            className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">差し戻し理由を入力</h3>
-              <button onClick={() => setShowRejectModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+              <h3 id="reject-modal-title" className="text-lg font-bold text-[#191714]">差し戻し理由を入力</h3>
+              <button type="button" onClick={() => setShowRejectModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                 <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>
@@ -568,11 +580,17 @@ export default function RequestInbox() {
       {/* 承認者変更モーダル */}
       {showChangeApproverModal && changingStepIndex !== null && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowChangeApproverModal(false)} />
-          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowChangeApproverModal(false)} aria-hidden="true" />
+          <div
+            ref={changeApproverModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="change-approver-modal-title"
+            className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">承認者を変更</h3>
-              <button onClick={() => setShowChangeApproverModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+              <h3 id="change-approver-modal-title" className="text-lg font-bold text-[#191714]">承認者を変更</h3>
+              <button type="button" onClick={() => setShowChangeApproverModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                 <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>

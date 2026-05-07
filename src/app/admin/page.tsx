@@ -30,6 +30,7 @@ import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ClientOnlyDate } from '@/components/common/client-only-date';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState<'general' | 'org' | 'categories' | 'security' | 'logs' | 'delegation'>('general');
@@ -112,6 +113,20 @@ export default function AdminSettings() {
   const [catFormAmountRules, setCatFormAmountRules] = useState<AmountRule[]>([]);
   const [catFormFields, setCatFormFields] = useState<CustomField[]>([]);
   const [catFormWorkflow, setCatFormWorkflow] = useState<WorkflowStepTemplate[]>([]);
+
+  // focus trap refs for each modal
+  const changeModalRef = useRef<HTMLDivElement>(null);
+  const delegationModalRef = useRef<HTMLDivElement>(null);
+  const addUserModalRef = useRef<HTMLDivElement>(null);
+  const catModalRef = useRef<HTMLDivElement>(null);
+  const editUserModalRef = useRef<HTMLDivElement>(null);
+  const unitModalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(changeModalRef, isChangeModalOpen, () => setIsChangeModalOpen(false));
+  useFocusTrap(delegationModalRef, showAddDelegationModal, () => setShowAddDelegationModal(false));
+  useFocusTrap(addUserModalRef, showAddUserModal, () => setShowAddUserModal(false));
+  useFocusTrap(catModalRef, showAddCatModal || editingCategory !== null, () => { setShowAddCatModal(false); setEditingCategory(null); setCatFormTab('basic'); });
+  useFocusTrap(editUserModalRef, showEditUserModal, () => { setShowEditUserModal(false); setEditingUser(null); });
+  useFocusTrap(unitModalRef, showAddUnitModal || editingUnit !== null, () => { setShowAddUnitModal(false); setEditingUnit(null); });
 
   const fetchData = useCallback(async () => {
     const provider = getDataProvider();
@@ -833,11 +848,17 @@ export default function AdminSettings() {
               {/* 代決追加モーダル */}
               {showAddDelegationModal && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowAddDelegationModal(false)} />
-                  <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowAddDelegationModal(false)} aria-hidden="true" />
+                  <div
+                    ref={delegationModalRef}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="delegation-modal-title"
+                    className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+                  >
                     <div className="p-6 border-b flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-[#191714]">代決設定を追加</h3>
-                      <button onClick={() => setShowAddDelegationModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
+                      <h3 id="delegation-modal-title" className="text-lg font-bold text-[#191714]">代決設定を追加</h3>
+                      <button type="button" onClick={() => setShowAddDelegationModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                         <X className="w-5 h-5 text-slate-400" />
                       </button>
                     </div>
@@ -1010,13 +1031,20 @@ export default function AdminSettings() {
 
       {isChangeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0" onClick={() => setIsChangeModalOpen(false)} aria-hidden="true" />
+          <div
+            ref={changeModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="change-modal-title"
+            className="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between bg-slate-50/50">
               <div>
-                <h3 className="text-xl font-bold text-[#191714]">人事・組織変更の登録</h3>
+                <h3 id="change-modal-title" className="text-xl font-bold text-[#191714]">人事・組織変更の登録</h3>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Schedule Personnel Event</p>
               </div>
-              <button onClick={() => setIsChangeModalOpen(false)} className="p-2 hover:bg-slate-200 rounded-xl transition-colors">
+              <button type="button" onClick={() => setIsChangeModalOpen(false)} className="p-2 hover:bg-slate-200 rounded-xl transition-colors" aria-label="閉じる">
                 <ChevronRight className="w-5 h-5 rotate-90" />
               </button>
             </div>
@@ -1142,10 +1170,17 @@ export default function AdminSettings() {
       {/* 新規ユーザー追加モーダル */}
       {showAddUserModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0" onClick={() => setShowAddUserModal(false)} aria-hidden="true" />
+          <div
+            ref={addUserModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-user-modal-title"
+            className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">メンバー新規追加</h3>
-              <button onClick={() => setShowAddUserModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+              <h3 id="add-user-modal-title" className="text-lg font-bold text-[#191714]">メンバー新規追加</h3>
+              <button type="button" onClick={() => setShowAddUserModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
             </div>
             <div className="p-6 space-y-4">
               {[
@@ -1185,10 +1220,17 @@ export default function AdminSettings() {
       {/* カテゴリー追加・編集モーダル */}
       {(showAddCatModal || editingCategory) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh]">
+          <div className="absolute inset-0" onClick={() => { setShowAddCatModal(false); setEditingCategory(null); setCatFormTab('basic'); }} aria-hidden="true" />
+          <div
+            ref={catModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cat-modal-title"
+            className="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh]"
+          >
             <div className="p-6 border-b flex items-center justify-between shrink-0">
-              <h3 className="text-lg font-bold text-[#191714]">{editingCategory ? 'カテゴリーを編集' : 'カテゴリーを追加'}</h3>
-              <button onClick={() => { setShowAddCatModal(false); setEditingCategory(null); setCatFormTab('basic'); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+              <h3 id="cat-modal-title" className="text-lg font-bold text-[#191714]">{editingCategory ? 'カテゴリーを編集' : 'カテゴリーを追加'}</h3>
+              <button type="button" onClick={() => { setShowAddCatModal(false); setEditingCategory(null); setCatFormTab('basic'); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
             </div>
 
             {/* タブ */}
@@ -1422,10 +1464,17 @@ export default function AdminSettings() {
       {/* ユーザー編集モーダル */}
       {showEditUserModal && editingUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0" onClick={() => { setShowEditUserModal(false); setEditingUser(null); }} aria-hidden="true" />
+          <div
+            ref={editUserModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-user-modal-title"
+            className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">プロフィール編集</h3>
-              <button onClick={() => { setShowEditUserModal(false); setEditingUser(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+              <h3 id="edit-user-modal-title" className="text-lg font-bold text-[#191714]">プロフィール編集</h3>
+              <button type="button" onClick={() => { setShowEditUserModal(false); setEditingUser(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
             </div>
             <div className="p-6 space-y-4">
               {[
@@ -1485,10 +1534,17 @@ export default function AdminSettings() {
       {/* 組織ユニット追加・編集モーダル */}
       {(showAddUnitModal || editingUnit) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0" onClick={() => { setShowAddUnitModal(false); setEditingUnit(null); }} aria-hidden="true" />
+          <div
+            ref={unitModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="unit-modal-title"
+            className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">{editingUnit ? 'ユニットを編集' : 'ユニットを追加'}</h3>
-              <button onClick={() => { setShowAddUnitModal(false); setEditingUnit(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+              <h3 id="unit-modal-title" className="text-lg font-bold text-[#191714]">{editingUnit ? 'ユニットを編集' : 'ユニットを追加'}</h3>
+              <button type="button" onClick={() => { setShowAddUnitModal(false); setEditingUnit(null); }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる"><X className="w-5 h-5 text-slate-400" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div className="space-y-1">
