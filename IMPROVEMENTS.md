@@ -129,7 +129,7 @@
 | # | 内容 | 対象ファイル | ステータス |
 |---|------|------------|----------|
 | P2-1 | 全アイコンボタンに `aria-label` 付与・モーダル focus trap 実装 | 全ページ | ✅ |
-| P2-2 | `<label>` と `<input>` の紐付け統一（date input 含む） | `src/app/request/page.tsx` 他 | ⬜ |
+| P2-2 | `<label>` と `<input>` の紐付け統一（date input 含む） | `src/app/request/page.tsx` 他 | ✅ |
 | P2-3 | WCAG 2.1 AA カラーコントラスト確認・修正 | Tailwind CSS 設定 | ⬜ |
 | P2-4 | `next/dynamic` によるページ単位 Code Splitting | `src/app/admin/page.tsx`, `src/app/inbox/page.tsx` | ⬜ |
 | P2-5 | `OrgNode` 再帰描画に `React.memo` 適用 | `src/components/organization/org-node.tsx` | ⬜ |
