@@ -534,9 +534,10 @@ function RequestFormContent() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">大分類</label>
+                <label htmlFor="req-large-category" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">大分類</label>
                 <div className="relative group">
-                  <select 
+                  <select
+                    id="req-large-category"
                     className="w-full h-12 pl-4 pr-10 bg-slate-50 border border-slate-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-bold text-slate-900"
                     onChange={(e) => {
                       setLargeCategory(e.target.value);
@@ -551,9 +552,10 @@ function RequestFormContent() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">中分類</label>
+                <label htmlFor="req-medium-category" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">中分類</label>
                 <div className="relative group">
-                  <select 
+                  <select
+                    id="req-medium-category"
                     className="w-full h-12 pl-4 pr-10 bg-slate-50 border border-slate-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-bold text-slate-900 disabled:opacity-50"
                     disabled={!largeCategory}
                     onChange={(e) => {
@@ -620,8 +622,9 @@ function RequestFormContent() {
               </div>
 
               <div className="space-y-2" id="field-__title">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">タイトル <span className="text-rose-500">*</span></label>
+                <label htmlFor="req-title" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">タイトル <span className="text-rose-500">*</span></label>
                 <input
+                  id="req-title"
                   type="text"
                   placeholder="例：2026年度 資格取得祝金申請"
                   className={`w-full h-12 px-4 bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-bold text-slate-900 ${fieldErrors['__title'] ? 'border-rose-400 ring-1 ring-rose-300' : 'border-slate-200'}`}
@@ -633,8 +636,9 @@ function RequestFormContent() {
                 {fieldErrors['__title'] && <p id="err-__title" className="text-xs text-rose-500 font-bold px-1">{fieldErrors['__title']}</p>}
               </div>
               <div className="space-y-2" id="field-__description">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">詳細説明 / 追記</label>
+                <label htmlFor="req-description" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">詳細説明 / 追記</label>
                 <textarea
+                  id="req-description"
                   rows={6}
                   placeholder="申請の背景、希望する対応内容などを記載してください。"
                   className={`w-full p-4 bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-medium text-slate-900 resize-none ${fieldErrors['__description'] ? 'border-rose-400 ring-1 ring-rose-300' : 'border-slate-200'}`}
@@ -665,7 +669,10 @@ function RequestFormContent() {
                       };
                       return (
                         <div key={field.id} className="space-y-2" id={`field-${field.id}`}>
-                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">
+                          <label
+                            htmlFor={!['checkbox', 'file'].includes(field.type) ? `custom-field-${field.id}` : undefined}
+                            className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1"
+                          >
                             {field.label}
                             {field.required && <span className="text-rose-500 ml-1">*</span>}
                           </label>
@@ -673,6 +680,7 @@ function RequestFormContent() {
                           {field.type === 'select' ? (
                             <div className="relative">
                               <select
+                                id={`custom-field-${field.id}`}
                                 className={inputClass('w-full h-12 pl-4 pr-10 bg-slate-50 border rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-bold text-slate-900')}
                                 value={customData[field.label] || ''}
                                 onChange={(e) => handleChange(e.target.value)}
@@ -686,6 +694,7 @@ function RequestFormContent() {
                             </div>
                           ) : field.type === 'textarea' ? (
                             <textarea
+                              id={`custom-field-${field.id}`}
                               rows={3}
                               className={inputClass('w-full px-4 py-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all text-sm text-slate-900 resize-none')}
                               placeholder={field.placeholder ?? `${field.label}を入力...`}
@@ -714,6 +723,7 @@ function RequestFormContent() {
                             </label>
                           ) : field.type === 'date' ? (
                             <input
+                              id={`custom-field-${field.id}`}
                               type="date"
                               className={inputClass('w-full h-12 px-4 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-bold text-slate-900')}
                               value={customData[field.label] || ''}
@@ -723,6 +733,7 @@ function RequestFormContent() {
                             />
                           ) : (
                             <input
+                              id={`custom-field-${field.id}`}
                               type={field.type === 'number' ? 'number' : 'text'}
                               className={inputClass('w-full h-12 px-4 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-bold text-slate-900')}
                               placeholder={field.placeholder ?? `${field.label}を入力...`}
@@ -1048,9 +1059,10 @@ function RequestFormContent() {
               </div>
               <div className="relative">
                 <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-300" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   autoFocus
+                  aria-label="ユーザーを検索"
                   placeholder="氏名や役職で検索..."
                   className="w-full h-12 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-slate-900 transition-all font-bold"
                   value={searchQuery}
