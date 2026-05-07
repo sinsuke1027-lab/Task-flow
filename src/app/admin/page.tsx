@@ -478,8 +478,9 @@ export default function AdminSettings() {
                 )}
                 <div className="grid grid-cols-2 gap-8 pt-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">テナント名</label>
+                    <label htmlFor="admin-tenant-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">テナント名</label>
                     <input
+                      id="admin-tenant-name"
                       type="text"
                       value={tenantName}
                       onChange={(e) => setTenantName(e.target.value)}
@@ -864,8 +865,9 @@ export default function AdminSettings() {
                     </div>
                     <div className="p-6 space-y-4">
                       <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">権限を委任する人（不在者）<span className="text-rose-500">*</span></label>
+                        <label htmlFor="del-delegator" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">権限を委任する人（不在者）<span className="text-rose-500">*</span></label>
                         <select
+                          id="del-delegator"
                           className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all"
                           value={delDelegatorId}
                           onChange={e => setDelDelegatorId(e.target.value)}
@@ -877,8 +879,9 @@ export default function AdminSettings() {
                         </select>
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">代理承認者<span className="text-rose-500">*</span></label>
+                        <label htmlFor="del-delegate" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">代理承認者<span className="text-rose-500">*</span></label>
                         <select
+                          id="del-delegate"
                           className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all"
                           value={delDelegateId}
                           onChange={e => setDelDelegateId(e.target.value)}
@@ -891,17 +894,17 @@ export default function AdminSettings() {
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">開始日<span className="text-rose-500">*</span></label>
-                          <input type="date" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delStartDate} onChange={e => setDelStartDate(e.target.value)} />
+                          <label htmlFor="del-start-date" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">開始日<span className="text-rose-500">*</span></label>
+                          <input id="del-start-date" type="date" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delStartDate} onChange={e => setDelStartDate(e.target.value)} />
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">終了日（任意）</label>
-                          <input type="date" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delEndDate} onChange={e => setDelEndDate(e.target.value)} />
+                          <label htmlFor="del-end-date" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">終了日（任意）</label>
+                          <input id="del-end-date" type="date" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delEndDate} onChange={e => setDelEndDate(e.target.value)} />
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">理由・備考</label>
-                        <input type="text" placeholder="例：出張、育休など" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delReason} onChange={e => setDelReason(e.target.value)} />
+                        <label htmlFor="del-reason" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">理由・備考</label>
+                        <input id="del-reason" type="text" placeholder="例：出張、育休など" className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-slate-900 transition-all" value={delReason} onChange={e => setDelReason(e.target.value)} />
                       </div>
                       <div className="flex gap-3 pt-2">
                         <button onClick={() => setShowAddDelegationModal(false)} className="flex-1 py-3 bg-white border border-slate-200 text-slate-600 rounded-2xl font-bold text-sm hover:bg-slate-50 transition-all">キャンセル</button>
@@ -939,6 +942,7 @@ export default function AdminSettings() {
                       <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
+                        aria-label="監査ログを検索"
                         placeholder="ユーザー名、アクション種別で検索..."
                         value={logSearchQuery}
                         onChange={(e) => setLogSearchQuery(e.target.value)}
@@ -949,6 +953,7 @@ export default function AdminSettings() {
                       <CalendarDays className="w-4 h-4 text-slate-400" />
                       <input
                         type="date"
+                        aria-label="開始日"
                         value={logStartDate}
                         onChange={(e) => setLogStartDate(e.target.value)}
                         className="text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-slate-400 transition-all"
@@ -956,6 +961,7 @@ export default function AdminSettings() {
                       <span className="text-slate-300 font-bold text-xs">~</span>
                       <input
                         type="date"
+                        aria-label="終了日"
                         value={logEndDate}
                         onChange={(e) => setLogEndDate(e.target.value)}
                         className="text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-slate-400 transition-all"
@@ -1051,9 +1057,10 @@ export default function AdminSettings() {
             
             <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">対象ユーザー</label>
-                <select 
-                  value={selectedUser} 
+                <label htmlFor="change-target-user" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">対象ユーザー</label>
+                <select
+                  id="change-target-user"
+                  value={selectedUser}
                   onChange={(e) => setSelectedUser(e.target.value)}
                   className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all"
                 >
@@ -1066,9 +1073,10 @@ export default function AdminSettings() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">変更種別</label>
-                  <select 
-                    value={changeType} 
+                  <label htmlFor="change-type-select" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">変更種別</label>
+                  <select
+                    id="change-type-select"
+                    value={changeType}
                     onChange={(e) => setChangeType(e.target.value as typeof changeType)}
                     className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all"
                   >
@@ -1079,9 +1087,9 @@ export default function AdminSettings() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">適用予定日</label>
+                  <label htmlFor="change-scheduled-date" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">適用予定日</label>
                   <div className="relative">
-                    <input type="date" className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all pl-10" />
+                    <input id="change-scheduled-date" type="date" className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all pl-10" />
                     <CalendarDays className="w-4 h-4 absolute left-4 top-4 text-slate-400" />
                   </div>
                 </div>
@@ -1090,8 +1098,9 @@ export default function AdminSettings() {
               {(changeType === 'transfer' || changeType === 'promotion') && (
                 <div className="space-y-4 pt-4 border-t border-dashed">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">新所属組織</label>
-                    <select 
+                    <label htmlFor="change-new-org" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">新所属組織</label>
+                    <select
+                      id="change-new-org"
                       value={newOrgUnit}
                       onChange={(e) => setNewOrgUnit(e.target.value)}
                       className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all"
@@ -1103,8 +1112,9 @@ export default function AdminSettings() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">新直属上長</label>
-                    <select 
+                    <label htmlFor="change-new-manager" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">新直属上長</label>
+                    <select
+                      id="change-new-manager"
                       value={newManager}
                       onChange={(e) => setNewManager(e.target.value)}
                       className="w-full h-12 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all"
@@ -1184,25 +1194,25 @@ export default function AdminSettings() {
             </div>
             <div className="p-6 space-y-4">
               {[
-                { label: '氏名', value: newUserName, setter: setNewUserName, placeholder: '例: 田中 太郎' },
-                { label: 'メールアドレス', value: newUserEmail, setter: setNewUserEmail, placeholder: 'example@company.co.jp' },
-              ].map(({ label, value, setter, placeholder }) => (
+                { id: 'new-user-name', label: '氏名', value: newUserName, setter: setNewUserName, placeholder: '例: 田中 太郎' },
+                { id: 'new-user-email', label: 'メールアドレス', value: newUserEmail, setter: setNewUserEmail, placeholder: 'example@company.co.jp' },
+              ].map(({ id, label, value, setter, placeholder }) => (
                 <div key={label} className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">{label}</label>
-                  <input type="text" value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
+                  <label htmlFor={id} className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">{label}</label>
+                  <input id={id} type="text" value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
                     className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                 </div>
               ))}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">役職</label>
-                <select value={newUserPosition} onChange={e => setNewUserPosition(e.target.value)}
+                <label htmlFor="new-user-position" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">役職</label>
+                <select id="new-user-position" value={newUserPosition} onChange={e => setNewUserPosition(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   {['President', 'Division Manager', 'General Manager', 'Team Leader', 'Member'].map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">組織ユニット</label>
-                <select value={newUserOrgUnit} onChange={e => setNewUserOrgUnit(e.target.value)}
+                <label htmlFor="new-user-org-unit" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">組織ユニット</label>
+                <select id="new-user-org-unit" value={newUserOrgUnit} onChange={e => setNewUserOrgUnit(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   <option value="">選択してください</option>
                   {orgUnits.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
@@ -1253,21 +1263,21 @@ export default function AdminSettings() {
               {catFormTab === 'basic' && (
                 <div className="space-y-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">カテゴリー名</label>
-                    <input type="text" value={catFormName} onChange={e => setCatFormName(e.target.value)} placeholder="例: 資格取得祝金申請"
+                    <label htmlFor="cat-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">カテゴリー名</label>
+                    <input id="cat-name" type="text" value={catFormName} onChange={e => setCatFormName(e.target.value)} placeholder="例: 資格取得祝金申請"
                       className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">大分類（親カテゴリー）</label>
-                    <select value={catFormParentId} onChange={e => setCatFormParentId(e.target.value)}
+                    <label htmlFor="cat-parent" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">大分類（親カテゴリー）</label>
+                    <select id="cat-parent" value={catFormParentId} onChange={e => setCatFormParentId(e.target.value)}
                       className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                       <option value="">なし（大分類として追加）</option>
                       {categories.filter(c => c.parentId === null).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">目標SLA（営業日）</label>
-                    <input type="number" min={1} max={90} value={catFormSla} onChange={e => setCatFormSla(Number(e.target.value))}
+                    <label htmlFor="cat-sla" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">目標SLA（営業日）</label>
+                    <input id="cat-sla" type="number" min={1} max={90} value={catFormSla} onChange={e => setCatFormSla(Number(e.target.value))}
                       className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                   </div>
                   <div className="space-y-2 pt-2 border-t border-dashed border-slate-100">
@@ -1322,10 +1332,10 @@ export default function AdminSettings() {
                   {catFormFields.map((field, idx) => (
                     <div key={field.id} className="p-3 bg-slate-50 border rounded-2xl space-y-2">
                       <div className="flex gap-2 items-center">
-                        <input type="text" placeholder="項目名（例: 受験料）" value={field.label}
+                        <input type="text" aria-label="項目名" placeholder="項目名（例: 受験料）" value={field.label}
                           onChange={e => setCatFormFields(prev => prev.map((f, i) => i === idx ? { ...f, label: e.target.value } : f))}
                           className="flex-1 h-8 px-3 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all" />
-                        <select value={field.type}
+                        <select aria-label="項目タイプ" value={field.type}
                           onChange={e => setCatFormFields(prev => prev.map((f, i) => i === idx ? { ...f, type: e.target.value as CustomField['type'], options: undefined } : f))}
                           className="h-8 px-2 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all">
                           <option value="text">テキスト</option>
@@ -1346,13 +1356,13 @@ export default function AdminSettings() {
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                      <input type="text" placeholder="プレースホルダー（任意）" value={field.placeholder ?? ''}
+                      <input type="text" aria-label="プレースホルダー" placeholder="プレースホルダー（任意）" value={field.placeholder ?? ''}
                         onChange={e => setCatFormFields(prev => prev.map((f, i) => i === idx ? { ...f, placeholder: e.target.value } : f))}
                         className="w-full h-7 px-3 bg-white border rounded-xl text-[11px] text-slate-500 focus:outline-none focus:border-slate-400 transition-all" />
                       {field.type === 'select' && (
                         <div className="space-y-1">
                           <p className="text-[10px] text-slate-400 font-bold">選択肢（改行区切り）</p>
-                          <textarea rows={3} value={(field.options ?? []).join('\n')}
+                          <textarea rows={3} aria-label="選択肢（改行区切り）" value={(field.options ?? []).join('\n')}
                             onChange={e => setCatFormFields(prev => prev.map((f, i) => i === idx ? { ...f, options: e.target.value.split('\n').filter(Boolean) } : f))}
                             className="w-full px-3 py-2 bg-white border rounded-xl text-xs focus:outline-none focus:border-slate-400 transition-all resize-none" />
                         </div>
@@ -1378,7 +1388,7 @@ export default function AdminSettings() {
                     <div key={step.id} className="p-3 bg-slate-50 border rounded-2xl space-y-2">
                       <div className="flex gap-2 items-center">
                         <span className="text-[10px] font-black text-slate-400 w-5 shrink-0">{idx + 1}</span>
-                        <input type="text" placeholder="ステップ名（例: 上長承認）" value={step.label}
+                        <input type="text" aria-label="ステップ名" placeholder="ステップ名（例: 上長承認）" value={step.label}
                           onChange={e => setCatFormWorkflow(prev => prev.map((s, i) => i === idx ? { ...s, label: e.target.value } : s))}
                           className="flex-1 h-8 px-3 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all" />
                         <button type="button" onClick={() => setCatFormWorkflow(prev => prev.filter((_, i) => i !== idx))}
@@ -1387,7 +1397,7 @@ export default function AdminSettings() {
                         </button>
                       </div>
                       <div className="flex gap-2">
-                        <select value={step.approverType}
+                        <select aria-label="承認者タイプ" value={step.approverType}
                           onChange={e => setCatFormWorkflow(prev => prev.map((s, i) => i === idx ? { ...s, approverType: e.target.value as ApproverType, approverUserId: undefined, approverRole: undefined, approverGroupIds: undefined } : s))}
                           className="flex-1 h-8 px-2 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all">
                           <option value="direct_manager">直属上長</option>
@@ -1398,7 +1408,7 @@ export default function AdminSettings() {
                           <option value="approval_group">承認グループ</option>
                         </select>
                         {step.approverType === 'role' && (
-                          <select value={step.approverRole ?? ''}
+                          <select aria-label="役職" value={step.approverRole ?? ''}
                             onChange={e => setCatFormWorkflow(prev => prev.map((s, i) => i === idx ? { ...s, approverRole: e.target.value } : s))}
                             className="flex-1 h-8 px-2 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all">
                             <option value="">役職を選択</option>
@@ -1408,7 +1418,7 @@ export default function AdminSettings() {
                           </select>
                         )}
                         {step.approverType === 'specific_user' && (
-                          <select value={step.approverUserId ?? ''}
+                          <select aria-label="特定ユーザー" value={step.approverUserId ?? ''}
                             onChange={e => setCatFormWorkflow(prev => prev.map((s, i) => i === idx ? { ...s, approverUserId: e.target.value } : s))}
                             className="flex-1 h-8 px-2 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all">
                             <option value="">ユーザーを選択</option>
@@ -1416,7 +1426,7 @@ export default function AdminSettings() {
                           </select>
                         )}
                         {step.approverType === 'approval_group' && (
-                          <select value={step.parallelType ?? 'or'}
+                          <select aria-label="並列設定" value={step.parallelType ?? 'or'}
                             onChange={e => setCatFormWorkflow(prev => prev.map((s, i) => i === idx ? { ...s, parallelType: e.target.value as 'or' | 'and' } : s))}
                             className="h-8 px-2 bg-white border rounded-xl text-xs font-bold focus:outline-none focus:border-slate-400 transition-all">
                             <option value="or">OR（誰か1名）</option>
@@ -1478,25 +1488,25 @@ export default function AdminSettings() {
             </div>
             <div className="p-6 space-y-4">
               {[
-                { label: '氏名', value: editUserName, setter: setEditUserName, placeholder: '例: 田中 太郎' },
-                { label: 'メールアドレス', value: editUserEmail, setter: setEditUserEmail, placeholder: 'example@company.co.jp' },
-              ].map(({ label, value, setter, placeholder }) => (
+                { id: 'edit-user-name', label: '氏名', value: editUserName, setter: setEditUserName, placeholder: '例: 田中 太郎' },
+                { id: 'edit-user-email', label: 'メールアドレス', value: editUserEmail, setter: setEditUserEmail, placeholder: 'example@company.co.jp' },
+              ].map(({ id, label, value, setter, placeholder }) => (
                 <div key={label} className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">{label}</label>
-                  <input type="text" value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
+                  <label htmlFor={id} className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">{label}</label>
+                  <input id={id} type="text" value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
                     className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
                 </div>
               ))}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">役職</label>
-                <select value={editUserPosition} onChange={e => setEditUserPosition(e.target.value)}
+                <label htmlFor="edit-user-position" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">役職</label>
+                <select id="edit-user-position" value={editUserPosition} onChange={e => setEditUserPosition(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   {['President', 'Division Manager', 'General Manager', 'Team Leader', 'Member'].map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">組織ユニット</label>
-                <select value={editUserOrgUnit} onChange={e => setEditUserOrgUnit(e.target.value)}
+                <label htmlFor="edit-user-org-unit" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">組織ユニット</label>
+                <select id="edit-user-org-unit" value={editUserOrgUnit} onChange={e => setEditUserOrgUnit(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   {orgUnits.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
                 </select>
@@ -1548,13 +1558,13 @@ export default function AdminSettings() {
             </div>
             <div className="p-6 space-y-4">
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">ユニット名</label>
-                <input type="text" value={unitFormName} onChange={e => setUnitFormName(e.target.value)} placeholder="例: 営業第一グループ"
+                <label htmlFor="unit-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">ユニット名</label>
+                <input id="unit-name" type="text" value={unitFormName} onChange={e => setUnitFormName(e.target.value)} placeholder="例: 営業第一グループ"
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all" />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">種別</label>
-                <select value={unitFormType} onChange={e => setUnitFormType(e.target.value as OrganizationUnit['type'])}
+                <label htmlFor="unit-type" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">種別</label>
+                <select id="unit-type" value={unitFormType} onChange={e => setUnitFormType(e.target.value as OrganizationUnit['type'])}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   <option value="division">Division（事業部）</option>
                   <option value="group">Group（部）</option>
@@ -1562,8 +1572,8 @@ export default function AdminSettings() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">親ユニット</label>
-                <select value={unitFormParentId} onChange={e => setUnitFormParentId(e.target.value)}
+                <label htmlFor="unit-parent" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">親ユニット</label>
+                <select id="unit-parent" value={unitFormParentId} onChange={e => setUnitFormParentId(e.target.value)}
                   className="w-full h-10 px-4 bg-slate-50 border rounded-xl font-bold text-sm focus:outline-none focus:border-slate-400 transition-all">
                   <option value="">なし（ルートとして追加）</option>
                   {orgUnits.filter(u => u.status === 'active').map(u => <option key={u.id} value={u.id}>{u.name}</option>)}

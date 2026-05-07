@@ -413,6 +413,7 @@ export default function RequestInbox() {
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-300" />
             <input
               type="text"
+              aria-label="依頼を検索"
               placeholder="依頼を検索..."
               value={inboxSearchQuery}
               onChange={(e) => setInboxSearchQuery(e.target.value)}
@@ -552,6 +553,7 @@ export default function RequestInbox() {
               </div>
               <textarea
                 rows={4}
+                aria-label="差し戻し理由"
                 placeholder="差し戻し理由を入力してください（必須）..."
                 value={rejectComment}
                 onChange={(e) => setRejectComment(e.target.value)}
@@ -602,6 +604,7 @@ export default function RequestInbox() {
                 <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-300" />
                 <input
                   type="text"
+                  aria-label="承認者を検索"
                   placeholder="氏名で検索..."
                   value={approverSearchQuery}
                   onChange={(e) => setApproverSearchQuery(e.target.value)}
@@ -941,8 +944,9 @@ export default function RequestInbox() {
                   {user?.avatar ? <Image src={user.avatar} width={40} height={40} className="w-full h-full rounded-full object-cover" alt="avatar" /> : 'U'}
                 </div>
                 <div className="flex-1 space-y-3">
-                  <textarea 
+                  <textarea
                     rows={3}
+                    aria-label="コメントを入力"
                     placeholder="申請内容に関する質問や連絡事項を入力してください..."
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all resize-none"
                     value={commentText}
