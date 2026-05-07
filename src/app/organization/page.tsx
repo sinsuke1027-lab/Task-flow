@@ -18,6 +18,7 @@ import { getDataProvider } from '@/lib/repository/factory';
 import { User, OrganizationUnit } from '@/lib/repository/types';
 import { OrgNode } from '@/components/organization/org-node';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function OrganizationPage() {
   const [units, setUnits] = useState<OrganizationUnit[]>([]);
@@ -46,6 +47,7 @@ export default function OrganizationPage() {
         setUnits(allUnits);
         setUsers(allUsers);
       } catch (error) {
+        toast.error('組織データの取得に失敗しました');
         console.error('Failed to fetch organization data:', error);
       } finally {
         setIsLoading(false);
