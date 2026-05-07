@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 import Image from 'next/image';
 import { Bell, HelpCircle, User, Search, ChevronRight, LogOut, Settings, X, BookOpen, MessageCircle, Menu } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
@@ -16,6 +17,8 @@ export function Header() {
   const [showNotifPanel, setShowNotifPanel] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const helpModalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(helpModalRef, showHelpModal, () => setShowHelpModal(false));
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -183,16 +186,22 @@ export function Header() {
       {/* ヘルプモーダル */}
       {showHelpModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowHelpModal(false)} />
-          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowHelpModal(false)} aria-hidden="true" />
+          <div
+            ref={helpModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="help-modal-title"
+            className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
                   <HelpCircle className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-[#191714]">ヘルプ・よくある質問</h3>
+                <h3 id="help-modal-title" className="text-lg font-bold text-[#191714]">ヘルプ・よくある質問</h3>
               </div>
-              <button onClick={() => setShowHelpModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+              <button type="button" onClick={() => setShowHelpModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                 <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>

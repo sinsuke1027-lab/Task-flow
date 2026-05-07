@@ -19,6 +19,7 @@ import { User, OrganizationUnit } from '@/lib/repository/types';
 import { OrgNode } from '@/components/organization/org-node';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 export default function OrganizationPage() {
   const [units, setUnits] = useState<OrganizationUnit[]>([]);
@@ -29,6 +30,8 @@ export default function OrganizationPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const profileModalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(profileModalRef, showProfileModal, () => setShowProfileModal(false));
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
@@ -153,9 +156,11 @@ export default function OrganizationPage() {
           <aside className="lg:col-span-4 animate-in slide-in-from-right-8 duration-500 sticky top-8 h-fit">
             <div className="bg-slate-900 rounded-[32px] overflow-hidden shadow-2xl text-white">
               <div className="relative h-32 bg-gradient-to-br from-slate-800 to-slate-900">
-                <button 
+                <button
+                  type="button"
                   onClick={() => setSelectedUser(null)}
                   className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-md"
+                  aria-label="パネルを閉じる"
                 >
                   <X className="w-4 h-4 text-white" />
                 </button>
@@ -234,11 +239,17 @@ export default function OrganizationPage() {
       {/* プロフィール詳細モーダル */}
       {showProfileModal && selectedUser && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowProfileModal(false)} />
-          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowProfileModal(false)} aria-hidden="true" />
+          <div
+            ref={profileModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="profile-modal-title"
+            className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+          >
             <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#191714]">プロフィール詳細</h3>
-              <button onClick={() => setShowProfileModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+              <h3 id="profile-modal-title" className="text-lg font-bold text-[#191714]">プロフィール詳細</h3>
+              <button type="button" onClick={() => setShowProfileModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
                 <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>

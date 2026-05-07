@@ -21,6 +21,10 @@ export function useFocusTrap(
 ) {
   useEffect(() => {
     if (!active || !ref.current) return;
+
+    // モーダルを開く前にフォーカスしていた要素を記憶
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
     const container = ref.current;
     const focusable = Array.from(
       container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS),
@@ -54,6 +58,10 @@ export function useFocusTrap(
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      // モーダルを閉じたらトリガー要素にフォーカスを戻す
+      previouslyFocused?.focus();
+    };
   }, [active, ref, onEscape]);
 }
