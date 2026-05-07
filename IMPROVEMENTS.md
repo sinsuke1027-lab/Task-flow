@@ -120,7 +120,7 @@
 | P1-5 | CI パイプライン拡充：`ci.yml` に build + test + `npm audit` を追加 | `.github/workflows/ci.yml` | ✅ |
 | P1-6 | デプロイパイプライン作成（GCP Cloud Run 自動デプロイ）→ **GCP-D1 に詳細** | `.github/workflows/deploy.yml`（新規） | ⬜ |
 | P1-7 | `error.tsx` / `loading.tsx` を全ページに追加 | `src/app/error.tsx`, `src/app/loading.tsx`（新規） | ✅ |
-| P1-8 | Toast 通知ライブラリ導入（`sonner` 推奨）・各ページの `console.error` を通知に置き換え | `src/app/inbox/page.tsx`, `src/app/tracker/page.tsx`, `src/app/admin/page.tsx` | ⬜ |
+| P1-8 | Toast 通知ライブラリ導入（`sonner` 推奨）・各ページの `console.error` を通知に置き換え | `src/app/inbox/page.tsx`, `src/app/tracker/page.tsx`, `src/app/admin/page.tsx` | ✅ |
 
 ---
 
