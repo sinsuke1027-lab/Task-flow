@@ -73,11 +73,11 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
               <div className="text-2xl font-bold text-white mb-1">147+</div>
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Users</div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">Active Users</div>
             </div>
             <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
               <div className="text-2xl font-bold text-white mb-1">27+</div>
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Teams</div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">Teams</div>
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="user@example.com"
-                className="w-full px-4 py-3 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white"
               />
             </div>
             {!isMockMode && (
@@ -125,7 +125,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent bg-white"
                 />
               </div>
             )}
@@ -149,7 +149,7 @@ export default function LoginPage() {
             <>
               <div className="my-6 flex items-center gap-3">
                 <div className="flex-1 h-px bg-slate-200" />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest whitespace-nowrap">デモ（ワンクリック）</span>
+                <span className="text-xs text-slate-500 font-bold uppercase tracking-widest whitespace-nowrap">デモ（ワンクリック）</span>
                 <div className="flex-1 h-px bg-slate-200" />
               </div>
 
@@ -165,9 +165,9 @@ export default function LoginPage() {
                       <u.icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1">
-                      <div className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{u.label}</div>
+                      <div className="text-xs font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">{u.label}</div>
                       <div className="text-base font-bold text-slate-900">{u.name}</div>
-                      <div className="text-xs text-slate-400">{u.email}</div>
+                      <div className="text-xs text-slate-500">{u.email}</div>
                     </div>
                     <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white transition-colors">
                       <LayoutDashboard className="w-4 h-4" />
@@ -178,7 +178,7 @@ export default function LoginPage() {
             </>
           )}
 
-          <p className="mt-8 text-center text-xs text-slate-400 font-bold uppercase tracking-widest">
+          <p className="mt-8 text-center text-xs text-slate-500 font-bold uppercase tracking-widest">
             {isMockMode ? 'Mock Mode — No Database Connection' : 'Powered by Supabase Auth'}
           </p>
         </div>

@@ -74,7 +74,7 @@ export default function OrganizationPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-slate-100 border-t-slate-900 rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest animate-pulse">Building Organization Map...</p>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">Building Organization Map...</p>
         </div>
       </div>
     );
@@ -85,7 +85,7 @@ export default function OrganizationPage() {
       {/* Header Section */}
       <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-slate-400">
+          <div className="flex items-center gap-2 text-slate-500">
             <Building2 className="w-4 h-4" />
             <span className="text-[10px] font-black uppercase tracking-widest">Workspace Directory</span>
           </div>
@@ -95,7 +95,7 @@ export default function OrganizationPage() {
 
         {/* Search Bar */}
         <div className="relative w-full md:w-80 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-slate-900 transition-colors" />
           <input 
             type="text" 
             placeholder="氏名、役職、メールアドレスで検索..." 
@@ -108,7 +108,7 @@ export default function OrganizationPage() {
               onClick={() => { setSearchQuery(''); setDebouncedQuery(''); }}
               className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-lg transition-colors"
             >
-              <X className="w-3 h-3 text-slate-400" />
+              <X className="w-3 h-3 text-slate-500" />
             </button>
           )}
         </div>
@@ -126,7 +126,7 @@ export default function OrganizationPage() {
                 <Target className="w-5 h-5 text-slate-900" />
                 <h2 className="text-lg font-bold text-slate-900">組織構造</h2>
               </div>
-              <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <div className="flex items-center gap-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                 <div className="flex items-center gap-1.5">
                   <div className="w-2 h-2 bg-slate-900 rounded-full border border-white shadow-sm" />
                   <span>管理者</span>
@@ -187,7 +187,7 @@ export default function OrganizationPage() {
                         <span className="px-2 py-0.5 bg-white/10 border border-white/20 rounded-full text-[10px] font-black uppercase tracking-tighter">System Admin</span>
                       )}
                     </div>
-                    <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mt-1">{selectedUser.position}</p>
+                    <p className="text-slate-500 font-bold uppercase tracking-widest text-xs mt-1">{selectedUser.position}</p>
                   </div>
                 </div>
 
@@ -199,7 +199,7 @@ export default function OrganizationPage() {
                         <Mail className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
                         <span className="text-sm font-bold truncate">{selectedUser.email}</span>
                       </div>
-                      <div className="flex items-center gap-3 text-slate-400">
+                      <div className="flex items-center gap-3 text-slate-500">
                         <Phone className="w-4 h-4 text-slate-500" />
                         <span className="text-sm font-bold">03-XXXX-XXXX (内線 123)</span>
                       </div>
@@ -209,7 +209,7 @@ export default function OrganizationPage() {
                   <div className="space-y-4">
                     <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/10 pb-2">Managed Responsibilities</h4>
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-slate-400">
+                      <div className="flex items-center gap-3 text-slate-500">
                         <MapPin className="w-4 h-4 text-slate-500" />
                         <span className="text-sm font-bold">本社オフィス (東京)</span>
                       </div>
@@ -250,7 +250,7 @@ export default function OrganizationPage() {
             <div className="p-6 border-b flex items-center justify-between">
               <h3 id="profile-modal-title" className="text-lg font-bold text-[#191714]">プロフィール詳細</h3>
               <button type="button" onClick={() => setShowProfileModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors" aria-label="閉じる">
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
             <div className="p-6 space-y-5">
@@ -261,7 +261,7 @@ export default function OrganizationPage() {
                 }
                 <div>
                   <div className="text-xl font-black text-[#191714]">{selectedUser.name}</div>
-                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">{selectedUser.position}</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">{selectedUser.position}</div>
                 </div>
               </div>
               <div className="space-y-2 text-sm">
@@ -274,7 +274,7 @@ export default function OrganizationPage() {
                   { label: 'システムロール', value: selectedUser.role === 'admin' ? '管理者' : '一般ユーザー' },
                 ].map(row => (
                   <div key={row.label} className="flex justify-between py-2 border-b border-slate-50">
-                    <span className="text-slate-400 font-bold text-xs uppercase tracking-widest">{row.label}</span>
+                    <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">{row.label}</span>
                     <span className="font-bold text-[#191714]">{row.value}</span>
                   </div>
                 ))}
@@ -290,7 +290,7 @@ export default function OrganizationPage() {
           <div className="max-w-4xl mx-auto px-6 py-10 h-full overflow-y-auto">
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-2xl font-black tracking-tight text-slate-900">
-                検索結果: <span className="text-slate-400">{filteredUsers.length}件</span>
+                検索結果: <span className="text-slate-500">{filteredUsers.length}件</span>
               </h3>
               <button
                 onClick={() => { setSearchQuery(''); setDebouncedQuery(''); }}
@@ -328,17 +328,17 @@ export default function OrganizationPage() {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-slate-900">{u.name}</span>
                         {u.role === 'admin' && (
-                           <span className="text-[8px] font-black uppercase text-slate-400 bg-slate-50 px-1 py-0.5 rounded border border-slate-100">Admin</span>
+                           <span className="text-[8px] font-black uppercase text-slate-500 bg-slate-50 px-1 py-0.5 rounded border border-slate-100">Admin</span>
                         )}
                       </div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{u.position}</span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{u.position}</span>
                     </div>
                     <ChevronRight className="ml-auto w-4 h-4 text-slate-200 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+              <div className="flex flex-col items-center justify-center py-20 text-slate-500">
                 <Search className="w-12 h-12 mb-4 opacity-10" />
                 <p className="font-bold uppercase tracking-widest text-xs">No matching members found</p>
               </div>

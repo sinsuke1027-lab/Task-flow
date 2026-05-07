@@ -58,7 +58,7 @@ export function OrgNode({
         className="flex items-center gap-2 group cursor-pointer py-1.5"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="w-5 h-5 flex items-center justify-center text-slate-400 group-hover:text-slate-600">
+        <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-slate-600">
           {childUnits.length > 0 || directUsers.length > 0 ? (
             isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />
           ) : (
@@ -67,7 +67,7 @@ export function OrgNode({
         </div>
         <Building2 className={cn(
           "w-4 h-4 transition-colors",
-          isExpanded ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
+          isExpanded ? "text-slate-900" : "text-slate-500 group-hover:text-slate-600"
         )} />
         <span className={cn(
           "text-sm font-bold transition-colors",
@@ -128,7 +128,7 @@ export function OrgNode({
                     {user.avatar ? (
                       <Image src={user.avatar} width={32} height={32} alt={user.name} className="w-full h-full rounded" />
                     ) : (
-                      <UserIcon className="w-4 h-4 text-slate-400" />
+                      <UserIcon className="w-4 h-4 text-slate-500" />
                     )}
                   </div>
                   {/* 管理者バッジ（Shieldアイコン） */}
@@ -143,10 +143,10 @@ export function OrgNode({
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-slate-800 truncate">{user.name}</span>
                     {mode === 'directory' && user.role === 'admin' && (
-                      <span className="text-[8px] font-black uppercase text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100">Admin</span>
+                      <span className="text-[8px] font-black uppercase text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100">Admin</span>
                     )}
                   </div>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none truncate">{user.position}</span>
+                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none truncate">{user.position}</span>
                 </div>
 
                 {/* 右側のインジケータ（モード別） */}
@@ -158,7 +158,7 @@ export function OrgNode({
                     {count} 件
                   </span>
                 ) : (
-                  <ChevronRight className="ml-auto w-3 h-3 text-slate-200 group-hover:text-slate-400 transition-all opacity-0 group-hover:opacity-100 group-hover:translate-x-1" />
+                  <ChevronRight className="ml-auto w-3 h-3 text-slate-200 group-hover:text-slate-500 transition-all opacity-0 group-hover:opacity-100 group-hover:translate-x-1" />
                 )}
               </div>
             );

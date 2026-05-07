@@ -194,7 +194,7 @@ export default function Dashboard() {
           {/* Advanced Filters */}
           <div className="bg-white p-4 rounded-2xl border border-slate-200 notion-shadow flex flex-wrap items-center gap-6">
             <div className="flex items-center gap-3">
-              <Calendar className="w-4 h-4 text-slate-400" />
+              <Calendar className="w-4 h-4 text-slate-500" />
               <div className="flex items-center gap-2">
                 <input type="date" className="text-xs font-bold bg-slate-50 border rounded-lg px-2 py-1.5" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 <span className="text-slate-300 font-bold">~</span>
@@ -202,7 +202,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3 border-l pl-8">
-              <Filter className="w-4 h-4 text-slate-400" />
+              <Filter className="w-4 h-4 text-slate-500" />
               <select className="text-xs font-bold bg-slate-50 border rounded-lg px-4 py-1.5" value={selectedDeptId} onChange={(e) => setSelectedDeptId(e.target.value)}>
                 <option value="all">すべての管理部門</option>
                 {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
@@ -254,7 +254,7 @@ export default function Dashboard() {
                 選択中 {selectedTaskIds.size} 件を一括承認
               </button>
             )}
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{myTurnTasks.length}件</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{myTurnTasks.length}件</span>
           </div>
         </div>
         
@@ -271,10 +271,10 @@ export default function Dashboard() {
                       className="w-4 h-4 rounded cursor-pointer accent-slate-900"
                     />
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">申請内容</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">申請者</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">回答期限</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">アクション</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">申請内容</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">申請者</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">回答期限</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">アクション</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -291,7 +291,7 @@ export default function Dashboard() {
                     <td className="px-6 py-4">
                       <Link href={`/inbox?taskId=${t.id}`} className="block">
                         <div className="text-sm font-bold text-slate-800">{t.title}</div>
-                        <div className="text-[10px] text-slate-400 line-clamp-1">{t.description}</div>
+                        <div className="text-[10px] text-slate-500 line-clamp-1">{t.description}</div>
                       </Link>
                     </td>
                     <td className="px-6 py-4">
@@ -306,7 +306,7 @@ export default function Dashboard() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <span className="text-[10px] font-black text-rose-500 flex items-center justify-center gap-1">
+                      <span className="text-[10px] font-black text-rose-700 flex items-center justify-center gap-1">
                         <Clock className="w-3 h-3" />
                         <ClientOnlyDate date={t.dueDate} />
                       </span>
@@ -323,7 +323,7 @@ export default function Dashboard() {
             </table>
           </div>
         ) : (
-          <div className="bg-slate-50 border p-10 rounded-3xl text-center border-dashed text-slate-400 text-xs font-bold uppercase tracking-widest">
+          <div className="bg-slate-50 border p-10 rounded-3xl text-center border-dashed text-slate-500 text-xs font-bold uppercase tracking-widest">
              現在対応すべきタスクはありません。
           </div>
         )}
@@ -337,9 +337,9 @@ export default function Dashboard() {
             <table className="w-full text-left">
               <thead className="bg-slate-50/50 border-b">
                 <tr>
-                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">申請内容</th>
-                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ステータス</th>
-                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">現在の担当者</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">申請内容</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">ステータス</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">現在の担当者</th>
                   <th className="w-10"></th>
                 </tr>
               </thead>
@@ -348,7 +348,7 @@ export default function Dashboard() {
                   <tr key={task.id} className="hover:bg-slate-50/50">
                     <td className="px-6 py-4">
                       <div className="font-bold text-sm mb-0.5">{task.title}</div>
-                      <div className="text-[10px] font-bold text-slate-300">{new Date(task.createdAt).toLocaleDateString('ja-JP')} 提出</div>
+                      <div className="text-[10px] font-bold text-slate-500">{new Date(task.createdAt).toLocaleDateString('ja-JP')} 提出</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-blue-50 text-blue-600 border border-blue-100 italic">
@@ -359,14 +359,14 @@ export default function Dashboard() {
                       <span className="text-xs font-bold text-slate-600">{task.currentApproverName || 'Next...'}</span>
                     </td>
                     <td className="pr-4 text-right">
-                      <Link href="/tracker" className="text-slate-300 hover:text-slate-900"><ChevronRight className="w-4 h-4" /></Link>
+                      <Link href="/tracker" className="text-slate-500 hover:text-slate-900"><ChevronRight className="w-4 h-4" /></Link>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <div className="p-10 text-center text-slate-300 text-xs font-bold uppercase tracking-widest">
+            <div className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
               進行中の申請はありません。
             </div>
           )}
@@ -377,11 +377,11 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <Link href="/request" className="flex items-center gap-3 p-5 bg-slate-900 text-white rounded-2xl hover:bg-black group shadow-xl">
            <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center"><Plus className="w-5 h-5" /></div>
-           <div><div className="text-sm font-bold">新規依頼を作成</div><p className="text-[10px] text-slate-400">Apply for anything</p></div>
+           <div><div className="text-sm font-bold">新規依頼を作成</div><p className="text-[10px] text-slate-500">Apply for anything</p></div>
         </Link>
         <Link href="/tracker" className="flex items-center gap-3 p-5 bg-white border border-slate-200 rounded-2xl hover:border-slate-900 group">
-           <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white"><BarChart3 className="w-5 h-5" /></div>
-           <div><div className="text-sm font-bold text-slate-900">全ての履歴を確認</div><p className="text-[10px] text-slate-400">Audit your process</p></div>
+           <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500 group-hover:bg-slate-900 group-hover:text-white"><BarChart3 className="w-5 h-5" /></div>
+           <div><div className="text-sm font-bold text-slate-900">全ての履歴を確認</div><p className="text-[10px] text-slate-500">Audit your process</p></div>
         </Link>
       </div>
     </div>
@@ -403,7 +403,7 @@ function StatsCard({ icon, title, value, color, percent }: { icon: React.ReactNo
           <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${colorMap[color].split(' ')[2]} ${colorMap[color].split(' ')[1]}`}>
             {icon}
           </div>
-          <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">{title}</h4>
+          <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest">{title}</h4>
         </div>
         <span className={`text-2xl font-black ${colorMap[color].split(' ')[1]}`}>{value}</span>
       </div>

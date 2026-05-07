@@ -25,7 +25,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" />
-          <p className="text-sm font-bold text-slate-400 animate-pulse">LOADING TASK BRIDGE...</p>
+          <p className="text-sm font-bold text-slate-500 animate-pulse">LOADING TASK BRIDGE...</p>
         </div>
       </div>
     );
