@@ -3,34 +3,73 @@ name: Issue Auto Branch
 on:
   issues:
     types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Target issue number"
+        required: true
+        type: string
+
+concurrency:
+  group: issue-branch-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: write
+  id-token: write
 
 jobs:
-  create-branch:
+  create-issue-branch:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create branch from issue
+      - name: Determine issue number
+        id: issue
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "number=${{ inputs.issue_number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "number=${{ github.event.issue.number }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create branch via Claude Code Action
+        uses: anthropics/claude-code-action@v1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ISSUE_NUMBER="${{ github.event.issue.number }}"
-          ISSUE_TITLE="${{ github.event.issue.title }}"
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --allowedTools "Bash(gh issue view:*),Bash(gh issue develop:*),Bash(gh issue comment:*),Bash(git ls-remote:*)"
+          prompt: |
+            目的: Issueの内容から自動的に 'issue/<number>-<slug>' の形式で紐づくブランチを作成する。
 
-          # タイトルをkebab-caseに変換（英数字以外はハイフンに、連続ハイフンは1つに）
-          BRANCH_SLUG=$(echo "$ISSUE_TITLE" | \
-            tr '[:upper:]' '[:lower:]' | \
-            sed 's/[^a-z0-9]/-/g' | \
-            sed 's/--*/-/g' | \
-            sed 's/^-\|-$//g' | \
-            cut -c1-50)
+            入力（確認コマンドは不要、この値をそのまま使用）:
+              - Issue番号: ${{ steps.issue.outputs.number }}
 
-          BRANCH_NAME="issue/${ISSUE_NUMBER}-${BRANCH_SLUG}"
+            重要な制約:
+              - 環境変数の確認コマンド（echo, env, printenv等）は実行しない
+              - 許可されているコマンドは gh issue view, gh issue develop, gh issue comment, git ls-remote のみ
+              - 上記の入力値を信頼し、そのまま使用すること
 
-          git checkout -b "$BRANCH_NAME"
-          git push origin "$BRANCH_NAME"
+            ブランチ名ルール:
+              - 形式: issue/<number>-<slug> （<number> は ${{ steps.issue.outputs.number }} 固定）
+              - <slug> は「Issueタイトル」のみを読み取り、英語で要約した2〜5語のkebab-case
+              - 文字: 小文字英数字とハイフンのみ。その他の文字は全て除去し、連続ハイフンは1つに正規化、先頭・末尾のハイフンは削除
+              - 長さ: slugは30文字以内、ブランチ全体は50文字以内（超える場合はslugを切り詰める）
+              - 連続ハイフンの禁止、先頭・末尾のハイフン禁止
+              - 汎用語 (feature/add/new) は避け、対象や目的が伝わる語を優先
 
-          gh issue comment "$ISSUE_NUMBER" --body "ブランチを作成しました: \`$BRANCH_NAME\`"
+            手順:
+              1) gh issue view ${{ steps.issue.outputs.number }} --json title,number --jq '.title' でタイトルのみを取得し、本文は使用しない
+              2) 上記ルールで slug を決定し、ブランチ名を組み立てる（例: issue/${{ steps.issue.outputs.number }}-payment-webhook-error）
+              3) git ls-remote --heads origin "ブランチ名" で存在チェックし、存在すれば slug に -v2, -v3... を付けて再生成
+              4) gh issue develop "${{ steps.issue.outputs.number }}" --name "ブランチ名" --base main でブランチ作成
+
+              重要: コマンド実行時は変数展開（$記号）を使わず、リテラル値を直接指定すること
+
+            例:
+              - タイトル: 'API v2 user search with pagination' → slug: api-v2-search → branch: issue/${{ steps.issue.outputs.number }}-api-v2-search
+              - タイトル: '支払いWebhookのエラー対応'（日本語）→ slug: payment-webhook-error → branch: issue/${{ steps.issue.outputs.number }}-payment-webhook-error

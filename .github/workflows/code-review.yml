@@ -1,66 +1,78 @@
-name: AI Code Review
+name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-    branches: [master]
+    types: [opened, synchronize, ready_for_review]
+
+concurrency:
+  group: code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  review:
+  code-review:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     permissions:
-      pull-requests: write
       contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Get PR diff
-        id: diff
-        run: |
-          git diff origin/${{ github.base_ref }}...HEAD > pr_diff.txt
-          echo "diff_size=$(wc -c < pr_diff.txt)" >> $GITHUB_OUTPUT
+      - name: Run Code Review with Claude
+        id: code-review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          track_progress: true
+          prompt: |
+            基本情報:
+            - Repo: ${{ github.repository }}
+            - PR Number: ${{ github.event.pull_request.number }}
+            - PR Head SHA: ${{ github.event.pull_request.head.sha }}
+            - PR Base SHA: ${{ github.event.pull_request.base.sha }}
 
-      - name: AI Review with Claude
-        if: steps.diff.outputs.diff_size > 0
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_KEY }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-        run: |
-          DIFF=$(head -c 10000 pr_diff.txt)
+            目的:
+            - 高品質、かつ要件を満たしたPRであることを担保する。
+            - 紐づくIssueの要件充足、AGENTS.md（設計・コーディング規約）の遵守を徹底的にレビューする。
 
-          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
-            -H "x-api-key: $ANTHROPIC_API_KEY" \
-            -H "anthropic-version: 2023-06-01" \
-            -H "content-type: application/json" \
-            -d "$(jq -n \
-              --arg diff "$DIFF" \
-              '{
-                model: "claude-sonnet-4-6",
-                max_tokens: 1024,
-                messages: [{
-                  role: "user",
-                  content: ("以下のPR差分をレビューしてください。問題点・改善提案・良い点を日本語で簡潔に列挙してください。\n\n```diff\n" + $diff + "\n```")
-                }]
-              }'
-            )")
+            手順（MCPツールの活用）:
+            以下の順序で情報を収集し、レビューを行ってください。
 
-          if echo "$RESPONSE" | jq -e '.content[0].text' > /dev/null 2>&1; then
-            REVIEW_BODY=$(echo "$RESPONSE" | jq -r '.content[0].text')
-          else
-            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // "不明なエラー"')
-            echo "Anthropic API error: $ERROR_MSG"
-            exit 1
-          fi
+            1. PR情報の取得
+               - `mcp__github__get_pull_request` を使用して、PRのタイトル、説明、状態を取得します。
+               - PRの説明文（Body）から、関連するIssue番号や「Closes #123」のような記述を特定します。
 
-          # 既存のボットコメントを削除して重複を防ぐ
-          gh api "repos/$REPO/issues/$PR_NUMBER/comments" \
-            --jq '.[] | select(.user.login == "github-actions[bot]") | .id' | \
-            xargs -I{} gh api --method DELETE "repos/$REPO/issues/comments/{}" 2>/dev/null || true
+            2. 既存のレビューコメントの確認
+               - `mcp__github__list_review_comments` を使用して、既に指摘されている内容や議論を確認します。
+               - 重複した指摘を行わないように注意してください。
 
-          COMMENT_BODY=$(printf '## AI Code Review (Claude)\n\n%s\n\n---\n*Powered by claude-sonnet-4-6*' "$REVIEW_BODY")
-          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$COMMENT_BODY"
+            3. 関連Issueの確認（紐づくIssueがある場合）
+               - `mcp__github__get_issue` を使用して、Issueの要件や詳細を確認します。
+               - `mcp__github__list_issue_comments` を使用して、Issue上での議論や追加要件を確認します。
+
+            4. 変更内容（Diff）の取得
+               - `mcp__github__get_pull_request_diff` を使用して、コードの変更差分を取得します。
+               - ローカルのgitコマンドではなく、MCPツール経由で正確な差分を取得してください。
+
+            5. 技術情報の確認（必要に応じて）
+               - 使用されているライブラリやフレームワークについて不明点がある場合は、`mcp__context7__resolve-library-id` および `mcp__context7__query-docs` を使用して公式ドキュメントを参照してください。
+
+            レビュー観点:
+            - Issueの要件を完全に満たしているか
+            - AGENTS.md（設計・コーディング規約）を遵守しているか
+            - コードの品質、可読性、保守性が高いか
+            - バグやセキュリティリスク、パフォーマンス上の懸念がないか
+
+            フィードバック方法:
+            - 具体的なコード上の問題（バグ、規約違反、改善提案）は、`mcp__github_inline_comment__create_inline_comment` を使用して、該当行にインラインコメントを行ってください。
+            - PR全体に関するフィードバックや承認/修正要求の要約は、`gh pr comment` コマンドを使用してコメントしてください。
+            - 以前報告した問題が修正されている場合は、「Resolved in <commit hash>」のようにコメントしてください。
+
+          claude_args: |
+            --mcp-config '{"mcpServers":{"context7":{"command":"npx","args":["-y","@upstash/context7-mcp"],"env":{"CONTEXT7_API_KEY":"${{ secrets.CONTEXT7_API_KEY }}"}}}}' --allowedTools "Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh issue comment:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*),mcp__context7__resolve-library-id,mcp__context7__query-docs,mcp__github_inline_comment__create_inline_comment,mcp__github__get_pull_request,mcp__github__get_pull_request_diff,mcp__github__list_review_comments,mcp__github__get_issue,mcp__github__list_issue_comments,Skill"

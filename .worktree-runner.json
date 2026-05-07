@@ -1,0 +1,8 @@
+{
+  "setup_commands": ["npm ci"],
+  "copy_files": [".env.local"],
+  "dev": {
+    "command": "npm run dev",
+    "port_offset": true
+  }
+}
