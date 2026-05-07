@@ -31,6 +31,7 @@ import { Task, AuditLog, Category, Delegation } from '@/lib/repository/types';
 import { useAuth } from '@/context/auth-context';
 import { ClientOnlyDate } from '@/components/common/client-only-date';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function RequestInbox() {
   const { user } = useAuth();
@@ -179,7 +180,9 @@ export default function RequestInbox() {
       await fetchTasks();
       const newLogs = await provider.getAuditLogs(selectedTask.id);
       setLogs(newLogs);
+      toast.success('承認しました');
     } catch (error) {
+      toast.error('承認処理に失敗しました');
       console.error('Approval failed:', error);
     } finally {
       setIsProcessing(false);
@@ -196,7 +199,9 @@ export default function RequestInbox() {
       await fetchTasks();
       const newLogs = await provider.getAuditLogs(selectedTask.id);
       setLogs(newLogs);
+      toast.success('確認しました');
     } catch (error) {
+      toast.error('確認処理に失敗しました');
       console.error('Acknowledge failed:', error);
     } finally {
       setIsProcessing(false);
@@ -220,7 +225,9 @@ export default function RequestInbox() {
       setLogs(newLogs);
       setShowRejectModal(false);
       setRejectComment('');
+      toast.success('差し戻しました');
     } catch (error) {
+      toast.error('差し戻し処理に失敗しました');
       console.error('Rejection failed:', error);
     } finally {
       setIsProcessing(false);
@@ -244,7 +251,9 @@ export default function RequestInbox() {
       setLogs(newLogs);
       setShowChangeApproverModal(false);
       setChangingStepIndex(null);
+      toast.success('承認者を変更しました');
     } catch (error) {
+      toast.error('承認者の変更に失敗しました');
       console.error('Change approver failed:', error);
     }
   };
