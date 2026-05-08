@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import Image from 'next/image';
 import { ChevronRight, ChevronDown, Building2, Shield, User as UserIcon } from 'lucide-react';
 import { OrganizationUnit, User } from '@/lib/repository/types';
@@ -16,10 +16,7 @@ interface OrgNodeProps {
   onUserClick?: (user: User) => void;
 }
 
-/**
- * 組織図の階層構造を再帰的にレンダリングするコンポーネント
- */
-export function OrgNode({
+export const OrgNode = memo(function OrgNode({
   unit,
   allUnits,
   usersInUnit,
@@ -167,4 +164,4 @@ export function OrgNode({
       )}
     </div>
   );
-}
+});
