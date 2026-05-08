@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const nextConfig: NextConfig = {
   images: {
@@ -10,9 +15,11 @@ const nextConfig: NextConfig = {
   },
 };
 
+const configWithAnalyzer = withBundleAnalyzer(nextConfig);
+
 export default process.env.NEXT_PUBLIC_SENTRY_DSN
-  ? withSentryConfig(nextConfig, {
+  ? withSentryConfig(configWithAnalyzer, {
       silent: true,
       disableLogger: true,
     })
-  : nextConfig;
+  : configWithAnalyzer;
