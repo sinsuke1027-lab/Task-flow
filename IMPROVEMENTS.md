@@ -134,7 +134,7 @@
 | P2-4 | `next/dynamic` によるページ単位 Code Splitting | `src/app/admin/page.tsx`, `src/app/inbox/page.tsx` | ✅ |
 | P2-5 | `OrgNode` 再帰描画に `React.memo` 適用 | `src/components/organization/org-node.tsx` | ✅ |
 | P2-6 | `admin/page.tsx`（1,550行）・`inbox/page.tsx`（1,005行）をコンポーネント分割 | 上記2ファイル | ✅ |
-| P2-7 | Sentry 導入（エラー監視・PII マスキング設定） | `sentry.client.config.ts`, `sentry.server.config.ts`（新規） | ⬜ |
+| P2-7 | Sentry 導入（エラー監視・PII マスキング設定） | `sentry.client.config.ts`, `sentry.server.config.ts`（新規） | ✅ |
 | P2-8 | Bundle サイズ分析 + Core Web Vitals 計測・改善（LCP < 2.5s 目標） | `next.config.ts` | ⬜ |
 
 ---
