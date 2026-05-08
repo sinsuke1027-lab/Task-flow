@@ -1,0 +1,9 @@
+.git
+.next
+node_modules
+.env*
+e2e/
+playwright-report/
+test-results/
+*.md
+.github/
