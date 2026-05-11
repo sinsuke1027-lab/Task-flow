@@ -172,9 +172,9 @@
 
 | # | 内容 | 対象ファイル | ステータス |
 |---|------|------------|----------|
-| GCP-A1 | Dockerfile 作成（Node.js 20 alpine、マルチステージビルド） | `Dockerfile`（新規） | ⬜ |
-| GCP-A2 | .dockerignore 作成（`node_modules`, `.next`, `.env*`, `e2e/` 等を除外） | `.dockerignore`（新規） | ⬜ |
-| GCP-A3 | `next.config.ts` に `output: 'standalone'` 追加（Docker イメージ軽量化） | `next.config.ts` | ⬜ |
+| GCP-A1 | Dockerfile 作成（Node.js 20 alpine、マルチステージビルド） | `Dockerfile`（新規） | ✅ |
+| GCP-A2 | .dockerignore 作成（`node_modules`, `.next`, `.env*`, `e2e/` 等を除外） | `.dockerignore`（新規） | ✅ |
+| GCP-A3 | `next.config.ts` に `output: 'standalone'` 追加（Docker イメージ軽量化） | `next.config.ts` | ✅ |
 | GCP-A4 | `cloudbuild.yaml` 作成（Docker ビルド → Artifact Registry プッシュ → Cloud Run デプロイ） | `cloudbuild.yaml`（新規） | ⬜ |
 | GCP-A5 | `.env.production.example` 作成（必要な環境変数テンプレート） | `.env.production.example`（新規） | ⬜ |
 

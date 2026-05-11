@@ -1,0 +1,30 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/task-flow/app:$COMMIT_SHA'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/task-flow/app:$COMMIT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'task-flow'
+      - '--image=asia-northeast1-docker.pkg.dev/$PROJECT_ID/task-flow/app:$COMMIT_SHA'
+      - '--region=asia-northeast1'
+      - '--min-instances=1'
+      - '--max-instances=10'
+      - '--memory=512Mi'
+      - '--port=8080'
+      - '--allow-unauthenticated'
+      - '--update-secrets=NEXT_PUBLIC_SUPABASE_URL=NEXT_PUBLIC_SUPABASE_URL:latest,NEXT_PUBLIC_SUPABASE_ANON_KEY=NEXT_PUBLIC_SUPABASE_ANON_KEY:latest,NEXT_PUBLIC_DATA_PROVIDER=NEXT_PUBLIC_DATA_PROVIDER:latest'
+
+images:
+  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/task-flow/app:$COMMIT_SHA'
