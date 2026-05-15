@@ -33,6 +33,7 @@ export function AdminOrgSection({ users, orgUnits, onRefetch }: AdminOrgSectionP
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserPosition, setNewUserPosition] = useState('Member');
   const [newUserOrgUnit, setNewUserOrgUnit] = useState('');
+  const [addUserToast, setAddUserToast] = useState<string | null>(null);
 
   // User row menu
   const [userMenuTargetId, setUserMenuTargetId] = useState<string | null>(null);
@@ -105,6 +106,7 @@ export function AdminOrgSection({ users, orgUnits, onRefetch }: AdminOrgSectionP
   const handleAddUser = async () => {
     if (!newUserName || !newUserEmail) return;
     const provider = getDataProvider();
+    const addedName = newUserName;
     await provider.createUser({
       name: newUserName, email: newUserEmail, role: 'user',
       position: newUserPosition,
@@ -115,6 +117,8 @@ export function AdminOrgSection({ users, orgUnits, onRefetch }: AdminOrgSectionP
     setShowAddUserModal(false);
     setNewUserName(''); setNewUserEmail(''); setNewUserPosition('Member'); setNewUserOrgUnit('');
     await onRefetch();
+    setAddUserToast(`${addedName} を追加しました`);
+    setTimeout(() => setAddUserToast(null), 3000);
   };
 
   const handleEditUser = async () => {
@@ -606,6 +610,13 @@ export function AdminOrgSection({ users, orgUnits, onRefetch }: AdminOrgSectionP
               </div>
             </div>
           </div>
+        </div>
+      )}
+      {/* ユーザー追加成功トースト */}
+      {addUserToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-emerald-600 text-white px-5 py-3 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-300">
+          <CheckCircle2 className="w-5 h-5 shrink-0" />
+          <span className="text-sm font-bold">{addUserToast}</span>
         </div>
       )}
     </div>
