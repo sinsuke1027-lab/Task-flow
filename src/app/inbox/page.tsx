@@ -176,6 +176,7 @@ export default function RequestInbox() {
         user={user}
         categories={categories}
         allUsers={allUsers}
+        delegations={delegations}
         now={now}
         onSelectTask={setSelectedTask}
       />
