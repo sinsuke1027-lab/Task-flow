@@ -40,7 +40,7 @@ export default function AdminSettings() {
     ]);
     setOrgUnits(units);
     setCategories(cats);
-    setUsers(allUsers.slice(0, 50));
+    setUsers(allUsers);
     setLogs(allLogs);
     setTasks(allTasks);
     setDelegations(allDelegations);

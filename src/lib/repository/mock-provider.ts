@@ -200,6 +200,7 @@ export class MockDataProvider implements DataProvider {
       id: `task_${Math.random().toString(36).substr(2, 9)}`,
       statusId: 'status_todo',
       status: 'todo',
+      category: category?.name || '',
       createdAt: createdAt.toISOString(),
       updatedAt: createdAt.toISOString(),
       dueDate: dueDate.toISOString(),
