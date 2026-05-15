@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Filter, MoreHorizontal, Download } from 'lucide-react';
-import { Task, Category, User } from '@/lib/repository/types';
+import { Task, Category, User, Delegation } from '@/lib/repository/types';
 import { ClientOnlyDate } from '@/components/common/client-only-date';
 import { downloadTasksCsv } from '@/lib/export/approval-pdf';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ interface TaskListPanelProps {
   user: User | null;
   categories: Category[];
   allUsers: User[];
+  delegations: Delegation[];
   now: Date;
   onSelectTask: (task: Task) => void;
 }
@@ -23,6 +24,7 @@ export function TaskListPanel({
   user,
   categories,
   allUsers,
+  delegations,
   now,
   onSelectTask,
 }: TaskListPanelProps) {
@@ -41,9 +43,21 @@ export function TaskListPanel({
     let baseTasks = tasks;
     const isAdmin = user.role === 'admin' || user.departmentId === 'dept_admin';
 
+    // 自分が代理承認者である有効な代決の委任元IDリスト
+    const activeDelegatorIds = delegations
+      .filter(d =>
+        d.delegateId === user.id &&
+        d.isActive &&
+        new Date(d.startDate) <= now &&
+        (!d.endDate || new Date(d.endDate) >= now)
+      )
+      .map(d => d.delegatorId);
+
     if (!isAdmin) {
       baseTasks = tasks.filter(t =>
-        t.approvalRoute.some(step => step.userId === user.id)
+        t.approvalRoute.some(step => step.userId === user.id) ||
+        (activeDelegatorIds.length > 0 &&
+          t.approvalRoute.some(step => activeDelegatorIds.includes(step.userId) && step.status === 'pending'))
       );
     }
 
@@ -53,7 +67,10 @@ export function TaskListPanel({
       if (filter === 'overdue') return isOverdue;
       if (filter === 'completed') return t.status === 'completed';
       if (!isAdmin) {
-        if (filter === 'todo') return t.currentApproverId === user.id && !isOverdue;
+        if (filter === 'todo') {
+          const isDelegateTodo = activeDelegatorIds.includes(t.currentApproverId ?? '');
+          return (t.currentApproverId === user.id || isDelegateTodo) && !isOverdue;
+        }
         if (filter === 'in_progress') {
           const myStepIndex = t.approvalRoute.findIndex(s => s.userId === user.id);
           const myStep = t.approvalRoute[myStepIndex];
