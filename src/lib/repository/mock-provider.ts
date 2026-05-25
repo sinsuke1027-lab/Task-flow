@@ -240,6 +240,8 @@ export class MockDataProvider implements DataProvider {
     const task = await this.getTaskById(taskId);
     if (!task) throw new Error('Task not found');
 
+    if (task.requesterId === userId) throw new Error('自己承認は禁止されています');
+
     // ── 代決チェック: userId が delegate の場合、delegator のステップを処理 ──
     let stepIndex = task.approvalRoute.findIndex(s => s.userId === userId && s.status === 'pending');
     let delegatedBy: string | undefined;
