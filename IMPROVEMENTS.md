@@ -50,6 +50,14 @@
 | 19 | admin 監査ログの `localStorage` 操作をイベントハンドラ内で実行 | `src/app/admin/page.tsx` | ✅ |
 | 20 | `factory.ts` のシングルトン管理が薄い（実DB切り替え時の設計問題） | `src/lib/repository/factory.ts` | ✅ |
 
+### E — セキュリティ・認可バグ（緊急修正）
+
+| # | 問題 | ファイル | ステータス |
+|---|------|---------|----------|
+| E-2 | 必須カスタムフィールドが未入力でも送信ボタンが活性化し、エラー表示なしに送信できる | `src/app/request/page.tsx` | ✅ |
+| E-5 | 非管理者ユーザーが `/admin` ルートに直接アクセス可能（認可ガードなし） | `src/app/admin/layout.tsx`（新規） | ✅ |
+| E-6 | 申請者自身がインボックスから自己承認・差し戻しを実行できる | `src/lib/repository/mock-provider.ts`, `src/components/inbox/task-detail-panel.tsx` | ✅ |
+
 ---
 
 ## 機能追加
