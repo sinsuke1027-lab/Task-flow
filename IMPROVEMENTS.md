@@ -152,7 +152,7 @@
 | # | 内容 | 対象ファイル | ステータス |
 |---|------|------------|----------|
 | P2-9 | 通知システム（Supabase Realtime + SendGrid によるアプリ内・メール通知） | `src/app/api/notifications/`（新規） | ⬜ |
-| P2-10 | 監査ログの期間フィルタリング（admin 画面） | `src/app/admin/page.tsx` | ⬜ |
+| P2-10 | 監査ログの期間フィルタリング（admin 画面） | `src/app/admin/page.tsx` | ✅ |
 | P2-11 | 金額ルール UI 実装（`AmountRule` スキーマは実装済み、UI が未実装） | `src/app/request/page.tsx` | ⬜ |
 | P2-12 | マルチテナント管理 UI（テナント作成・設定画面） | `src/app/admin/page.tsx` | ⬜ |
 | P2-13 | Excel（XLSX）出力対応 | `src/lib/export/`（新規ファイル追加） | ⬜ |
