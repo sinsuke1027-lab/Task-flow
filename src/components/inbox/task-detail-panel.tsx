@@ -405,7 +405,7 @@ export function TaskDetailPanel({
                   <Copy className="w-5 h-5" />
                   再利用して申請
                 </button>
-              ) : selectedTask.taskType === 'circulation' && user && selectedTask.approvalRoute.some(s => s.userId === user.id && s.status === 'pending') ? (
+              ) : selectedTask.taskType === 'circulation' && user && user.id !== selectedTask.requesterId && selectedTask.approvalRoute.some(s => s.userId === user.id && s.status === 'pending') ? (
                 <button
                   onClick={onAcknowledge}
                   disabled={isProcessing}
@@ -413,7 +413,7 @@ export function TaskDetailPanel({
                 >
                   確認済みにする
                 </button>
-              ) : user && isMyTurn(selectedTask, user.id, delegations) ? (
+              ) : user && user.id !== selectedTask.requesterId && isMyTurn(selectedTask, user.id, delegations) ? (
                 <>
                   <button
                     onClick={onApprove}
