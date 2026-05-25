@@ -95,6 +95,11 @@ function RequestFormContent() {
   // フォームバリデーション
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  const requiredFieldsFilled =
+    selectedCategory?.customFields
+      ?.filter(f => f.required)
+      .every(f => String(customData[f.label] ?? '').trim() !== '') ?? true;
+
   // 金額閾値警告
   const [amountWarnings, setAmountWarnings] = useState<Array<{ rule: AmountRule; amount: number }>>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -971,7 +976,7 @@ function RequestFormContent() {
 
             <button 
               type="submit"
-              disabled={!selectedCategory || !title}
+              disabled={!selectedCategory || !title.trim() || !requiredFieldsFilled}
               className="w-full flex items-center justify-center gap-2 py-4 bg-[#191714] text-white rounded-2xl font-bold hover:bg-black transition-all hover:shadow-2xl hover:-translate-y-1 disabled:opacity-20 disabled:pointer-events-none"
             >
               <Send className="w-4 h-4" />
